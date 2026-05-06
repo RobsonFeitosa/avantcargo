@@ -1,4 +1,6 @@
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { MessageSquare } from "lucide-react";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 
 export const Process = () => {
@@ -45,7 +47,7 @@ export const Process = () => {
         </div>
 
         <div className="max-w-4xl mx-auto relative">
-          <div className="absolute left-8 top-8 bottom-8 w-[2px] bg-primary/20 -translate-x-1/2" />
+          <div className="absolute left-8 top-8 bottom-24 w-[2px] bg-primary/20 -translate-x-1/2" />
           
           <div className="space-y-16 relative">
             {steps.map((step, idx) => (
@@ -67,6 +69,13 @@ export const Process = () => {
               </ScrollReveal>
             ))}
           </div>
+          
+          <ScrollReveal delay={0.6} className="mt-16 flex justify-center">
+            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-8 h-14 text-base shadow-glow rounded-full group">
+              <MessageSquare className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
+              Falar com um especialista
+            </Button>
+          </ScrollReveal>
         </div>
       </div>
     </section>
