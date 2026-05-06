@@ -43,7 +43,7 @@ export const Testimonials = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {testimonials.map((t, idx) => (
-            <div key={idx} className={`card-surface p-8 relative group animate-slide-up [animation-delay:${idx * 200}ms] opacity-0`}>
+            <div key={idx} className={`card-surface p-8 relative group`}>
               <Quote className="absolute top-6 right-8 h-12 w-12 text-primary/10 group-hover:text-primary/20 transition-colors" />
               <div className="space-y-6">
                 <p className="text-lg text-muted-foreground italic leading-relaxed relative z-10">

@@ -52,7 +52,7 @@ export const Services = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((s, idx) => (
-            <Card key={idx} className={`p-8 card-surface group hover:border-primary/50 transition-all duration-300 relative overflow-hidden animate-slide-up [animation-delay:${idx * 100}ms] opacity-0 ${s.featured ? "border-primary/30" : ""}`}>
+            <Card key={idx} className={`p-8 card-surface group hover:border-primary/50 transition-all duration-300 relative overflow-hidden ${s.featured ? "border-primary/30" : ""}`}>
               {s.featured && (
                 <div className="absolute top-0 right-0 px-3 py-1 bg-primary text-primary-foreground text-[10px] font-bold uppercase rounded-bl-lg">
                   Mais procurado

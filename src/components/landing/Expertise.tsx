@@ -39,7 +39,7 @@ export const Expertise = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {items.map((item, idx) => (
-              <div key={idx} className={`card-surface p-6 hover:translate-y-[-4px] transition-all duration-300 animate-slide-up [animation-delay:${idx * 100}ms] opacity-0`}>
+              <div key={idx} className={`card-surface p-6 hover:translate-y-[-4px] transition-all duration-300`}>
                 <div className="flex items-center gap-3 mb-3">
                   <CheckCircle2 className="text-primary h-5 w-5 shrink-0" />
                   <h4 className="font-bold text-sm">{item.title}</h4>

@@ -30,7 +30,7 @@ export const Sectors = () => {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
           {sectors.map((sector, idx) => (
-            <div key={idx} className={`card-surface p-6 flex flex-col items-center justify-center gap-4 hover:border-primary/40 hover:bg-primary/5 transition-all group animate-slide-up [animation-delay:${idx * 50}ms] opacity-0`}>
+            <div key={idx} className={`card-surface p-6 flex flex-col items-center justify-center gap-4 hover:border-primary/40 hover:bg-primary/5 transition-all group`}>
               <div className="h-12 w-12 rounded-full bg-secondary border border-border flex items-center justify-center group-hover:text-primary transition-colors">
                 <sector.icon className="h-6 w-6" />
               </div>

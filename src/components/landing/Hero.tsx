@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Shield, Globe, FileText, Users } from "lucide-react";
+import { ScrollReveal } from "@/components/animations/ScrollReveal";
 
 export const Hero = () => {
   return (
@@ -11,49 +12,60 @@ export const Hero = () => {
 
       <div className="container relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8 animate-fade-in">
-            <Badge variant="outline" className="px-4 py-1.5 border-primary/30 bg-primary/5 text-primary text-xs font-semibold tracking-wider uppercase">
-              Logística Aérea & Serviços Aduaneiros
-            </Badge>
+          <div className="space-y-8">
+            <ScrollReveal direction="right" delay={0.1}>
+              <Badge variant="outline" className="px-4 py-1.5 border-primary/30 bg-primary/5 text-primary text-xs font-semibold tracking-wider uppercase">
+                Logística Aérea & Serviços Aduaneiros
+              </Badge>
+            </ScrollReveal>
 
-            <h1 className="text-4xl md:text-6xl font-bold leading-tight tracking-tight">
-              Seu parceiro <span className="text-primary">estratégico</span> <br />
-              em Aeroportos GRU | VCP
-            </h1>
+            <ScrollReveal direction="right" delay={0.2}>
+              <h1 className="text-4xl md:text-6xl font-bold leading-tight tracking-tight">
+                Seu parceiro <span className="text-primary">estratégico</span> <br />
+                em Aeroportos GRU | VCP
+              </h1>
+            </ScrollReveal>
 
-            <p className="text-lg text-muted-foreground max-w-xl leading-relaxed">
-              Soluções ágeis para agentes de carga e comissárias. Controle a informação, controle o resultado e acelere seu desembaraço aduaneiro.
-            </p>
-
-            <div className="flex flex-wrap gap-4">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 h-12 shadow-glow">
-                Ver recursos <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button size="lg" variant="outline" className="border-border hover:bg-secondary h-12 px-8 font-semibold">
-                Falar agora
-              </Button>
-            </div>
-
-            <div className="flex items-center gap-8 pt-4">
-              <div className="flex -space-x-3">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="h-10 w-10 rounded-full border-2 border-background bg-secondary flex items-center justify-center text-[10px] font-bold overflow-hidden">
-                    <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i}`} alt="User" />
-                  </div>
-                ))}
-              </div>
-              <p className="text-sm text-muted-foreground">
-                <span className="text-foreground font-bold">+500 clientes</span> confiam em nós
+            <ScrollReveal direction="right" delay={0.3}>
+              <p className="text-lg text-muted-foreground max-w-xl leading-relaxed">
+                Soluções ágeis para agentes de carga e comissárias. Controle a informação, controle o resultado e acelere seu desembaraço aduaneiro.
               </p>
-            </div>
+            </ScrollReveal>
+
+            <ScrollReveal direction="right" delay={0.4}>
+              <div className="flex flex-wrap gap-4">
+                <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 h-12 shadow-glow">
+                  Ver recursos <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+                <Button size="lg" variant="outline" className="border-border hover:bg-secondary h-12 px-8 font-semibold">
+                  Falar agora
+                </Button>
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal direction="right" delay={0.5}>
+              <div className="flex items-center gap-8 pt-4">
+                <div className="flex -space-x-3">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="h-10 w-10 rounded-full border-2 border-background bg-secondary flex items-center justify-center text-[10px] font-bold overflow-hidden">
+                      <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i}`} alt="User" />
+                    </div>
+                  ))}
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  <span className="text-foreground font-bold">+500 clientes</span> confiam em nós
+                </p>
+              </div>
+            </ScrollReveal>
           </div>
 
-          <div className="relative animate-fade-in [animation-delay:200ms]">
-            <div className="absolute -inset-4 bg-primary/10 blur-3xl rounded-full opacity-50" />
-            <div className="relative card-surface p-6 md:p-8 backdrop-blur-xl border-primary/20">
-              <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
-                <Shield className="text-primary h-5 w-5" /> Nossos Diferenciais
-              </h3>
+          <ScrollReveal direction="left" delay={0.3}>
+            <div className="relative">
+              <div className="absolute -inset-4 bg-primary/10 blur-3xl rounded-full opacity-50" />
+              <div className="relative card-surface p-6 md:p-8 backdrop-blur-xl border-primary/20">
+                <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+                  <Shield className="text-primary h-5 w-5" /> Nossos Diferenciais
+                </h3>
 
               <div className="space-y-4">
                 {[
@@ -89,7 +101,7 @@ export const Hero = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
