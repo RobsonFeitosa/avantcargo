@@ -1,60 +1,72 @@
 import { Badge } from "@/components/ui/badge";
+import { ScrollReveal } from "@/components/animations/ScrollReveal";
 
 export const Process = () => {
   const steps = [
     {
       number: "01",
       title: "Análise e Diagnóstico",
-      desc: "Avaliamos as necessidades específicas do seu negócio para traçar a melhor estratégia de comércio exterior.",
+      desc: "Avaliamos a situação da empresa, os produtos e os objetivos para identificar as melhores oportunidades e regimes aduaneiros aplicáveis.",
     },
     {
       number: "02",
-      title: "Planejamento Estratégico",
-      desc: "Definimos as rotas, modais e a melhor otimização tributária para garantir a viabilidade da sua operação.",
+      title: "Planejamento e Estratégia",
+      desc: "Definimos a estratégia mais adequada para cada operação, com foco em redução de custos, conformidade legal e agilidade no processo.",
     },
     {
       number: "03",
       title: "Execução e Acompanhamento",
-      desc: "Gerenciamos cada detalhe do processo aduaneiro com transparência e atualizações em tempo real.",
+      desc: "Realizamos todos os procedimentos junto aos órgãos competentes (Receita Federal, MDIC, Siscomex), monitorando cada etapa e respondendo às exigências com agilidade.",
     },
     {
       number: "04",
-      title: "Entrega e Pós-Operação",
-      desc: "Finalizamos o processo com entrega segura, relatório detalhado e análise de performance operacional.",
+      title: "Resultado e Continuidade",
+      desc: "Entregamos o resultado esperado e mantemos o relacionamento ativo, garantindo que sua empresa esteja sempre em conformidade e aproveitando os benefícios disponíveis.",
     },
   ];
 
   return (
-    <section className="py-24 bg-secondary/10 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_50%,rgba(14,72,76,0.05),transparent_50%)]" />
-      
+    <section className="py-24 bg-secondary/5 relative overflow-hidden">
       <div className="container relative z-10">
         <div className="text-center space-y-4 mb-20 max-w-2xl mx-auto">
-          <Badge variant="outline" className="text-primary border-primary/20 bg-primary/5 uppercase tracking-widest px-4 py-1">
-            Como Trabalhamos
-          </Badge>
-          <h2 className="text-3xl md:text-5xl font-bold">Nossa abordagem em <span className="text-primary">4 etapas</span></h2>
-          <p className="text-muted-foreground">
-            Um fluxo de trabalho transparente e eficiente desenhado para mitigar riscos e maximizar resultados.
-          </p>
+          <ScrollReveal>
+            <Badge variant="outline" className="text-primary border-primary/20 bg-primary/5 uppercase tracking-widest px-4 py-1">
+              Como Trabalhamos
+            </Badge>
+          </ScrollReveal>
+          <ScrollReveal delay={0.1}>
+            <h2 className="text-3xl md:text-5xl font-bold">Nossa abordagem em <span className="text-primary">4 etapas</span></h2>
+          </ScrollReveal>
+          <ScrollReveal delay={0.2}>
+            <p className="text-muted-foreground">
+              Um fluxo de trabalho transparente e eficiente desenhado para mitigar riscos e maximizar resultados.
+            </p>
+          </ScrollReveal>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-          <div className="hidden lg:block absolute top-12 left-0 w-full h-[2px] bg-border border-dashed border-t-2" />
+        <div className="max-w-4xl mx-auto relative">
+          <div className="absolute left-8 top-8 bottom-8 w-[2px] bg-primary/20 -translate-x-1/2" />
           
-          {steps.map((step, idx) => (
-            <div key={idx} className="relative space-y-6 group animate-slide-up [animation-delay:${idx * 150}ms] opacity-0">
-              <div className="h-16 w-16 rounded-full bg-background border-4 border-primary/20 flex items-center justify-center text-xl font-bold text-primary group-hover:scale-110 group-hover:border-primary transition-all duration-300 relative z-20 mx-auto lg:mx-0">
-                {step.number}
-              </div>
-              <div className="space-y-3 text-center lg:text-left">
-                <h3 className="text-xl font-bold">{step.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {step.desc}
-                </p>
-              </div>
-            </div>
-          ))}
+          <div className="space-y-16 relative">
+            {steps.map((step, idx) => (
+              <ScrollReveal key={idx} delay={idx * 0.15} direction="up" distance={30}>
+                <div className="flex items-start gap-8 md:gap-16 group">
+                  <div className="relative z-10 shrink-0">
+                    <div className="h-16 w-16 rounded-full bg-background border-4 border-primary/30 flex items-center justify-center text-xl font-bold text-primary shadow-elegant group-hover:scale-110 group-hover:border-primary transition-all duration-500">
+                      {step.number}
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 pt-2">
+                    <h3 className="text-2xl font-bold">{step.title}</h3>
+                    <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl">
+                      {step.desc}
+                    </p>
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
         </div>
       </div>
     </section>

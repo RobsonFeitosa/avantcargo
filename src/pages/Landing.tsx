@@ -15,7 +15,7 @@ export default function Landing() {
       <Hero />
       <ScrollReveal delay={0.2}><StatsBar /></ScrollReveal>
       <ScrollReveal><Services /></ScrollReveal>
-      <ScrollReveal><Process /></ScrollReveal>
+      <Process />
       <ScrollReveal><Expertise /></ScrollReveal>
       <ScrollReveal><Sectors /></ScrollReveal>
       <ScrollReveal><Testimonials /></ScrollReveal>
