@@ -26,7 +26,7 @@ export const Navbar = () => {
     <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-background/90 backdrop-blur-xl border-b border-primary/20 py-0 shadow-lg" : "bg-transparent py-6"}`}>
       <div className="container flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
-          <img src={logo} alt="AvantCargo Logo" className="h-24 w-auto object-contain brightness-0 invert" />
+          <img src={logo} alt="AvantCargo Logo" className="h-24 w-auto object-contain" />
         </Link>
 
         <div className="hidden md:flex items-center gap-10">

@@ -8,7 +8,7 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div className="space-y-6">
             <div className="flex items-center gap-2">
-              <img src={logo} alt="AvantCargo Logo" className="h-16 w-auto object-contain brightness-0 invert" />
+              <img src={logo} alt="AvantCargo Logo" className="h-16 w-auto object-contain" />
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
               AvantCargo - Logística e Serviços Aduaneiros. Referência em assessoria de comércio exterior, oferecendo soluções estratégicas e operacionais.
