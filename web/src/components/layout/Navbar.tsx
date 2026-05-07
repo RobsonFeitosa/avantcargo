@@ -13,7 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Users, Monitor, Truck, ChevronDown } from "lucide-react";
+import { Monitor, Truck, ChevronDown, Radar, Box } from "lucide-react";
 
 export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -36,13 +36,13 @@ export const Navbar = () => {
   ];
 
   const servicesItems = [
-    { name: "Representação", icon: Users, path: "/servicos/representacao" },
+    { name: "Representação", icon: Radar, path: "/servicos/representacao" },
     { name: "Sistemas Comex", icon: Monitor, path: "/servicos/sistemas-comex" },
-    { name: "Transportes", icon: Truck, path: "/servicos/transportes" },
+    { name: "Transportes", icon: Truck, path: "/servicos/transporte" },
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b ${scrolled ? "bg-white/80 backdrop-blur-md border-slate-200 py-2 shadow-sm" : "bg-transparent border-transparent py-4"}`}>
+    <nav className="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 py-3 shadow-sm transition-all duration-300">
       <div className="container flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
           <Image src={logo} alt="AvantCargo Logo" className="h-14 w-auto object-contain" priority />

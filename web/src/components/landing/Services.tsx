@@ -4,40 +4,25 @@ import { FaBriefcase } from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
 
 
-import { Box, FileCheck, Landmark, Truck, Radar, FileSearch } from "lucide-react";
+import { Box, Truck, Radar, Monitor } from "lucide-react";
 
 export const Services = () => {
   const services = [
     {
-      title: "Logística Eficiente",
-      desc: "Representação real de GRU a VCP para quem não pode esperar. Soluções ágeis e controle total.",
-      icon: Truck,
+      title: "Representação",
+      desc: "Soluções completas de Importação e Exportação com foco em agilidade, segurança e conformidade total em GRU e VCP.",
+      icon: Radar,
       featured: true,
     },
     {
-      title: "Exportação Aérea",
-      desc: "Seu parceiro estratégico com expertise em cargas perigosas e operações de alta complexidade.",
-      icon: Box,
+      title: "Sistemas Comex",
+      desc: "Suporte especializado em E-awb e lançamentos no Portal Único, reduzindo burocracia e acelerando processos digitais.",
+      icon: Monitor,
     },
     {
-      title: "Desembaraço Aduaneiro",
-      desc: "Terceirização especializada em aeroportos que acelera o desembaraço e reduz custos operacionais.",
-      icon: FileCheck,
-    },
-    {
-      title: "Inteligência Artificial",
-      desc: "Uso de IA para otimizar estoques, reduzir desperdícios e prever sazonalidade nos fretes.",
-      icon: Landmark,
-    },
-    {
-      title: "Habilitação Radar",
-      desc: "Processo completo para habilitar sua empresa a operar legalmente no comércio exterior.",
-      icon: Radar,
-    },
-    {
-      title: "Consultoria Técnica",
-      desc: "Análise de impacto de condições climáticas e sazonalidade nos custos de frete internacional.",
-      icon: FileSearch,
+      title: "Transporte & Logística",
+      desc: "Coleta, etiquetagem, pré-cadastro e entrega nos terminais com segurança e agilidade no pré-embarque internacional.",
+      icon: Truck,
     },
   ];
 

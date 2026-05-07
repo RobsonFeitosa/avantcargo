@@ -46,7 +46,7 @@ export const Footer = () => {
               {[
                 { name: "Representação", path: "/servicos/representacao" },
                 { name: "Sistemas Comex", path: "/servicos/sistemas-comex" },
-                { name: "Transportes", path: "/servicos/transportes" },
+                { name: "Transportes", path: "/servicos/transporte" },
               ].map((link) => (
                 <li key={link.name}>
                   <Link href={link.path} className="text-sm text-slate-500 hover:text-primary transition-colors">{link.name}</Link>
