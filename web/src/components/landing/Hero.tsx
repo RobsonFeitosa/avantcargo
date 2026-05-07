@@ -55,7 +55,7 @@ export const Hero = () => {
                 {[
                   "+20 anos de experiência",
                   "Empresa 100% brasileira",
-                  "Curitiba, PR"
+                  "Guarulhos, SP"
                 ].map((text, idx) => (
                   <div key={idx} className="flex items-center gap-3 group whitespace-nowrap">
                     <div className="">

@@ -72,7 +72,7 @@ export const ContactCTA = () => {
                 className="w-full sm:w-[280px] bg-transparent border-white/20 text-white hover:bg-white/10 h-16 rounded-full font-bold text-lg"
               >
                 <Phone className="mr-2 h-5 w-5" />
-                (41) 3311-2890
+                (11) 96450-3217
               </Button>
             </div>
 

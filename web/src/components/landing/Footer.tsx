@@ -63,11 +63,11 @@ export const Footer = () => {
               </li>
               <li className="flex gap-3 text-sm text-muted-foreground">
                 <Phone className="h-5 w-5 text-primary shrink-0" />
-                <span>(41) 3311-2890</span>
+                <span>(11) 96450-3217</span>
               </li>
               <li className="flex gap-3 text-sm text-muted-foreground">
                 <Mail className="h-5 w-5 text-primary shrink-0" />
-                <span>contato@avantcargo.com.br</span>
+                <span>comercia@avantcargo.com.br</span>
               </li>
             </ul>
           </div>

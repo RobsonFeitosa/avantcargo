@@ -44,7 +44,7 @@ export default function Contact() {
     {
       icon: Phone,
       title: "Telefone Fixo",
-      value: "(41) 3311-2890",
+      value: "(11) 96450-3217",
       desc: "Seg a sex, 8h-18h",
       color: "text-blue-500",
       bg: "bg-blue-500/10",
@@ -52,7 +52,7 @@ export default function Contact() {
     {
       icon: Mail,
       title: "E-mail",
-      value: "contato@avantcargo.com.br",
+      value: "comercia@avantcargo.com.br",
       desc: "Resposta em até 24h úteis",
       color: "text-orange-500",
       bg: "bg-orange-500/10",
@@ -264,7 +264,7 @@ export default function Contact() {
                   <div className="p-8 rounded-[32px] bg-white/[0.03] border border-white/10 space-y-6">
                     <div className="space-y-2">
                       <p className="text-white font-medium">Av. República Argentina, 1237 — Sala 415</p>
-                      <p className="text-emerald-100/40">Curitiba, PR — CEP 80620-010</p>
+                      <p className="text-emerald-100/40">Guarulhos, SP — CEP 80620-010</p>
                       <p className="text-[10px] text-emerald-100/20 font-mono mt-4">CNPJ 22.837.692/0001-05</p>
                     </div>
                     <Button variant="outline" className="w-full h-12 bg-transparent border-white/10 text-white hover:bg-white/10 rounded-xl gap-2 font-bold">
