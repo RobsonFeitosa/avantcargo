@@ -2,10 +2,27 @@
 
 import { LandingLayout } from "@/components/layout/LandingLayout";
 import { Badge } from "@/components/ui/badge";
-import { Monitor, FileJson, Zap, ShieldCheck } from "lucide-react";
+import { Monitor, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 
 export default function ServiceComex() {
+  const features = [
+    "Equipe dedicada 24 horas por 7 dias por semana.",
+    "Know-How de excelência.",
+    "Atendimento direto - sem burocracia.",
+    "CCT Importação.",
+    "MRUC nas exportações.",
+    "CE Mercante (futuro CCT Marítimo).",
+    "Pucomex.",
+    "Sistemas Aeroportuários.",
+    "Follow-up automatizados.",
+    "Acompanhamento em tempo real.",
+    "Lançamentos ágeis.",
+    "Envio de extratos atualizados.",
+    "Bloqueio + Desbloqueio de cargas.",
+    "Atualizações Sistemáticas."
+  ];
+
   return (
     <LandingLayout>
       <div className="bg-white min-h-screen">
@@ -20,45 +37,30 @@ export default function ServiceComex() {
               <h1 className="text-4xl md:text-6xl font-bold leading-tight text-emerald-950 mb-6">
                 Sistemas <span className="text-primary">Comex</span>
               </h1>
-              <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-                Mais velocidade, menos burocracia: terceirize seus lançamentos e foque no seu cliente!
+              <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+                A base sólida por trás dos líderes do mercado! Deixe a responsabilidade técnica conosco e foque no crescimento do seu negócio.
               </p>
             </ScrollReveal>
           </div>
         </section>
 
-        {/* Main Content */}
+        {/* Main Value Proposition */}
         <section className="py-24">
           <div className="container">
             <div className="flex flex-col lg:flex-row items-center gap-16">
               <div className="flex-1 space-y-8">
                 <ScrollReveal direction="left">
-                  <h2 className="text-3xl md:text-4xl font-bold text-emerald-950">E-awb e Lançamentos no Portal Único</h2>
+                  <h2 className="text-3xl md:text-4xl font-bold text-emerald-950">Prioridade Máxima em Lançamentos</h2>
                   <p className="text-slate-600 text-lg leading-relaxed">
-                    A exportação aérea exige precisão documental e total conformidade com os órgãos reguladores. Oferecemos suporte especializado para os lançamentos que estão sob responsabilidade do Agente de Carga.
+                    Quando o assunto é impulsionar seu negócio através dos nossos serviços, tratamos com prioridade máxima. Deixar a responsabilidade de lançamentos com a Avant te garante tranquilidade e a certeza da excelência em cada etapa da operação.
                   </p>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-8">
-                    <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 group hover:border-primary/50 transition-all">
-                      <FileJson className="h-10 w-10 text-primary mb-4 group-hover:scale-110 transition-transform" />
-                      <h3 className="font-bold text-emerald-950 mb-2">Precisão Documental</h3>
-                      <p className="text-sm text-slate-500">Garantia de que cada dado inserido segue rigorosamente as normas vigentes.</p>
-                    </div>
-                    <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 group hover:border-primary/50 transition-all">
-                      <Zap className="h-10 w-10 text-orange-500 mb-4 group-hover:scale-110 transition-transform" />
-                      <h3 className="font-bold text-emerald-950 mb-2">Agilidade Digital</h3>
-                      <p className="text-sm text-slate-500">Lançamentos rápidos no Portal Único para evitar atrasos no embarque.</p>
-                    </div>
-                    <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 group hover:border-primary/50 transition-all">
-                      <ShieldCheck className="h-10 w-10 text-emerald-600 mb-4 group-hover:scale-110 transition-transform" />
-                      <h3 className="font-bold text-emerald-950 mb-2">Conformidade Total</h3>
-                      <p className="text-sm text-slate-500">Total alinhamento com os órgãos reguladores e legislação aduaneira.</p>
-                    </div>
-                    <div className="p-6 bg-slate-50 rounded-2xl border border-slate-200 group hover:border-primary/50 transition-all">
-                      <Monitor className="h-10 w-10 text-blue-500 mb-4 group-hover:scale-110 transition-transform" />
-                      <h3 className="font-bold text-emerald-950 mb-2">Suporte Especializado</h3>
-                      <p className="text-sm text-slate-500">Equipe focada na responsabilidade do Agente de Carga.</p>
-                    </div>
+                  <p className="text-slate-600 text-lg leading-relaxed">
+                    Nossa equipe dedicada 24x7 cuida de todo o processo com estratégia, precisão e compromisso com resultados, para que você possa focar no que realmente importa: crescer e escalar com segurança.
+                  </p>
+                  <div className="pt-4">
+                    <button className="bg-primary text-white px-8 py-4 rounded-full font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-primary/20 text-lg">
+                      Saiba Mais
+                    </button>
                   </div>
                 </ScrollReveal>
               </div>
@@ -70,25 +72,19 @@ export default function ServiceComex() {
                       <div className="h-16 w-16 rounded-2xl bg-white/10 flex items-center justify-center">
                         <Monitor className="h-8 w-8 text-primary" />
                       </div>
-                      <h3 className="text-2xl font-bold">Por que terceirizar?</h3>
+                      <h3 className="text-2xl font-bold">Por que Avant?</h3>
                       <ul className="space-y-4">
                         <li className="flex items-start gap-3">
-                          <div className="h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center mt-1">
-                            <div className="h-2 w-2 rounded-full bg-primary" />
-                          </div>
-                          <span>Foco total no atendimento ao seu cliente</span>
+                          <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-1" />
+                          <span>Atendimento direto - sem burocracia</span>
                         </li>
                         <li className="flex items-start gap-3">
-                          <div className="h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center mt-1">
-                            <div className="h-2 w-2 rounded-full bg-primary" />
-                          </div>
-                          <span>Redução de erros operacionais e multas</span>
+                          <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-1" />
+                          <span>Precisão técnica em cada lançamento</span>
                         </li>
                         <li className="flex items-start gap-3">
-                          <div className="h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center mt-1">
-                            <div className="h-2 w-2 rounded-full bg-primary" />
-                          </div>
-                          <span>Escalabilidade para picos de demanda</span>
+                          <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-1" />
+                          <span>Escalabilidade com segurança operacional</span>
                         </li>
                       </ul>
                     </div>
@@ -99,16 +95,24 @@ export default function ServiceComex() {
           </div>
         </section>
 
-        {/* Info Box */}
+        {/* Detailed Features Grid */}
         <section className="py-24 bg-slate-50">
           <div className="container">
-            <div className="bg-white border border-slate-200 rounded-[32px] p-12 text-center max-w-4xl mx-auto shadow-sm">
-              <ScrollReveal>
-                <h2 className="text-3xl font-bold text-emerald-950 mb-6">Eficiência que impulsiona seu <span className="text-primary">negócio</span></h2>
-                <p className="text-slate-600 text-lg leading-relaxed">
-                  Não deixe que a burocracia documental atrase sua logística. Com a AvantCargo, seus lançamentos são tratados com a prioridade e a precisão que o comércio exterior moderno exige.
-                </p>
-              </ScrollReveal>
+            <div className="text-center mb-16 space-y-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-emerald-950">Diferenciais e <span className="text-primary">Capacidades</span></h2>
+              <p className="text-slate-600 max-w-2xl mx-auto">Excelência técnica e suporte contínuo para garantir a fluidez da sua operação internacional.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {features.map((feature, idx) => (
+                <ScrollReveal key={idx} delay={idx * 0.05}>
+                  <div className="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm hover:border-primary/30 hover:shadow-md transition-all flex items-center gap-4 group">
+                    <div className="h-10 w-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-all">
+                      <ShieldCheck className="h-5 w-5" />
+                    </div>
+                    <span className="font-semibold text-slate-700 group-hover:text-emerald-950 transition-colors">{feature}</span>
+                  </div>
+                </ScrollReveal>
+              ))}
             </div>
           </div>
         </section>
