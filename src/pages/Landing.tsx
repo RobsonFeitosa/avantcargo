@@ -12,8 +12,10 @@ import { ScrollReveal } from "@/components/animations/ScrollReveal";
 export default function Landing() {
   return (
     <LandingLayout>
-      <Hero />
-      <ScrollReveal delay={0.2}><StatsBar /></ScrollReveal>
+      <div className="bg-gradient-to-br from-primary/20 via-background to-[#0e484c]/30">
+        <Hero />
+        <ScrollReveal delay={0.2}><StatsBar /></ScrollReveal>
+      </div>
       <ScrollReveal><Services /></ScrollReveal>
       <Process />
       <ScrollReveal><Expertise /></ScrollReveal>

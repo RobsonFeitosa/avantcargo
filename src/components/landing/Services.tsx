@@ -1,5 +1,9 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { FaBriefcase } from "react-icons/fa";
+import { FaArrowRightLong } from "react-icons/fa6";
+
+
 import { Box, FileCheck, Landmark, Truck, Radar, FileSearch } from "lucide-react";
 
 export const Services = () => {
@@ -38,35 +42,49 @@ export const Services = () => {
   ];
 
   return (
-    <section id="servicos" className="py-24 bg-background">
-      <div className="container">
-        <div className="text-center space-y-4 mb-16 max-w-2xl mx-auto">
-          <Badge variant="outline" className="text-primary border-primary/20 bg-primary/5 uppercase tracking-widest px-4 py-1">
-            Nossa Expertise
+    <section id="servicos" className="py-24 bg-emerald-900 relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-orange-500/5 blur-[120px] rounded-full pointer-events-none" />
+      
+      <div className="container relative z-10">
+        <div className="text-center space-y-4 mb-20 max-w-2xl mx-auto">
+          <Badge variant="outline" className="text-primary border-primary/20 bg-primary/10 uppercase tracking-widest px-4 py-1 gap-2 rounded-full">
+            <FaBriefcase />
+            <span>O que fazemos</span>
           </Badge>
-          <h2 className="text-3xl md:text-5xl font-bold">Principais <span className="text-primary">Serviços</span></h2>
-          <p className="text-muted-foreground">
+          <h2 className="text-4xl md:text-5xl font-bold text-white">Principais <span className="text-primary">Serviços</span></h2>
+          <p className="text-emerald-100/60 text-lg">
             Oferecemos soluções completas para integrar sua empresa ao mercado internacional com eficiência e segurança.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((s, idx) => (
-            <Card key={idx} className={`p-8 card-surface group hover:border-primary/50 transition-all duration-300 relative overflow-hidden ${s.featured ? "border-primary/30" : ""}`}>
+            <Card
+              key={idx}
+              className={`p-10 border-white/10 bg-white/5 backdrop-blur-sm group hover:border-primary/50 transition-all duration-500 relative overflow-hidden flex flex-col h-full hover:shadow-2xl hover:shadow-primary/5 hover:-translate-y-2 ${s.featured ? "border-orange-500/50 shadow-lg shadow-orange-500/10 bg-white/[0.08]" : ""}`}
+            >
+              <div className="absolute bottom-0 left-0 w-full h-1 bg-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+
               {s.featured && (
-                <div className="absolute top-0 right-0 px-3 py-1 bg-primary text-primary-foreground text-[10px] font-bold uppercase rounded-bl-lg">
-                  Mais procurado
+                <div className="mb-6">
+                  <Badge variant="outline" className="bg-orange-500 text-white border-none text-[10px] uppercase font-bold px-4 py-1 rounded-full tracking-widest shadow-lg">
+                    Mais popular
+                  </Badge>
                 </div>
               )}
-              <div className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                <s.icon className="h-6 w-6 text-primary group-hover:text-primary-foreground" />
+
+              <div className="h-16 w-16 rounded-[20px] bg-white/5 border border-white/10 flex items-center justify-center mb-10 group-hover:scale-110 transition-all duration-500">
+                <s.icon className="h-8 w-8 text-primary group-hover:text-orange-500 group-hover:-rotate-12 transition-all duration-500" />
               </div>
-              <h3 className="text-xl font-bold mb-3">{s.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+
+              <h3 className="text-2xl font-bold mb-4 text-white group-hover:text-primary transition-colors duration-300">{s.title}</h3>
+              <p className="text-emerald-100/70 leading-relaxed mb-10 flex-grow">
                 {s.desc}
               </p>
-              <button className="text-sm font-semibold text-primary flex items-center gap-2 hover:gap-3 transition-all">
-                Saiba mais <Box className="h-3 w-3" />
+
+              <button className="text-sm font-bold text-primary flex items-center gap-2 group/btn hover:text-white transition-all duration-300">
+                Saiba mais <FaArrowRightLong className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
               </button>
             </Card>
           ))}

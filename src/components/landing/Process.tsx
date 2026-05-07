@@ -2,6 +2,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MessageSquare } from "lucide-react";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
+import { BiSolidDirections } from "react-icons/bi";
+
 
 export const Process = () => {
   const steps = [
@@ -32,7 +34,9 @@ export const Process = () => {
       <div className="container relative z-10">
         <div className="text-center space-y-4 mb-20 max-w-2xl mx-auto">
           <ScrollReveal>
-            <Badge variant="outline" className="text-primary border-primary/20 bg-primary/5 uppercase tracking-widest px-4 py-1">
+            <Badge variant="outline" className="text-primary gap-2 border-primary/20 bg-primary/5 uppercase tracking-widest px-4 py-1">
+              <BiSolidDirections />
+
               Como Trabalhamos
             </Badge>
           </ScrollReveal>
@@ -48,7 +52,7 @@ export const Process = () => {
 
         <div className="max-w-4xl mx-auto relative">
           <div className="absolute left-8 top-8 bottom-24 w-[2px] bg-primary/20 -translate-x-1/2" />
-          
+
           <div className="space-y-16 relative">
             {steps.map((step, idx) => (
               <ScrollReveal key={idx} delay={idx * 0.15} direction="up" distance={30}>
@@ -69,7 +73,7 @@ export const Process = () => {
               </ScrollReveal>
             ))}
           </div>
-          
+
           <ScrollReveal delay={0.6} className="mt-16 flex justify-center">
             <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-8 h-14 text-base shadow-glow rounded-full group">
               <MessageSquare className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
