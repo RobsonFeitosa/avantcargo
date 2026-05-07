@@ -25,25 +25,25 @@ export const Hero = () => {
             </ScrollReveal>
 
             <ScrollReveal direction="right" delay={0.2}>
-              <h1 className="text-4xl md:text-6xl font-bold leading-tight tracking-tight">
+              <h1 className="text-4xl md:text-6xl font-bold leading-tight tracking-tight text-emerald-950">
                 Seu parceiro <span className="text-primary">estratégico</span> <br />
                 em Aeroportos GRU | VCP
               </h1>
             </ScrollReveal>
 
             <ScrollReveal direction="right" delay={0.3}>
-              <p className="text-lg text-muted-foreground max-w-xl leading-relaxed">
+              <p className="text-lg text-slate-600 max-w-xl leading-relaxed">
                 Soluções ágeis para agentes de carga e comissárias. Controle a informação, controle o resultado e acelere seu desembaraço aduaneiro.
               </p>
             </ScrollReveal>
 
             <ScrollReveal direction="right" delay={0.4}>
               <div className="flex flex-wrap gap-4">
-                <Button size="lg" className="bg-primary hover:bg-primary/90 rounded-full text-primary-foreground font-semibold px-8 h-12 shadow-glow">
+                <Button size="lg" className="bg-primary hover:bg-emerald-700 rounded-full text-white font-semibold px-8 h-12 shadow-xl shadow-primary/10">
                   <FaWhatsapp className="mr-1" />
                   Falar conosco
                 </Button>
-                <Button size="lg" variant="outline" className="border-border rounded-full hover:bg-secondary h-12 px-8 font-semibold">
+                <Button size="lg" variant="outline" className="border-slate-300 rounded-full hover:bg-slate-50 h-12 px-8 font-semibold text-slate-700">
                   <FaBuilding />
                   Quem somos
                 </Button>
@@ -61,7 +61,7 @@ export const Hero = () => {
                     <div className="">
                       <FaCheckCircle className="h-3.5 w-3.5 text-orange-500" />
                     </div>
-                    <span className="text-sm font-bold text-foreground/90 group-hover:text-foreground transition-colors tracking-tight">{text}</span>
+                    <span className="text-sm font-bold text-slate-600 group-hover:text-emerald-900 transition-colors tracking-tight">{text}</span>
                   </div>
                 ))}
               </div>
@@ -70,8 +70,8 @@ export const Hero = () => {
 
           <ScrollReveal direction="left" delay={0.3}>
             <div className="relative ">
-              <div className="relative  p-6 md:p-8 border   bg-white/40 !rounded-3xl">
-                <h3 className="text-xl font-bold mb-6 flex items-center gap-2 uppercase">
+              <div className="relative p-6 md:p-8 border border-slate-200 bg-white/80 backdrop-blur-sm !rounded-3xl shadow-2xl shadow-primary/5">
+                <h3 className="text-xl font-bold mb-6 flex items-center gap-2 uppercase text-emerald-900">
                   Nossos principais serviços
                 </h3>
 
@@ -82,35 +82,35 @@ export const Hero = () => {
                     { icon: Shield, title: "Segurança Jurídica", desc: "Conformidade total com a legislação vigente." },
                     { icon: Users, title: "Equipe Dedicada", desc: "Suporte especializado em cada etapa do processo." },
                   ].map((item, idx) => (
-                    <div key={idx} className="flex border  bg-white/10 gap-4 p-3 rounded-lg">
+                    <div key={idx} className="flex border border-slate-100 bg-slate-50/50 gap-4 p-3 rounded-lg group hover:border-primary/20 hover:bg-white transition-all">
                       <div className="h-10 w-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                         <item.icon className="h-5 w-5 text-primary" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-sm">{item.title}</h4>
-                        <p className="text-xs text-muted-foreground">{item.desc}</p>
+                        <h4 className="font-semibold text-sm text-emerald-900">{item.title}</h4>
+                        <p className="text-xs text-slate-500">{item.desc}</p>
                       </div>
                     </div>
                   ))}
                 </div>
 
                 <div className="grid grid-cols-3 gap-4 pt-8 ">
-                  <div className="border flex justify-center items-center py-4 rounded-lg">
+                  <div className="border border-slate-100 flex justify-center items-center py-4 rounded-lg bg-white shadow-sm">
                     <div>
                       <p className="text-2xl font-bold text-primary text-center">500+</p>
-                      <p className="text-[10px] text-muted-foreground uppercase text-center">Clientes atendidos</p>
+                      <p className="text-[10px] text-slate-400 uppercase text-center">Clientes atendidos</p>
                     </div>
                   </div>
-                  <div className="border flex justify-center items-center py-4 rounded-lg">
+                  <div className="border border-slate-100 flex justify-center items-center py-4 rounded-lg bg-white shadow-sm">
                     <div>
                       <p className="text-2xl font-bold text-primary text-center">20+</p>
-                      <p className="text-[10px] text-muted-foreground uppercase text-center">Anos de experiência</p>
+                      <p className="text-[10px] text-slate-400 uppercase text-center">Anos de experiência</p>
                     </div>
                   </div>
-                  <div className="border flex justify-center items-center py-4 rounded-lg">
+                  <div className="border border-slate-100 flex justify-center items-center py-4 rounded-lg bg-white shadow-sm">
                     <div>
                       <p className="text-2xl font-bold text-primary text-center">98%</p>
-                      <p className="text-[10px] text-muted-foreground uppercase text-center">Satisfação</p>
+                      <p className="text-[10px] text-slate-400 uppercase text-center">Satisfação</p>
                     </div>
                   </div>
                 </div>

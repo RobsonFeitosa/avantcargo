@@ -14,7 +14,7 @@ import { ScrollReveal } from "@/components/animations/ScrollReveal";
 export default function Landing() {
   return (
     <LandingLayout>
-      <div className="bg-gradient-to-br from-primary/20 via-background to-[#0e484c]/30">
+      <div className="bg-gradient-to-br from-primary/5 via-slate-50 to-orange-500/5">
         <Hero />
         <StatsBar />
       </div>
