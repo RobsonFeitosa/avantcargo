@@ -41,7 +41,7 @@ export const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-bold mb-6 uppercase tracking-widest text-xs text-emerald-950">Serviços</h4>
+            <h4 className="font-bold mb-6 uppercase tracking-widest text-xs text-emerald-950">Áreas de Atuação</h4>
             <ul className="space-y-4">
               {[
                 { name: "Representação", path: "/servicos/representacao" },

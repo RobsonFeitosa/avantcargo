@@ -31,7 +31,6 @@ export const Navbar = () => {
   const navItems = [
     { name: "Início", path: "/" },
     { name: "Quem Somos", path: "/quem-somos" },
-    { name: "Áreas de Atuação", path: "/atuacao" },
     { name: "Contato", path: "/contato" },
   ];
 
@@ -65,7 +64,7 @@ export const Navbar = () => {
             Quem Somos
           </Link>
 
-          {/* Serviços (Dropdown on Hover) */}
+          {/* Áreas de Atuação (Dropdown on Hover) */}
           <div
             className="relative"
             onMouseEnter={() => setIsServicesOpen(true)}
@@ -73,24 +72,27 @@ export const Navbar = () => {
           >
             <DropdownMenu open={isServicesOpen} onOpenChange={setIsServicesOpen} modal={false}>
               <DropdownMenuTrigger asChild>
-                <div className={`text-sm font-bold tracking-tight transition-all duration-300 relative group flex items-center px-4 py-2 rounded-full outline-none cursor-pointer ${pathname.startsWith("/servicos") || isServicesOpen ? "text-primary bg-primary/10" : "text-slate-600 hover:text-primary hover:bg-slate-50"}`}>
-                  Serviços <ChevronDown className={`ml-1 h-4 w-4 transition-transform duration-200 ${isServicesOpen ? "rotate-180" : ""}`} />
+                <div className={`text-sm font-bold tracking-tight transition-all duration-300 relative group flex items-center gap-1.5 px-4 py-2 rounded-full cursor-pointer ${pathname.startsWith("/servicos") ? "text-primary bg-primary/10" : "text-slate-600 hover:text-primary hover:bg-slate-50"}`}>
+                  Áreas de Atuação
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isServicesOpen ? "rotate-180" : ""}`} />
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                sideOffset={0}
-                className="bg-white border-slate-200 rounded-2xl p-1 min-w-[240px] shadow-2xl animate-in fade-in zoom-in-95 duration-200 mt-2"
+                align="center"
+                className="w-56 p-2 bg-white/95 backdrop-blur-lg border-slate-200 shadow-xl rounded-2xl animate-in fade-in zoom-in duration-200"
+                onMouseEnter={() => setIsServicesOpen(true)}
+                onMouseLeave={() => setIsServicesOpen(false)}
               >
                 {servicesItems.map((item) => (
-                  <DropdownMenuItem key={item.name} asChild className="p-0 focus:bg-transparent">
+                  <DropdownMenuItem key={item.name} asChild>
                     <Link
                       href={item.path}
-                      className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer hover:bg-primary/5 transition-all group"
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 hover:bg-primary/5 group/item"
                     >
-                      <div className="flex items-center justify-center text-orange-500 group-hover:scale-110 transition-transform">
-                        <item.icon className="h-5 w-5" />
+                      <div className="h-8 w-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover/item:bg-primary/10 group-hover/item:text-primary transition-colors">
+                        <item.icon className="h-4.5 w-4.5" />
                       </div>
-                      <span className="text-sm font-semibold text-slate-700 group-hover:text-primary transition-colors">
+                      <span className="text-sm font-semibold text-slate-600 group-hover/item:text-primary transition-colors">
                         {item.name}
                       </span>
                     </Link>
@@ -100,16 +102,13 @@ export const Navbar = () => {
             </DropdownMenu>
           </div>
 
-          {/* Other Items */}
-          {navItems.slice(2).map((item) => (
-            <Link
-              key={item.name}
-              href={item.path}
-              className={`text-sm font-bold tracking-tight transition-all duration-300 relative group flex items-center px-4 py-2 rounded-full ${pathname === item.path ? "text-primary bg-primary/10" : "text-slate-600 hover:text-primary hover:bg-slate-50"}`}
-            >
-              {item.name}
-            </Link>
-          ))}
+          {/* Contato */}
+          <Link
+            href="/contato"
+            className={`text-sm font-bold tracking-tight transition-all duration-300 relative group flex items-center px-4 py-2 rounded-full ${pathname === "/contato" ? "text-primary bg-primary/10" : "text-slate-600 hover:text-primary hover:bg-slate-50"}`}
+          >
+            Contato
+          </Link>
         </div>
 
         <div className="flex items-center gap-4">
