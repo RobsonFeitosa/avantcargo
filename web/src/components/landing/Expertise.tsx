@@ -48,34 +48,34 @@ export const Expertise = () => {
   ];
 
   return (
-    <section id="sobre" className="py-24 bg-[hsl(184_50%_4%)] relative overflow-hidden">
+    <section id="sobre" className="py-24 bg-slate-50 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-full h-full bg-primary/5 pointer-events-none" />
 
       <div className="container relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           <div className="space-y-10">
             <div className="space-y-6">
-              <Badge variant="outline" className="gap-2 text-orange-500 border-orange-500/30 bg-orange-500/10 uppercase tracking-widest px-4 py-1.5 rounded-full font-bold">
+              <Badge variant="outline" className="gap-2 text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-4 py-1.5 rounded-full font-bold">
                 <BsFillPeopleFill className="h-4 w-4" />
                 Quem somos
               </Badge>
-              <h2 className="text-4xl md:text-6xl font-bold leading-tight text-white">
+              <h2 className="text-4xl md:text-6xl font-bold leading-tight text-emerald-950">
                 Mais de <span className="text-orange-500">20 anos</span> de expertise em Comércio Exterior
               </h2>
-              <p className="text-lg text-emerald-100/60 leading-relaxed">
+              <p className="text-lg text-slate-600 leading-relaxed">
                 Atuamos com excelência em todos os portos, aeroportos e fronteiras do Brasil, garantindo que sua carga chegue ao destino final sem imprevistos e com o melhor custo-benefício.
               </p>
             </div>
 
             <div className="space-y-4">
               {leftItems.map((item, idx) => (
-                <div key={idx} className="flex items-center gap-6 p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/30 transition-all group">
-                  <div className={`h-12 w-12 rounded-xl bg-white/5 flex items-center justify-center ${item.iconColor} group-hover:scale-110 transition-transform`}>
+                <div key={idx} className="flex items-center gap-6 p-6 rounded-2xl bg-white border border-slate-200 hover:border-primary/30 shadow-sm hover:shadow-md transition-all group">
+                  <div className={`h-12 w-12 rounded-xl bg-slate-50 flex items-center justify-center ${item.iconColor} group-hover:scale-110 transition-transform`}>
                     <item.icon className="h-6 w-6" />
                   </div>
                   <div className="space-y-1">
-                    <h4 className="font-bold text-white text-lg">{item.title}</h4>
-                    <p className="text-sm text-emerald-100/40">{item.desc}</p>
+                    <h4 className="font-bold text-emerald-900 text-lg">{item.title}</h4>
+                    <p className="text-sm text-slate-500">{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -85,7 +85,7 @@ export const Expertise = () => {
               <Button className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-10 h-16 rounded-full shadow-lg shadow-orange-500/20 transition-all hover:scale-105 text-lg">
                 Conheça nossa história
               </Button>
-              <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white/10 font-bold px-10 h-16 rounded-full transition-all text-lg">
+              <Button variant="outline" className="bg-transparent border-slate-300 text-slate-700 hover:bg-slate-100 font-bold px-10 h-16 rounded-full transition-all text-lg">
                 Fale conosco
               </Button>
             </div>
@@ -93,30 +93,30 @@ export const Expertise = () => {
 
           <div className="space-y-4">
             {rightItems.map((item, idx) => (
-              <div key={idx} className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/40 hover:bg-white/[0.08] transition-all group relative overflow-hidden">
+              <div key={idx} className="p-6 rounded-2xl bg-white border border-slate-200 hover:border-primary/40 hover:bg-slate-50/50 shadow-sm transition-all group relative overflow-hidden">
                 <div className="flex items-center gap-6">
-                  <div className={`h-12 w-12 rounded-xl bg-white/5 flex items-center justify-center ${item.iconColor} group-hover:scale-110 transition-transform`}>
+                  <div className={`h-12 w-12 rounded-xl bg-slate-50 flex items-center justify-center ${item.iconColor} group-hover:scale-110 transition-transform`}>
                     <item.icon className="h-6 w-6" />
                   </div>
                   <div className="space-y-1">
-                    <h4 className="font-bold text-lg text-white">{item.title}</h4>
-                    <p className="text-sm text-emerald-100/40">{item.desc}</p>
+                    <h4 className="font-bold text-lg text-emerald-900">{item.title}</h4>
+                    <p className="text-sm text-slate-500">{item.desc}</p>
                   </div>
                 </div>
               </div>
             ))}
 
             {/* Founder Box */}
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-primary/20 to-transparent border border-primary/30 hover:border-primary/50 transition-all group relative overflow-hidden">
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-primary/5 to-transparent border border-primary/20 hover:border-primary/40 transition-all group relative overflow-hidden bg-white">
               <div className="flex items-center gap-6">
                 <div className="h-12 w-12 rounded-full border-2 border-orange-500 p-1 group-hover:scale-110 transition-transform shrink-0">
-                  <div className="h-full w-full rounded-full bg-white/10 flex items-center justify-center text-orange-500 font-bold text-sm">
+                  <div className="h-full w-full rounded-full bg-orange-500/10 flex items-center justify-center text-orange-600 font-bold text-sm">
                     MD
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <h4 className="font-bold text-lg text-white">Matheus Diniz</h4>
-                  <p className="text-sm text-emerald-100/40">Fundador & Especialista</p>
+                  <h4 className="font-bold text-lg text-emerald-900">Matheus Diniz</h4>
+                  <p className="text-sm text-slate-500">Fundador & Especialista</p>
                 </div>
               </div>
             </div>

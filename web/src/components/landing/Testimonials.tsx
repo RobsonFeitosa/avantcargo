@@ -58,8 +58,8 @@ export const Testimonials = () => {
   };
 
   return (
-    <section className="py-32 bg-[hsl(184_50%_4%)] relative overflow-hidden">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(249,115,22,0.03),transparent_70%)] pointer-events-none" />
+    <section className="py-32 bg-white relative overflow-hidden">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(249,115,22,0.02),transparent_70%)] pointer-events-none" />
 
       <div className="container relative z-10">
         <div className="text-center space-y-6 mb-20   mx-auto">
@@ -68,7 +68,7 @@ export const Testimonials = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <Badge variant="outline" className="gap-2 text-orange-500 border-orange-500/30 bg-orange-500/10 uppercase tracking-widest px-6 py-2 rounded-full font-bold">
+            <Badge variant="outline" className="gap-2 text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-6 py-2 rounded-full font-bold">
               <Star className="h-4 w-4 fill-orange-500" />
               Depoimentos
             </Badge>
@@ -78,7 +78,7 @@ export const Testimonials = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl font-bold text-white tracking-tight"
+            className="text-4xl md:text-6xl font-bold text-emerald-950 tracking-tight"
           >
             O que nossos <span className="text-orange-500">clientes dizem</span>
           </motion.h2>
@@ -87,7 +87,7 @@ export const Testimonials = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-emerald-100/60 text-lg"
+            className="text-slate-600 text-lg"
           >
             Alguns depoimentos de pessoas e empresas que acreditam em nosso trabalho.
           </motion.p>
@@ -105,7 +105,7 @@ export const Testimonials = () => {
               key={idx}
               variants={itemVariants}
               whileHover={{ y: -5 }}
-              className="p-8 md:p-10 rounded-[32px] bg-white/[0.03] border border-white/10 hover:border-orange-500/30 transition-all group relative flex flex-col h-full"
+              className="p-8 md:p-10 rounded-[32px] bg-slate-50/50 border border-slate-200 hover:border-orange-500/20 hover:bg-white hover:shadow-xl hover:shadow-orange-500/5 transition-all group relative flex flex-col h-full"
             >
               <div className="flex justify-between items-start mb-8">
                 <div className="flex gap-1">
@@ -113,20 +113,20 @@ export const Testimonials = () => {
                     <Star key={i} className="h-5 w-5 fill-orange-500 text-orange-500" />
                   ))}
                 </div>
-                <Quote className="h-10 w-10 text-white/10 group-hover:text-orange-500/20 transition-colors" />
+                <Quote className="h-10 w-10 text-slate-200 group-hover:text-orange-500/10 transition-colors" />
               </div>
 
-              <p className="text-base md:text-lg text-emerald-100/70 italic leading-relaxed mb-10 flex-grow">
+              <p className="text-base md:text-lg text-slate-600 italic leading-relaxed mb-10 flex-grow">
                 "{t.text}"
               </p>
 
               <div className="flex items-center gap-4 mt-auto">
-                <div className="h-12 w-12 rounded-full bg-teal-600/40 border border-blue-400/30 flex items-center justify-center text-white font-bold text-sm shrink-0">
+                <div className="h-12 w-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-sm shrink-0">
                   {t.initials}
                 </div>
                 <div>
-                  <h4 className="font-bold text-white text-sm md:text-base leading-tight">{t.name}</h4>
-                  <p className="text-[10px] md:text-xs text-emerald-100/40 font-medium uppercase tracking-wider mt-1">{t.role}</p>
+                  <h4 className="font-bold text-emerald-900 text-sm md:text-base leading-tight">{t.name}</h4>
+                  <p className="text-[10px] md:text-xs text-slate-400 font-medium uppercase tracking-wider mt-1">{t.role}</p>
                 </div>
               </div>
             </motion.div>

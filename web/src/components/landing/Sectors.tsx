@@ -36,8 +36,8 @@ export const Sectors = () => {
   };
 
   return (
-    <section className="py-32 bg-emerald-950  relative overflow-hidden">
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
+    <section className="py-32 bg-emerald-50/10 relative overflow-hidden">
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-orange-500/5 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="container relative z-10">
@@ -47,7 +47,7 @@ export const Sectors = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <Badge variant="outline" className="gap-2 text-orange-500 border-orange-500/30 bg-orange-500/10 uppercase tracking-widest px-6 py-2 rounded-full font-bold">
+            <Badge variant="outline" className="gap-2 text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-6 py-2 rounded-full font-bold">
               <FaIndustry className="h-4 w-4" />
               Segmentos
             </Badge>
@@ -57,16 +57,16 @@ export const Sectors = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl font-bold text-white tracking-tight"
+            className="text-4xl md:text-6xl font-bold text-emerald-950 tracking-tight"
           >
-            Setores que <span className="text-[#48D1CC]">atendemos</span>
+            Setores que <span className="text-primary">atendemos</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-emerald-100/60 max-w-2xl mx-auto text-lg"
+            className="text-slate-600 max-w-2xl mx-auto text-lg"
           >
             Soluções logísticas integradas e personalizadas para as demandas mais exigentes do mercado global.
           </motion.p>
@@ -84,12 +84,12 @@ export const Sectors = () => {
               key={idx}
               variants={itemVariants}
               whileHover={{ scale: 1.05, y: -5 }}
-              className="p-8 flex flex-col items-center justify-center gap-5 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-orange-500/50 hover:bg-white/[0.06] transition-all group relative cursor-default"
+              className="p-8 flex flex-col items-center justify-center gap-5 rounded-2xl bg-white border border-emerald-100 hover:border-orange-500/30 hover:shadow-xl hover:shadow-orange-500/5 transition-all group relative cursor-default"
             >
               <div className="absolute inset-0 bg-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl" />
 
-              <sector.icon className="h-7 w-7 text-[#48D1CC]" />
-              <p className="text-[11px] font-black uppercase tracking-[0.2em] text-center text-emerald-100/40 group-hover:text-white transition-colors">
+              <sector.icon className="h-7 w-7 text-primary group-hover:text-orange-500 transition-colors" />
+              <p className="text-[11px] font-black uppercase tracking-[0.2em] text-center text-slate-400 group-hover:text-emerald-900 transition-colors">
                 {sector.name}
               </p>
             </motion.div>
