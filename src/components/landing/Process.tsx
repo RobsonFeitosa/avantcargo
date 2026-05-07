@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { MessageSquare } from "lucide-react";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { BiSolidDirections } from "react-icons/bi";
+import { FaWhatsapp } from "react-icons/fa";
 
 
 export const Process = () => {
@@ -30,21 +31,22 @@ export const Process = () => {
   ];
 
   return (
-    <section className="py-24 bg-secondary/5 relative overflow-hidden">
-      <div className="container relative z-10">
-        <div className="text-center space-y-4 mb-20 max-w-2xl mx-auto">
-          <ScrollReveal>
-            <Badge variant="outline" className="text-primary gap-2 border-primary/20 bg-primary/5 uppercase tracking-widest px-4 py-1">
-              <BiSolidDirections />
+    <section className="py-24 bg-emerald-950 relative overflow-hidden">
+      <div className="absolute top-1/2 left-0 w-1/2 h-1/2 bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
 
+      <div className="container relative z-10">
+        <div className="text-center space-y-4 mb-20 mx-auto">
+          <ScrollReveal>
+            <Badge variant="outline" className="text-primary gap-2 border-primary/20 bg-primary/10 uppercase tracking-widest px-4 py-1 rounded-full">
+              <BiSolidDirections />
               Como Trabalhamos
             </Badge>
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
-            <h2 className="text-3xl md:text-5xl font-bold">Nossa abordagem em <span className="text-primary">4 etapas</span></h2>
+            <h2 className="text-5xl font-bold text-white">Nossa abordagem em <span className="text-primary">4 etapas</span></h2>
           </ScrollReveal>
-          <ScrollReveal delay={0.2}>
-            <p className="text-muted-foreground">
+          <ScrollReveal delay={0.2} className="flex justify-center">
+            <p className="text-emerald-100/60    max-w-2xl text-lg">
               Um fluxo de trabalho transparente e eficiente desenhado para mitigar riscos e maximizar resultados.
             </p>
           </ScrollReveal>
@@ -57,15 +59,16 @@ export const Process = () => {
             {steps.map((step, idx) => (
               <ScrollReveal key={idx} delay={idx * 0.15} direction="up" distance={30}>
                 <div className="flex items-start gap-8 md:gap-16 group">
-                  <div className="relative z-10 shrink-0">
-                    <div className="h-16 w-16 rounded-full bg-background border-4 border-primary/30 flex items-center justify-center text-xl font-bold text-primary shadow-elegant group-hover:scale-110 group-hover:border-primary transition-all duration-500">
+                  <div className="relative z-10 shrink-0 h-16 w-16 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                    <div className="absolute inset-0 rounded-full border-[3px] border-primary/30 group-hover:border-orange-500 transition-colors duration-500" />
+                    <div className="h-[3.25rem] w-[3.25rem] rounded-full bg-primary flex items-center justify-center text-lg font-bold text-white group-hover:bg-orange-500 transition-colors duration-500 shadow-lg">
                       {step.number}
                     </div>
                   </div>
 
                   <div className="space-y-4 pt-2">
-                    <h3 className="text-2xl font-bold">{step.title}</h3>
-                    <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl">
+                    <h3 className="text-2xl font-bold text-white group-hover:text-primary transition-colors duration-300">{step.title}</h3>
+                    <p className="text-lg text-emerald-100/70 leading-relaxed max-w-2xl">
                       {step.desc}
                     </p>
                   </div>
@@ -75,8 +78,8 @@ export const Process = () => {
           </div>
 
           <ScrollReveal delay={0.6} className="mt-16 flex justify-center">
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-8 h-14 text-base shadow-glow rounded-full group">
-              <MessageSquare className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
+            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold   text-base shadow-glow rounded-full group transition-all duration-300 hover:scale-105">
+              <FaWhatsapp className=" h-5 w-5 group-hover:scale-110 transition-transform" />
               Falar com um especialista
             </Button>
           </ScrollReveal>
