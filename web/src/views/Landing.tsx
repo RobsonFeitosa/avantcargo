@@ -16,14 +16,14 @@ export default function Landing() {
     <LandingLayout>
       <div className="bg-gradient-to-br from-primary/20 via-background to-[#0e484c]/30">
         <Hero />
-        <ScrollReveal delay={0.2}><StatsBar /></ScrollReveal>
+        <StatsBar />
       </div>
-      <ScrollReveal><Services /></ScrollReveal>
+      <Services />
       <Process />
-      <ScrollReveal><Expertise /></ScrollReveal>
-      <ScrollReveal><Sectors /></ScrollReveal>
-      <ScrollReveal><Testimonials /></ScrollReveal>
-      <ScrollReveal><ContactCTA /></ScrollReveal>
+      <Expertise />
+      <Sectors />
+      <Testimonials />
+      <ContactCTA />
     </LandingLayout>
   );
 }

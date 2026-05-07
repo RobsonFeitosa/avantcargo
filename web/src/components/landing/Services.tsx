@@ -45,7 +45,7 @@ export const Services = () => {
     <section id="servicos" className="py-24 bg-emerald-900 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-orange-500/5 blur-[120px] rounded-full pointer-events-none" />
-      
+
       <div className="container relative z-10">
         <div className="text-center space-y-4 mb-20 max-w-2xl mx-auto">
           <Badge variant="outline" className="text-primary border-primary/20 bg-primary/10 uppercase tracking-widest px-4 py-1 gap-2 rounded-full">

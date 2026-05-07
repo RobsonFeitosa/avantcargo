@@ -1,5 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Users, Shield, Globe, Zap, Clock, Box, Landmark, Truck, Radar, Pickaxe, Sparkles, Pill } from "lucide-react";
+import { FaIndustry } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 export const Sectors = () => {
   const sectors = [
@@ -18,28 +20,81 @@ export const Sectors = () => {
     { name: "Pharma", icon: Pill },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
-    <section className="py-24 bg-secondary/5">
-      <div className="container">
-        <div className="text-center space-y-4 mb-16">
-          <Badge variant="outline" className="text-primary border-primary/20 bg-primary/5 uppercase tracking-widest px-4 py-1">
-            Segmentos
-          </Badge>
-          <h2 className="text-3xl md:text-5xl font-bold">Setores que <span className="text-primary">atendemos</span></h2>
+    <section className="py-32 bg-emerald-950  relative overflow-hidden">
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-orange-500/5 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="container relative z-10">
+        <div className="text-center space-y-6 mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <Badge variant="outline" className="gap-2 text-orange-500 border-orange-500/30 bg-orange-500/10 uppercase tracking-widest px-6 py-2 rounded-full font-bold">
+              <FaIndustry className="h-4 w-4" />
+              Segmentos
+            </Badge>
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-6xl font-bold text-white tracking-tight"
+          >
+            Setores que <span className="text-[#48D1CC]">atendemos</span>
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-emerald-100/60 max-w-2xl mx-auto text-lg"
+          >
+            Soluções logísticas integradas e personalizadas para as demandas mais exigentes do mercado global.
+          </motion.p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-6"
+        >
           {sectors.map((sector, idx) => (
-            <div key={idx} className={`card-surface p-6 flex flex-col items-center justify-center gap-4 hover:border-primary/40 hover:bg-primary/5 transition-all group`}>
-              <div className="h-12 w-12 rounded-full bg-secondary border border-border flex items-center justify-center group-hover:text-primary transition-colors">
-                <sector.icon className="h-6 w-6" />
-              </div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-center group-hover:text-foreground transition-colors">
+            <motion.div
+              key={idx}
+              variants={itemVariants}
+              whileHover={{ scale: 1.05, y: -5 }}
+              className="p-8 flex flex-col items-center justify-center gap-5 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-orange-500/50 hover:bg-white/[0.06] transition-all group relative cursor-default"
+            >
+              <div className="absolute inset-0 bg-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl" />
+
+              <sector.icon className="h-7 w-7 text-[#48D1CC]" />
+              <p className="text-[11px] font-black uppercase tracking-[0.2em] text-center text-emerald-100/40 group-hover:text-white transition-colors">
                 {sector.name}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
