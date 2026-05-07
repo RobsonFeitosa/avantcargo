@@ -22,7 +22,7 @@ export const Navbar = () => {
 
   const navItems = [
     { name: "Início", path: "/" },
-    { name: "Sobre", path: "/sobre" },
+    { name: "Quem Somos", path: "/quem-somos" },
     { name: "Áreas de Atuação", path: "/atuacao" },
     { name: "Contato", path: "/contato" },
   ];
@@ -49,7 +49,7 @@ export const Navbar = () => {
         <div className="flex items-center gap-4">
           <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-glow hover:scale-105 transition-transform px-8 rounded-full" size="sm">
             <FaWhatsapp />
-            Falar Agora
+            Whatsapp
           </Button>
         </div>
       </div>

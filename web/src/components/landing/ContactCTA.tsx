@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Phone, CheckCircle2 } from "lucide-react";
 import { FaWhatsapp, FaArrowRightLong } from "react-icons/fa6";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export const ContactCTA = () => {
   return (
@@ -68,16 +69,16 @@ export const ContactCTA = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="w-full sm:w-[280px] bg-white/5 border-white/20 text-white hover:bg-white/10 h-16 rounded-full font-bold text-lg"
+                className="w-full sm:w-[280px] bg-transparent border-white/20 text-white hover:bg-white/10 h-16 rounded-full font-bold text-lg"
               >
                 <Phone className="mr-2 h-5 w-5" />
                 (41) 3311-2890
               </Button>
             </div>
 
-            <button className="text-white/40 hover:text-white transition-colors text-sm flex items-center gap-2 underline underline-offset-4 decoration-white/20">
+            <Link href="/contato" className="text-white/40 hover:text-white transition-colors text-sm flex items-center gap-2 underline underline-offset-4 decoration-white/20">
               Ou envie uma mensagem <FaArrowRightLong className="h-3 w-3" />
-            </button>
+            </Link>
           </motion.div>
         </div>
       </div>

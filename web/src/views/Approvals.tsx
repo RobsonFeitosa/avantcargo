@@ -22,9 +22,9 @@ type Approval = {
 const seed: Approval[] = [
   {
     id: "AP-2041", title: "Q2 vendor batch · AWS infra", type: "Vendor payment", amount: 184_320, entity: "Acme BR S/A",
-    requested_by: "Lucas Pereira", requested_at: "2026-05-04 14:22", priority: "high",
+    requested_by: "Matheus Pereira", requested_at: "2026-05-04 14:22", priority: "high",
     timeline: [
-      { actor: "Lucas Pereira", role: "Finance Analyst", action: "Created request", ts: "May 4 · 14:22", status: "done" },
+      { actor: "Matheus Pereira", role: "Finance Analyst", action: "Created request", ts: "May 4 · 14:22", status: "done" },
       { actor: "Marina Costa", role: "Head of Finance", action: "Reviewed & endorsed", ts: "May 4 · 18:05", status: "done" },
       { actor: "You · Renata Alves", role: "CFO", action: "Awaiting authorization", ts: "—", status: "current" },
       { actor: "Treasury Bot", role: "Automation", action: "Will execute via NestJS", ts: "—", status: "pending" },
@@ -139,11 +139,10 @@ export default function Approvals() {
                 {current.timeline.map((s, i) => (
                   <li key={i} className="flex gap-3 relative">
                     <div className="flex flex-col items-center">
-                      <div className={`h-7 w-7 rounded-full border flex items-center justify-center shrink-0 ${
-                        s.status === "done" ? "bg-success/20 border-success/40 text-success" :
-                        s.status === "current" ? "bg-primary/20 border-primary/40 text-primary animate-pulse-glow" :
-                        "bg-secondary border-border text-muted-foreground"
-                      }`}>
+                      <div className={`h-7 w-7 rounded-full border flex items-center justify-center shrink-0 ${s.status === "done" ? "bg-success/20 border-success/40 text-success" :
+                          s.status === "current" ? "bg-primary/20 border-primary/40 text-primary animate-pulse-glow" :
+                            "bg-secondary border-border text-muted-foreground"
+                        }`}>
                         {s.status === "done" ? <Check className="h-3.5 w-3.5" /> : s.status === "current" ? <Clock className="h-3.5 w-3.5" /> : <User className="h-3.5 w-3.5" />}
                       </div>
                       {i < current.timeline.length - 1 && <div className="w-px flex-1 bg-border my-1 min-h-[24px]" />}

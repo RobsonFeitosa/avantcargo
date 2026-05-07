@@ -19,13 +19,13 @@ export const Testimonials = () => {
     {
       name: "Diogo Fazolo",
       role: "Mestre em Direito — Especialista em Direito Aduaneiro",
-      text: "Conheço a empresa já há alguns anos, atendimento excelente, muita competência e conhecimento da legislação aduaneira. Tenho plena confiança em indicar o trabalho do Sr. Lucas Echevengua.",
+      text: "Conheço a empresa já há alguns anos, atendimento excelente, muita competência e conhecimento da legislação aduaneira. Tenho plena confiança em indicar o trabalho do Sr. Matheus Diniz.",
       initials: "DF",
     },
     {
       name: "Cleverson Martins Bassetto",
       role: "CEO — Empresa Multinacional",
-      text: "Já somos clientes há 7 anos e não trocamos de assessoria devido à qualidade no serviço e atendimento tanto do Lucas como de toda a equipe. Alto nível técnico e prático, recomendo!",
+      text: "Já somos clientes há 7 anos e não trocamos de assessoria devido à qualidade no serviço e atendimento tanto do Matheus como de toda a equipe. Alto nível técnico e prático, recomendo!",
       initials: "CB",
     },
     {
@@ -37,7 +37,7 @@ export const Testimonials = () => {
     {
       name: "Camila Rodrigues",
       role: "Gerente de Compras",
-      text: "Ótima assessoria para importar seus produtos dentro da legalidade aduaneira, suporte para Radar e auxílio na classificação fiscal de todos os produtos. Lucas sempre rápido e solícito em todas as nossas dúvidas.",
+      text: "Ótima assessoria para importar seus produtos dentro da legalidade aduaneira, suporte para Radar e auxílio na classificação fiscal de todos os produtos. Matheus sempre rápido e solícito em todas as nossas dúvidas.",
       initials: "CR",
     },
   ];

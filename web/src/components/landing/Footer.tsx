@@ -31,7 +31,7 @@ export const Footer = () => {
             <ul className="space-y-4">
               {[
                 { name: "Início", path: "/" },
-                { name: "Sobre", path: "/sobre" },
+                { name: "Quem Somos", path: "/quem-somos" },
               ].map((link) => (
                 <li key={link.name}>
                   <Link href={link.path} className="text-sm text-muted-foreground hover:text-primary transition-colors">{link.name}</Link>
@@ -59,11 +59,11 @@ export const Footer = () => {
             <ul className="space-y-4">
               <li className="flex gap-3 text-sm text-muted-foreground">
                 <MapPin className="h-5 w-5 text-primary shrink-0" />
-                <span>Av. Faria Lima, 1234 - 10º andar<br />São Paulo - SP, Brasil</span>
+                <span>Av. República Argentina, 1237 — Sala 415<br />Curitiba - PR, Brasil</span>
               </li>
               <li className="flex gap-3 text-sm text-muted-foreground">
                 <Phone className="h-5 w-5 text-primary shrink-0" />
-                <span>+55 (11) 4003-1234</span>
+                <span>(41) 3311-2890</span>
               </li>
               <li className="flex gap-3 text-sm text-muted-foreground">
                 <Mail className="h-5 w-5 text-primary shrink-0" />
