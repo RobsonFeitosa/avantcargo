@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # Banco de Dados
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres-avantcargo
+    restart: always
+    environment:
+      - POSTGRES_DB=bd-avantcargo
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=fcac41078f2abd6c272b8601a8511f0c
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  # Backend (API)
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: api-avantcargo
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://postgres:fcac41078f2abd6c272b8601a8511f0c@postgres:5432/bd-avantcargo
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+
+  # Frontend (Web)
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: web-avantcargo
+    restart: always
+    ports:
+      - "80:80" # Ou 3000:3000 se for apenas desenvolvimento
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:
