@@ -18,12 +18,12 @@ const WhatsAppButton = () => (
   </div>
 );
 
-export const LandingLayout = ({ children }: { children: ReactNode }) => {
+export const LandingLayout = ({ children, footerData }: { children: ReactNode, footerData?: any }) => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <main>{children}</main>
-      <Footer />
+      <Footer data={footerData} />
       <WhatsAppButton />
     </div>
   );

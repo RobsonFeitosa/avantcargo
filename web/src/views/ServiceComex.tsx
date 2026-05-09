@@ -2,8 +2,9 @@
 
 import { LandingLayout } from "@/components/layout/LandingLayout";
 import { Badge } from "@/components/ui/badge";
-import { Monitor, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { Monitor, ShieldCheck, CheckCircle2, MessageCircle } from "lucide-react";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function ServiceComex() {
   const features = [
@@ -58,9 +59,15 @@ export default function ServiceComex() {
                     Nossa equipe dedicada 24x7 cuida de todo o processo com estratégia, precisão e compromisso com resultados, para que você possa focar no que realmente importa: crescer e escalar com segurança.
                   </p>
                   <div className="pt-4">
-                    <button className="bg-primary text-white px-8 py-4 rounded-full font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-primary/20 text-lg">
+                    <a
+                      href="https://wa.me/5511964503217"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-primary/20 text-lg"
+                    >
+                      <FaWhatsapp className="w-5 h-5" />
                       Saiba Mais
-                    </button>
+                    </a>
                   </div>
                 </ScrollReveal>
               </div>

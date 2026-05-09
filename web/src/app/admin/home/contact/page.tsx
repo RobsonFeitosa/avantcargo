@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -13,7 +13,8 @@ import {
   MousePointerClick,
   GripVertical,
   Plus,
-  Trash2
+  Trash2,
+  Loader2
 } from "lucide-react";
 
 import {
@@ -34,6 +35,10 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Separator } from "@/components/ui/separator";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { homeContactActions } from "@/admin/actions/home-sections.actions";
+import { useAuth } from "@/admin/hooks_generic/providers/auth";
 
 interface SortableItemProps {
   id: string;
@@ -79,12 +84,65 @@ function SortableItem({ id, children }: SortableItemProps) {
 }
 
 export default function ContactCTAConfig() {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const [headerBadge, setHeaderBadge] = useState("CONTATO");
+  const [headerTitle, setHeaderTitle] = useState("Precisa de assessoria em Comércio Exterior?");
+  const [headerDescription, setHeaderDescription] = useState("Fale agora com um especialista AVANTCARGO. Atendemos empresas de todo o Brasil com agilidade, competência e mais de 20 anos de experiência.");
+  
+  const [primaryButton, setPrimaryButton] = useState({ text: "Falar no WhatsApp", link: "https://wa.me/5511964503217" });
+  const [secondaryButton, setSecondaryButton] = useState({ text: "(11) 96450-3217", link: "tel:+5511964503217" });
+  const [textLink, setTextLink] = useState({ text: "Ou envie uma mensagem", link: "/contato" });
+
   const [features, setFeatures] = useState([
     { id: "feat-1", text: "Importação e Exportação" },
     { id: "feat-2", text: "Ex-Tarifários — alíquota pode chegar a 0%" },
     { id: "feat-3", text: "Drawback e Radar Siscomex" },
     { id: "feat-4", text: "Gestão Aduaneira completa" },
   ]);
+
+  const { data: configData, isLoading } = useQuery({
+    queryKey: ["home-contact"],
+    queryFn: () => homeContactActions.get(),
+    enabled: !!user,
+  });
+
+  useEffect(() => {
+    if (configData?.result) {
+      const { result } = configData;
+      setHeaderBadge(result.headerBadge || "CONTATO");
+      setHeaderTitle(result.headerTitle || "Precisa de assessoria em Comércio Exterior?");
+      setHeaderDescription(result.headerDescription || "");
+      setFeatures(result.features || []);
+      setPrimaryButton(result.primaryButton || { text: "Falar no WhatsApp", link: "" });
+      setSecondaryButton(result.secondaryButton || { text: "", link: "" });
+      setTextLink(result.textLink || { text: "", link: "" });
+    }
+  }, [configData]);
+
+  const mutation = useMutation({
+    mutationFn: (data: any) => homeContactActions.update(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["home-contact"] });
+      toast.success("Configurações salvas com sucesso!");
+    },
+    onError: () => {
+      toast.error("Erro ao salvar configurações.");
+    }
+  });
+
+  const handleSave = () => {
+    mutation.mutate({
+      headerBadge,
+      headerTitle,
+      headerDescription,
+      features,
+      primaryButton,
+      secondaryButton,
+      textLink
+    });
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -105,6 +163,7 @@ export default function ContactCTAConfig() {
   };
 
   const addFeature = () => {
+    if (features.length >= 10) return;
     const newId = `feat-${Date.now()}`;
     setFeatures([...features, { id: newId, text: "" }]);
   };
@@ -112,6 +171,14 @@ export default function ContactCTAConfig() {
   const removeFeature = (idToRemove: string) => {
     setFeatures(features.filter(f => f.id !== idToRemove));
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex h-[400px] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
@@ -125,7 +192,6 @@ export default function ContactCTAConfig() {
       <div className="grid gap-8 lg:grid-cols-2">
         <div className="space-y-8">
           
-          {/* Cabeçalho da Seção */}
           <Card className="border-none shadow-sm overflow-hidden h-fit">
             <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
               <div className="flex items-center gap-2">
@@ -138,18 +204,37 @@ export default function ContactCTAConfig() {
             </CardHeader>
             <CardContent className="pt-6 space-y-4">
               <div className="space-y-2">
+                <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Badge Superior</Label>
+                <Input 
+                  maxLength={80} 
+                  value={headerBadge} 
+                  onChange={(e) => setHeaderBadge(e.target.value)}
+                  className="border-emerald-100 focus-visible:ring-emerald-500" 
+                />
+              </div>
+
+              <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título Principal</Label>
-                <Input maxLength={120} defaultValue="Precisa de assessoria em Comércio Exterior?" className="border-emerald-100 focus-visible:ring-emerald-500 text-lg font-semibold" />
+                <Input 
+                  maxLength={120} 
+                  value={headerTitle} 
+                  onChange={(e) => setHeaderTitle(e.target.value)}
+                  className="border-emerald-100 focus-visible:ring-emerald-500 text-lg font-semibold" 
+                />
               </div>
 
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Descrição</Label>
-                <Textarea maxLength={300} defaultValue="Fale agora com um especialista AVANTCARGO. Atendemos empresas de todo o Brasil com agilidade, competência e mais de 20 anos de experiência." className="min-h-[100px] border-emerald-100 focus-visible:ring-emerald-500" />
+                <Textarea 
+                  maxLength={300} 
+                  value={headerDescription} 
+                  onChange={(e) => setHeaderDescription(e.target.value)}
+                  className="min-h-[100px] border-emerald-100 focus-visible:ring-emerald-500" 
+                />
               </div>
             </CardContent>
           </Card>
 
-          {/* Botões de Ação */}
           <Card className="border-none shadow-sm overflow-hidden h-fit">
             <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
               <div className="flex items-center gap-2">
@@ -169,11 +254,21 @@ export default function ContactCTAConfig() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <Label className="text-emerald-900/70 font-semibold text-[10px]">Texto do Botão</Label>
-                    <Input maxLength={40} defaultValue="Falar no WhatsApp" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                    <Input 
+                      maxLength={40} 
+                      value={primaryButton.text} 
+                      onChange={(e) => setPrimaryButton({ ...primaryButton, text: e.target.value })}
+                      className="border-emerald-100 focus-visible:ring-emerald-500" 
+                    />
                   </div>
                   <div className="space-y-1">
                     <Label className="text-emerald-900/70 font-semibold text-[10px]">Link (URL ou Número)</Label>
-                    <Input maxLength={100} defaultValue="https://wa.me/5511964503217" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                    <Input 
+                      maxLength={100} 
+                      value={primaryButton.link} 
+                      onChange={(e) => setPrimaryButton({ ...primaryButton, link: e.target.value })}
+                      className="border-emerald-100 focus-visible:ring-emerald-500" 
+                    />
                   </div>
                 </div>
               </div>
@@ -188,11 +283,21 @@ export default function ContactCTAConfig() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <Label className="text-emerald-900/70 font-semibold text-[10px]">Texto do Botão</Label>
-                    <Input maxLength={40} defaultValue="(11) 96450-3217" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                    <Input 
+                      maxLength={40} 
+                      value={secondaryButton.text} 
+                      onChange={(e) => setSecondaryButton({ ...secondaryButton, text: e.target.value })}
+                      className="border-emerald-100 focus-visible:ring-emerald-500" 
+                    />
                   </div>
                   <div className="space-y-1">
                     <Label className="text-emerald-900/70 font-semibold text-[10px]">Link (tel:)</Label>
-                    <Input maxLength={100} defaultValue="tel:+5511964503217" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                    <Input 
+                      maxLength={100} 
+                      value={secondaryButton.link} 
+                      onChange={(e) => setSecondaryButton({ ...secondaryButton, link: e.target.value })}
+                      className="border-emerald-100 focus-visible:ring-emerald-500" 
+                    />
                   </div>
                 </div>
               </div>
@@ -206,11 +311,21 @@ export default function ContactCTAConfig() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <Label className="text-emerald-900/70 font-semibold text-[10px]">Texto do Link</Label>
-                    <Input maxLength={60} defaultValue="Ou envie uma mensagem" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                    <Input 
+                      maxLength={60} 
+                      value={textLink.text} 
+                      onChange={(e) => setTextLink({ ...textLink, text: e.target.value })}
+                      className="border-emerald-100 focus-visible:ring-emerald-500" 
+                    />
                   </div>
                   <div className="space-y-1">
                     <Label className="text-emerald-900/70 font-semibold text-[10px]">Link de Destino</Label>
-                    <Input maxLength={100} defaultValue="/contato" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                    <Input 
+                      maxLength={100} 
+                      value={textLink.link} 
+                      onChange={(e) => setTextLink({ ...textLink, link: e.target.value })}
+                      className="border-emerald-100 focus-visible:ring-emerald-500" 
+                    />
                   </div>
                 </div>
               </div>
@@ -220,7 +335,6 @@ export default function ContactCTAConfig() {
         </div>
 
         <div className="space-y-8">
-          {/* Lista de Tópicos (Checkmarks) */}
           <Card className="border-none shadow-sm overflow-hidden h-fit">
             <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -233,13 +347,23 @@ export default function ContactCTAConfig() {
                     Lista de benefícios ou serviços exibidos abaixo da descrição.
                   </CardDescription>
                 </div>
-                <Button onClick={addFeature} size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20 shrink-0">
+                <Button 
+                  onClick={addFeature} 
+                  disabled={features.length >= 10}
+                  size="sm" 
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20 shrink-0"
+                >
                   <Plus className="w-4 h-4 mr-2" />
                   Novo Tópico
                 </Button>
               </div>
             </CardHeader>
             <CardContent className="pt-6 space-y-1">
+              {features.length >= 10 && (
+                <div className="mb-4 p-3 bg-amber-50 text-amber-800 border border-amber-200 rounded-lg text-xs font-medium">
+                  Você atingiu o limite máximo de 10 tópicos.
+                </div>
+              )}
               <DndContext id="dnd-contact-features" sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEndFeatures}>
                 <SortableContext items={features} strategy={verticalListSortingStrategy}>
                   {features.map((feature) => (
@@ -276,11 +400,23 @@ export default function ContactCTAConfig() {
       </div>
 
       <div className="flex justify-end gap-4 border-t border-emerald-50 pt-8 mt-4">
-        <Button variant="outline" className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8">
+        <Button 
+          variant="outline" 
+          className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8"
+          onClick={() => queryClient.invalidateQueries({ queryKey: ["home-contact"] })}
+        >
           Descartar
         </Button>
-        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10">
-          <Save className="w-4 h-4 mr-2" />
+        <Button 
+          className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10"
+          onClick={handleSave}
+          disabled={mutation.isPending}
+        >
+          {mutation.isPending ? (
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          ) : (
+            <Save className="w-4 h-4 mr-2" />
+          )}
           Salvar Alterações
         </Button>
       </div>

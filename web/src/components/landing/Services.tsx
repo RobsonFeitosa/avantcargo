@@ -6,8 +6,19 @@ import { FaArrowRightLong } from "react-icons/fa6";
 
 import { Box, Truck, Radar, Monitor } from "lucide-react";
 
-export const Services = () => {
-  const services = [
+interface ServicesProps {
+  data?: {
+    headerBadge: string;
+    headerTitle: string;
+    headerDescription: string;
+    services: { id: string; badge?: string; title: string; desc: string }[];
+  }
+}
+
+export const Services = ({ data }: ServicesProps) => {
+  const icons = [Radar, Monitor, Truck];
+
+  const defaultServices = [
     {
       title: "Representação",
       desc: "Soluções completas de Importação e Exportação com foco em agilidade, segurança e conformidade total em GRU e VCP.",
@@ -26,6 +37,13 @@ export const Services = () => {
     },
   ];
 
+  const currentServices = data?.services.map((s, idx) => ({
+    ...s,
+    icon: icons[idx % icons.length],
+    featured: s.badge ? true : false,
+    badgeText: s.badge
+  })) || defaultServices.map(s => ({ ...s, badgeText: s.featured ? "Mais popular" : "" }));
+
   return (
     <section id="servicos" className="py-24 bg-slate-50 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
@@ -35,16 +53,27 @@ export const Services = () => {
         <div className="text-center space-y-4 mb-20 max-w-2xl mx-auto">
           <Badge variant="outline" className="text-primary border-primary/20 bg-primary/5 uppercase tracking-widest px-4 py-1 gap-2 rounded-full">
             <FaBriefcase />
-            <span>O que fazemos</span>
+            <span>{data?.headerBadge || "O que fazemos"}</span>
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-bold text-emerald-950">Principais <span className="text-primary">Serviços</span></h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-emerald-950">
+            {data?.headerTitle ? (
+              data.headerTitle.split(" ").map((word, i) => (
+                <span key={i}>
+                  {i > 0 && " "}
+                  {i === data.headerTitle.split(" ").length - 1 ? <span className="text-primary">{word}</span> : word}
+                </span>
+              ))
+            ) : (
+              <>Principais <span className="text-primary">Serviços</span></>
+            )}
+          </h2>
           <p className="text-slate-600 text-lg">
-            Oferecemos soluções completas para integrar sua empresa ao mercado internacional com eficiência e segurança.
+            {data?.headerDescription || "Oferecemos soluções completas para integrar sua empresa ao mercado internacional com eficiência e segurança."}
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((s, idx) => (
+          {currentServices.map((s, idx) => (
             <Card
               key={idx}
               className={`p-10 border-slate-200 bg-white group hover:border-primary/50 transition-all duration-500 relative overflow-hidden flex flex-col h-full hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-2 ${s.featured ? "border-orange-500/30 shadow-xl shadow-orange-500/5 ring-1 ring-orange-500/5" : "shadow-sm"}`}
@@ -54,7 +83,7 @@ export const Services = () => {
               {s.featured && (
                 <div className="mb-6">
                   <Badge variant="outline" className="bg-orange-500 text-white border-none text-[10px] uppercase font-bold px-4 py-1 rounded-full tracking-widest shadow-lg">
-                    Mais popular
+                    {s.badgeText || "Mais popular"}
                   </Badge>
                 </div>
               )}

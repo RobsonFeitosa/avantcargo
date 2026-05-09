@@ -6,23 +6,12 @@ import React, {
   ReactNode,
   useEffect,
 } from 'react'
-import { googleLogout } from '@react-oauth/google'
 import { api } from '@/admin/utils/handleClient'
 import { destroyCookie, parseCookies, setCookie } from 'nookies'
 
 export interface IUser {
   id: string
   name: string
-  email?: string
-  settings: {
-    level: number
-    avatar: string
-    balance: number
-    cpf?: string
-    actived: boolean
-    phone_number?: string
-    avatar_url: string
-  }
   created_at: string
   updated_at: string
 }
@@ -48,38 +37,19 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const signIn = useCallback((data: IAuthState) => {
     const { token, user } = data
 
-    if (data.token === 'inactive-user--resend-mail') {
-      return null
-    }
-
     if (user) {
-      const newUser = {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        settings: {
-          level: user.settings.level,
-          avatar: user.settings.avatar,
-          balance: user.settings.balance,
-          actived: user.settings.actived,
-          avatar_url: user.settings.avatar_url,
-        },
-        created_at: user.created_at,
-        updated_at: user.updated_at,
-      } as IUser
-
-      setCookie(null, '@LemonadeTechnologies:token', token, {
+      setCookie(null, '@AvantCargo:token', token, {
         maxAge: 60 * 60 * 24 * 7, // 7 days
         path: '/',
       })
-      setCookie(null, '@LemonadeTechnologies:user', JSON.stringify(user), {
+      setCookie(null, '@AvantCargo:user', JSON.stringify(user), {
         maxAge: 60 * 60 * 24 * 7, // 7 days
         path: '/',
       })
 
       api.defaults.headers.authorization = `Bearer ${token}`
 
-      setData({ token, user: newUser })
+      setData({ token, user })
       return { token, user }
     }
     return { token, user }
@@ -87,8 +57,8 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const cookies = parseCookies()
   const {
-    '@LemonadeTechnologies:token': tokenStorage,
-    '@LemonadeTechnologies:user': userStorage,
+    '@AvantCargo:token': tokenStorage,
+    '@AvantCargo:user': userStorage,
   } = cookies
 
   useEffect(() => {
@@ -100,24 +70,19 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, [tokenStorage, userStorage])
 
   const signOut = useCallback(() => {
-    destroyCookie(null, '@LemonadeTechnologies:order', {
+    destroyCookie(null, '@AvantCargo:token', {
       path: '/',
     })
-    destroyCookie(null, '@LemonadeTechnologies:token', {
+    destroyCookie(null, '@AvantCargo:user', {
       path: '/',
     })
-    destroyCookie(null, '@LemonadeTechnologies:user', {
-      path: '/',
-    })
-
-    googleLogout()
 
     setData({} as IAuthState)
   }, [setData])
 
   const updateUser = useCallback(
     (user: IUser) => {
-      setCookie(null, '@LemonadeTechnologies:user', JSON.stringify(user), {
+      setCookie(null, '@AvantCargo:user', JSON.stringify(user), {
         maxAge: 60 * 60 * 24 * 7, // 7 days
         path: '/',
       })

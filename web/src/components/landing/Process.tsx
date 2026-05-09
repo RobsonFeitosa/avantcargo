@@ -6,8 +6,18 @@ import { BiSolidDirections } from "react-icons/bi";
 import { FaWhatsapp } from "react-icons/fa";
 
 
-export const Process = () => {
-  const steps = [
+interface ProcessProps {
+  data?: {
+    headerBadge: string;
+    headerTitle: string;
+    headerDescription: string;
+    ctaText: string;
+    steps: { id: string; title: string; desc: string }[];
+  }
+}
+
+export const Process = ({ data }: ProcessProps) => {
+  const defaultSteps = [
     {
       number: "01",
       title: "Análise e Diagnóstico",
@@ -30,6 +40,12 @@ export const Process = () => {
     },
   ];
 
+  const currentSteps = data?.steps.map((s, idx) => ({
+    number: String(idx + 1).padStart(2, '0'),
+    title: s.title,
+    desc: s.desc
+  })) || defaultSteps;
+
   return (
     <section className="py-24 bg-white relative overflow-hidden">
       <div className="absolute top-1/2 left-0 w-1/2 h-1/2 bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
@@ -39,15 +55,27 @@ export const Process = () => {
           <ScrollReveal>
             <Badge variant="outline" className="text-primary gap-2 border-primary/20 bg-primary/5 uppercase tracking-widest px-4 py-1 rounded-full">
               <BiSolidDirections />
-              Como Trabalhamos
+              {data?.headerBadge || "Como Trabalhamos"}
             </Badge>
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
-            <h2 className="text-5xl font-bold text-emerald-950">Nossa abordagem em <span className="text-primary">4 etapas</span></h2>
+            <h2 className="text-5xl font-bold text-emerald-950">
+              {data?.headerTitle ? (
+                data.headerTitle.split(" ").map((word, i) => (
+                  <span key={i}>
+                    {i > 0 && " "}
+                    {word === "4" || word === String(currentSteps.length) ? <span className="text-primary">{word} etapas</span> : word}
+                    {word !== "4" && word !== String(currentSteps.length) && word === "etapas" ? "" : ""}
+                  </span>
+                )).filter(w => w !== "")
+              ) : (
+                <>Nossa abordagem em <span className="text-primary">4 etapas</span></>
+              )}
+            </h2>
           </ScrollReveal>
           <ScrollReveal delay={0.2} className="flex justify-center">
             <p className="text-slate-600 max-w-2xl text-lg">
-              Um fluxo de trabalho transparente e eficiente desenhado para mitigar riscos e maximizar resultados.
+              {data?.headerDescription || "Um fluxo de trabalho transparente e eficiente desenhado para mitigar riscos e maximizar resultados."}
             </p>
           </ScrollReveal>
         </div>
@@ -56,7 +84,7 @@ export const Process = () => {
           <div className="absolute left-8 top-8 bottom-24 w-[2px] bg-slate-200 -translate-x-1/2" />
 
           <div className="space-y-16 relative">
-            {steps.map((step, idx) => (
+            {currentSteps.map((step, idx) => (
               <ScrollReveal key={idx} delay={idx * 0.15} direction="up" distance={30}>
                 <div className="flex items-start gap-8 md:gap-16 group">
                   <div className="relative z-10 shrink-0 h-16 w-16 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
@@ -80,7 +108,7 @@ export const Process = () => {
           <ScrollReveal delay={0.6} className="mt-16 flex justify-center">
             <Button className="bg-primary hover:bg-emerald-700 text-white font-bold text-base shadow-xl shadow-primary/10 rounded-full group transition-all duration-300 hover:scale-105">
               <FaWhatsapp className=" h-5 w-5 group-hover:scale-110 transition-transform" />
-              Falar com um especialista
+              {data?.ctaText || "Falar com um especialista"}
             </Button>
           </ScrollReveal>
         </div>

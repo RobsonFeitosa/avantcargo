@@ -2,8 +2,12 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
-  ({ className, type, maxLength, ...props }, ref) => {
+export interface InputProps extends React.ComponentProps<"input"> {
+  hideCounter?: boolean;
+}
+
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, maxLength, hideCounter, ...props }, ref) => {
     const [internalLength, setInternalLength] = React.useState(
       String(props.defaultValue || "").length
     );
@@ -48,9 +52,11 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
           onChange={handleChange}
           {...props}
         />
-        <div className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-medium text-muted-foreground bg-background px-1 pointer-events-none">
-          {currentLength}/{maxLength}
-        </div>
+        {!hideCounter && (
+          <div className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-medium text-muted-foreground bg-background px-1 pointer-events-none">
+            {currentLength}/{maxLength}
+          </div>
+        )}
       </div>
     );
   },

@@ -5,8 +5,9 @@ import { AdminSidebar } from "./AdminSidebar";
 import { useAuth } from "@/admin/hooks_generic/providers/auth";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
+import { Login } from "@/components/admin/Login";
+import { NotificationBell } from "./NotificationBell";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -15,10 +16,9 @@ interface AdminLayoutProps {
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const { user } = useAuth();
 
-  useEffect(() => {
-    if (!user) {
-    }
-  }, [user]);
+  if (!user?.id) {
+    return <Login />;
+  }
 
   return (
     <SidebarProvider>
@@ -28,6 +28,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-2 border-b bg-white/80 px-6 backdrop-blur-md transition-[width,height] ease-linear">
             <SidebarTrigger className="-ml-1" />
             <div className="ml-auto flex items-center gap-4">
+              <NotificationBell />
               <a 
                 href="/" 
                 target="_blank" 
@@ -35,10 +36,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               >
                 Acessar site
               </a>
-              <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20">
-                <Plus size={16} className="mr-2" />
-                Novo serviço
-              </Button>
             </div>
           </header>
           <main className="flex-1 overflow-auto p-6">

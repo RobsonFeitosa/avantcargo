@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -12,9 +12,14 @@ import {
   Layout, 
   Component, 
   GripVertical,
-  ExternalLink
+  ExternalLink,
+  Loader2
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { sectorsActions } from "@/admin/actions/home-sections.actions";
+import { useAuth } from "@/admin/hooks_generic/providers/auth";
 
 import {
   DndContext,
@@ -83,21 +88,64 @@ function SortableItem({ id, children }: SortableItemProps) {
 }
 
 export default function SectorsConfig() {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const [headerBadge, setHeaderBadge] = useState("SEGMENTOS");
+  const [headerTitle, setHeaderTitle] = useState("Setores que atendemos");
+  const [headerDescription, setHeaderDescription] = useState("Soluções logísticas integradas e personalizadas para as demandas mais exigentes do mercado global.");
+
   const [sectors, setSectors] = useState([
-    { id: "sec-1", title: "AGENTES DE CARGA", icon: "Users" },
-    { id: "sec-2", title: "COMISSÁRIAS", icon: "Shield" },
-    { id: "sec-3", title: "CARGAS AÉREAS", icon: "Globe" },
-    { id: "sec-4", title: "CARGAS PERIGOSAS", icon: "Zap" },
-    { id: "sec-5", title: "CARGAS URGENTES", icon: "Clock" },
-    { id: "sec-6", title: "CARGAS DE PROJETO", icon: "Box" },
-    { id: "sec-7", title: "IMPORTADORES", icon: "Building" },
-    { id: "sec-8", title: "EXPORTADORES", icon: "Truck" },
-    { id: "sec-9", title: "GRU AIRPORT", icon: "Target" },
-    { id: "sec-10", title: "VIRACOPOS (VCP)", icon: "Target" },
-    { id: "sec-11", title: "OPERAÇÕES COMPLEXAS", icon: "Hammer" },
-    { id: "sec-12", title: "LOGÍSTICA REVERSA", icon: "RefreshCw" },
-    { id: "sec-13", title: "PHARMA", icon: "Pill" },
+    { id: "sec-1", title: "AGENTES DE CARGA", iconName: "Users" },
+    { id: "sec-2", title: "COMISSÁRIAS", iconName: "Shield" },
+    { id: "sec-3", title: "CARGAS AÉREAS", iconName: "Globe" },
+    { id: "sec-4", title: "CARGAS PERIGOSAS", iconName: "Zap" },
+    { id: "sec-5", title: "CARGAS URGENTES", iconName: "Clock" },
+    { id: "sec-6", title: "CARGAS DE PROJETO", iconName: "Box" },
+    { id: "sec-7", title: "IMPORTADORES", iconName: "Building" },
+    { id: "sec-8", title: "EXPORTADORES", iconName: "Truck" },
+    { id: "sec-9", title: "GRU AIRPORT", iconName: "Target" },
+    { id: "sec-10", title: "VIRACOPOS (VCP)", iconName: "Target" },
+    { id: "sec-11", title: "OPERAÇÕES COMPLEXAS", iconName: "Hammer" },
+    { id: "sec-12", title: "LOGÍSTICA REVERSA", iconName: "RefreshCw" },
+    { id: "sec-13", title: "PHARMA", iconName: "Pill" },
   ]);
+
+  const { data: configData, isLoading } = useQuery({
+    queryKey: ["sectors"],
+    queryFn: () => sectorsActions.get(),
+    enabled: !!user,
+  });
+
+  useEffect(() => {
+    if (configData?.result) {
+      const { result } = configData;
+      setHeaderBadge(result.headerBadge || "SEGMENTOS");
+      setHeaderTitle(result.headerTitle || "Setores que atendemos");
+      setHeaderDescription(result.headerDescription || "");
+      setSectors(result.sectors || []);
+    }
+  }, [configData]);
+
+  const mutation = useMutation({
+    mutationFn: (data: any) => sectorsActions.update(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["sectors"] });
+      toast.success("Configurações salvas com sucesso!");
+    },
+    onError: () => {
+      toast.error("Erro ao salvar configurações.");
+    }
+  });
+
+  const handleSave = () => {
+    mutation.mutate({
+      headerBadge,
+      headerTitle,
+      headerDescription,
+      sectors
+    });
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -117,6 +165,14 @@ export default function SectorsConfig() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex h-[400px] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
       <div className="flex flex-col gap-2">
@@ -128,7 +184,6 @@ export default function SectorsConfig() {
 
       <div className="grid gap-8 lg:grid-cols-2">
         <div className="space-y-8">
-          {/* Cabeçalho da Seção */}
           <Card className="border-none shadow-sm overflow-hidden h-fit">
             <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
               <div className="flex items-center gap-2">
@@ -142,24 +197,38 @@ export default function SectorsConfig() {
             <CardContent className="pt-6 space-y-4">
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Badge Superior</Label>
-                <Input maxLength={80} defaultValue="SEGMENTOS" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                <Input 
+                  maxLength={80} 
+                  value={headerBadge} 
+                  onChange={(e) => setHeaderBadge(e.target.value)}
+                  className="border-emerald-100 focus-visible:ring-emerald-500" 
+                />
               </div>
               
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título Principal</Label>
-                <Input maxLength={80} defaultValue="Setores que atendemos" className="border-emerald-100 focus-visible:ring-emerald-500 text-lg font-semibold" />
+                <Input 
+                  maxLength={80} 
+                  value={headerTitle} 
+                  onChange={(e) => setHeaderTitle(e.target.value)}
+                  className="border-emerald-100 focus-visible:ring-emerald-500 text-lg font-semibold" 
+                />
               </div>
 
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Subtítulo / Descrição</Label>
-                <Textarea maxLength={250} defaultValue="Soluções logísticas integradas e personalizadas para as demandas mais exigentes do mercado global." className="min-h-[100px] border-emerald-100 focus-visible:ring-emerald-500" />
+                <Textarea 
+                  maxLength={250} 
+                  value={headerDescription} 
+                  onChange={(e) => setHeaderDescription(e.target.value)}
+                  className="min-h-[100px] border-emerald-100 focus-visible:ring-emerald-500" 
+                />
               </div>
             </CardContent>
           </Card>
         </div>
 
         <div className="space-y-8">
-          {/* Lista de Setores */}
           <Card className="border-none shadow-sm overflow-hidden">
             <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
               <div className="flex items-center justify-between">
@@ -188,7 +257,7 @@ export default function SectorsConfig() {
                     <SortableItem key={sector.id} id={sector.id}>
                       <div className="flex gap-3 bg-white p-2 border border-emerald-50 rounded-lg shadow-sm items-center">
                         <div className="w-8 h-8 rounded-md bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
-                          <DynamicIcon name={sector.icon} size={18} />
+                          <DynamicIcon name={sector.iconName} size={18} />
                         </div>
                         <Input maxLength={80} value={sector.title} 
                           onChange={(e) => {
@@ -200,11 +269,11 @@ export default function SectorsConfig() {
                           placeholder="Nome do Setor"
                           className="border-emerald-100 focus-visible:ring-emerald-500 font-bold flex-1" 
                         />
-                        <Input maxLength={80} value={sector.icon} 
+                        <Input maxLength={80} value={sector.iconName} 
                           onChange={(e) => {
                             const newSectors = [...sectors];
                             const idx = newSectors.findIndex(s => s.id === sector.id);
-                            newSectors[idx].icon = e.target.value;
+                            newSectors[idx].iconName = e.target.value;
                             setSectors(newSectors);
                           }}
                           placeholder="Ex: Users"
@@ -221,11 +290,23 @@ export default function SectorsConfig() {
       </div>
 
       <div className="flex justify-end gap-4 border-t border-emerald-50 pt-8 mt-4">
-        <Button variant="outline" className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8">
+        <Button 
+          variant="outline" 
+          className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8"
+          onClick={() => queryClient.invalidateQueries({ queryKey: ["sectors"] })}
+        >
           Descartar
         </Button>
-        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10">
-          <Save className="w-4 h-4 mr-2" />
+        <Button 
+          className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10"
+          onClick={handleSave}
+          disabled={mutation.isPending}
+        >
+          {mutation.isPending ? (
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          ) : (
+            <Save className="w-4 h-4 mr-2" />
+          )}
           Salvar Alterações
         </Button>
       </div>

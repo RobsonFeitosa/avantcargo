@@ -1,0 +1,256 @@
+"use client";
+
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { 
+  Save, 
+  Layout, 
+  HeartHandshake,
+  GripVertical,
+  Plus,
+  Trash2,
+  Shield,
+  Search,
+  Handshake,
+  Zap,
+  Lightbulb,
+  MessageSquare
+} from "lucide-react";
+
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { Separator } from "@/components/ui/separator";
+
+interface SortableItemProps {
+  id: string;
+  children: React.ReactNode;
+}
+
+function SortableItem({ id, children }: SortableItemProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 10 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`group flex gap-4 p-5 rounded-xl border border-transparent transition-all ${
+        isDragging ? "bg-emerald-50 border-emerald-200 shadow-lg scale-[1.02]" : "hover:border-emerald-50 hover:bg-emerald-50/30"
+      }`}
+    >
+      <div
+        {...attributes}
+        {...listeners}
+        className="cursor-grab active:cursor-grabbing text-emerald-900/20 group-hover:text-emerald-600 transition-colors mt-2"
+      >
+        <GripVertical size={20} />
+      </div>
+      <div className="flex-1 w-full">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+export default function AboutValuesConfig() {
+  const [values, setValues] = useState([
+    { id: "v-1", icon: "Shield", title: "Integridade", desc: "Atuamos sempre dentro da legalidade, garantindo que todos os processos sejam transparentes." },
+    { id: "v-2", icon: "Search", title: "Excelência Técnica", desc: "Nossa equipe se mantém constantemente atualizada com as mudanças regulatórias." },
+    { id: "v-3", icon: "Handshake", title: "Parceria de Longo Prazo", desc: "Não somos apenas prestadores de serviço — somos parceiros estratégicos." },
+  ]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEndValues = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      setValues((items) => {
+        const oldIndex = items.findIndex((i) => i.id === active.id);
+        const newIndex = items.findIndex((i) => i.id === over.id);
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+  };
+
+  const addValue = () => {
+    const newId = `v-${Date.now()}`;
+    setValues([...values, { id: newId, icon: "Star", title: "", desc: "" }]);
+  };
+
+  const removeValue = (idToRemove: string) => {
+    setValues(values.filter(v => v.id !== idToRemove));
+  };
+
+  return (
+    <div className="space-y-8 animate-in fade-in duration-500 pb-10">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-bold tracking-tight text-emerald-950">Nossos Valores</h1>
+        <p className="text-emerald-900/60 font-medium">
+          Gerencie os pilares que guiam a empresa (Grid de ícones na página Quem Somos).
+        </p>
+      </div>
+
+      <div className="grid gap-8 lg:grid-cols-12">
+        {/* Textos Principais */}
+        <div className="lg:col-span-4 space-y-8">
+          <Card className="border-none shadow-sm h-fit">
+            <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
+              <div className="flex items-center gap-2">
+                <Layout className="w-5 h-5 text-emerald-600" />
+                <CardTitle className="text-lg font-bold text-emerald-950">Textos do Bloco</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-4">
+              <div className="space-y-2">
+                <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Badge (Pílula)</Label>
+                <Input maxLength={40} defaultValue="Nossos Valores" className="border-emerald-100" />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título (Parte 1)</Label>
+                <Input maxLength={60} defaultValue="O que nos" className="border-emerald-100" />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Palavra em Destaque (Parte 2)</Label>
+                <Input maxLength={40} defaultValue="guia" className="border-emerald-100 text-emerald-600 font-bold" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Lista de Valores */}
+        <div className="lg:col-span-8 space-y-8">
+          <Card className="border-none shadow-sm overflow-hidden flex-1 flex flex-col h-full">
+            <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-2">
+                  <HeartHandshake className="w-5 h-5 text-emerald-600" />
+                  <CardTitle className="text-lg font-bold text-emerald-950">Grid de Valores (Cards)</CardTitle>
+                </div>
+                <Button onClick={addValue} size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20 shrink-0">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Novo Valor
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-2">
+              <DndContext id="dnd-values" sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEndValues}>
+                <SortableContext items={values} strategy={verticalListSortingStrategy}>
+                  {values.map((item) => (
+                    <SortableItem key={item.id} id={item.id}>
+                      <div className="flex flex-col sm:flex-row gap-4 bg-white p-4 border border-emerald-50 rounded-xl shadow-sm relative group/item">
+                        <div className="sm:w-32 space-y-1 shrink-0">
+                          <div className="flex items-center justify-between">
+                            <Label className="text-emerald-900/70 font-semibold text-[10px]">Nome do Ícone</Label>
+                            <a href="https://lucide.dev/icons" target="_blank" rel="noopener noreferrer" className="text-[9px] text-emerald-600 hover:underline flex items-center gap-1">
+                              <Search size={10} /> Consultar
+                            </a>
+                          </div>
+                          <Input 
+                            maxLength={30}
+                            value={item.icon} 
+                            onChange={(e) => {
+                              const newItems = [...values];
+                              const idx = newItems.findIndex(i => i.id === item.id);
+                              newItems[idx].icon = e.target.value;
+                              setValues(newItems);
+                            }}
+                            placeholder="Ex: Shield"
+                            className="border-emerald-100" 
+                          />
+                        </div>
+                        <div className="flex-1 space-y-4">
+                          <div className="space-y-1">
+                            <Label className="text-emerald-900/70 font-semibold text-[10px]">Título do Valor</Label>
+                            <Input 
+                              maxLength={50}
+                              value={item.title} 
+                              onChange={(e) => {
+                                const newItems = [...values];
+                                const idx = newItems.findIndex(i => i.id === item.id);
+                                newItems[idx].title = e.target.value;
+                                setValues(newItems);
+                              }}
+                              className="border-emerald-100 font-bold text-emerald-950" 
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-emerald-900/70 font-semibold text-[10px]">Descrição Curta</Label>
+                            <Textarea 
+                              maxLength={160}
+                              value={item.desc} 
+                              onChange={(e) => {
+                                const newItems = [...values];
+                                const idx = newItems.findIndex(i => i.id === item.id);
+                                newItems[idx].desc = e.target.value;
+                                setValues(newItems);
+                              }}
+                              className="min-h-[80px] border-emerald-100" 
+                            />
+                          </div>
+                        </div>
+                        <Button 
+                          onClick={() => removeValue(item.id)}
+                          variant="ghost" 
+                          size="icon" 
+                          className="absolute -right-3 -top-3 text-red-400 hover:text-red-600 hover:bg-red-50 bg-white border border-red-100 shadow-sm opacity-0 group-hover/item:opacity-100 transition-opacity h-8 w-8 rounded-full z-10"
+                        >
+                          <Trash2 size={14} />
+                        </Button>
+                      </div>
+                    </SortableItem>
+                  ))}
+                </SortableContext>
+              </DndContext>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      <div className="flex justify-end gap-4 border-t border-emerald-50 pt-8 mt-4">
+        <Button variant="outline" className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8">
+          Descartar
+        </Button>
+        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10">
+          <Save className="w-4 h-4 mr-2" />
+          Salvar Alterações
+        </Button>
+      </div>
+    </div>
+  );
+}

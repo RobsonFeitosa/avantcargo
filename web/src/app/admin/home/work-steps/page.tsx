@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -10,9 +10,14 @@ import {
   Save, 
   Layout, 
   ListOrdered, 
-  GripVertical
+  GripVertical,
+  Loader2
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { workStepsActions } from "@/admin/actions/work-steps.actions";
+import { useAuth } from "@/admin/hooks_generic/providers/auth";
 
 import {
   DndContext,
@@ -76,7 +81,15 @@ function SortableItem({ id, children }: SortableItemProps) {
 }
 
 export default function WorkStepsConfig() {
-  const [steps, setSteps] = useState([
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const [headerBadge, setHeaderBadge] = useState("COMO TRABALHAMOS");
+  const [headerTitle, setHeaderTitle] = useState("Nossa abordagem em 4 etapas");
+  const [headerDescription, setHeaderDescription] = useState("Um fluxo de trabalho transparente e eficiente desenhado para mitigar riscos e maximizar resultados.");
+  const [ctaText, setCtaText] = useState("Falar com um especialista");
+
+  const [steps, setSteps] = useState<{ id: string; title: string; desc: string }[]>([
     { 
       id: "step-1", 
       title: "Análise e Diagnóstico", 
@@ -99,6 +112,44 @@ export default function WorkStepsConfig() {
     },
   ]);
 
+  const { data: configData, isLoading } = useQuery({
+    queryKey: ["work-steps"],
+    queryFn: () => workStepsActions.get(),
+    enabled: !!user,
+  });
+
+  useEffect(() => {
+    if (configData?.result) {
+      const { result } = configData;
+      setHeaderBadge(result.headerBadge || "COMO TRABALHAMOS");
+      setHeaderTitle(result.headerTitle || "Nossa abordagem em 4 etapas");
+      setHeaderDescription(result.headerDescription || "Um fluxo de trabalho transparente e eficiente desenhado para mitigar riscos e maximizar resultados.");
+      setCtaText(result.ctaText || "Falar com um especialista");
+      setSteps(result.steps || []);
+    }
+  }, [configData]);
+
+  const mutation = useMutation({
+    mutationFn: (data: any) => workStepsActions.update(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["work-steps"] });
+      toast.success("Configurações salvas com sucesso!");
+    },
+    onError: () => {
+      toast.error("Erro ao salvar configurações.");
+    }
+  });
+
+  const handleSave = () => {
+    mutation.mutate({
+      headerBadge,
+      headerTitle,
+      headerDescription,
+      ctaText,
+      steps
+    });
+  };
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -117,6 +168,14 @@ export default function WorkStepsConfig() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex h-[400px] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
       <div className="flex flex-col gap-2">
@@ -128,7 +187,6 @@ export default function WorkStepsConfig() {
 
       <div className="grid gap-8 lg:grid-cols-2">
         <div className="space-y-8">
-          {/* Cabeçalho da Seção */}
           <Card className="border-none shadow-sm overflow-hidden h-fit">
             <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
               <div className="flex items-center gap-2">
@@ -142,31 +200,50 @@ export default function WorkStepsConfig() {
             <CardContent className="pt-6 space-y-4">
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Badge Superior</Label>
-                <Input maxLength={80} defaultValue="COMO TRABALHAMOS" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                <Input 
+                  maxLength={80} 
+                  value={headerBadge} 
+                  onChange={(e) => setHeaderBadge(e.target.value)}
+                  className="border-emerald-100 focus-visible:ring-emerald-500" 
+                />
               </div>
               
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título Principal</Label>
-                <Input maxLength={80} defaultValue="Nossa abordagem em 4 etapas" className="border-emerald-100 focus-visible:ring-emerald-500 text-lg font-semibold" />
+                <Input 
+                  maxLength={80} 
+                  value={headerTitle} 
+                  onChange={(e) => setHeaderTitle(e.target.value)}
+                  className="border-emerald-100 focus-visible:ring-emerald-500 text-lg font-semibold" 
+                />
               </div>
 
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Subtítulo / Descrição</Label>
-                <Textarea maxLength={250} defaultValue="Um fluxo de trabalho transparente e eficiente desenhado para mitigar riscos e maximizar resultados." className="min-h-[80px] border-emerald-100 focus-visible:ring-emerald-500" />
+                <Textarea 
+                  maxLength={250} 
+                  value={headerDescription} 
+                  onChange={(e) => setHeaderDescription(e.target.value)}
+                  className="min-h-[80px] border-emerald-100 focus-visible:ring-emerald-500" 
+                />
               </div>
 
               <Separator className="bg-emerald-50 my-2" />
 
               <div className="space-y-2 pt-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão Inferior (CTA)</Label>
-                <Input maxLength={80} defaultValue="Falar com um especialista" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                <Input 
+                  maxLength={80} 
+                  value={ctaText} 
+                  onChange={(e) => setCtaText(e.target.value)}
+                  className="border-emerald-100 focus-visible:ring-emerald-500" 
+                />
               </div>
             </CardContent>
           </Card>
         </div>
 
         <div className="space-y-8">
-          {/* Etapas do Processo */}
           <Card className="border-none shadow-sm overflow-hidden">
             <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
               <div className="flex items-center gap-2">
@@ -221,11 +298,23 @@ export default function WorkStepsConfig() {
       </div>
 
       <div className="flex justify-end gap-4 border-t border-emerald-50 pt-8 mt-4">
-        <Button variant="outline" className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8">
+        <Button 
+          variant="outline" 
+          className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8"
+          onClick={() => queryClient.invalidateQueries({ queryKey: ["work-steps"] })}
+        >
           Descartar
         </Button>
-        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10">
-          <Save className="w-4 h-4 mr-2" />
+        <Button 
+          className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10"
+          onClick={handleSave}
+          disabled={mutation.isPending}
+        >
+          {mutation.isPending ? (
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          ) : (
+            <Save className="w-4 h-4 mr-2" />
+          )}
           Salvar Alterações
         </Button>
       </div>

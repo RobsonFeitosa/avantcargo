@@ -3,22 +3,41 @@ import { Users, Shield, Globe, Zap, Clock, Box, Landmark, Truck, Radar, Pickaxe,
 import { FaIndustry } from "react-icons/fa";
 import { motion } from "framer-motion";
 
-export const Sectors = () => {
-  const sectors = [
-    { name: "Agentes de Carga", icon: Users },
-    { name: "Comissárias", icon: Shield },
-    { name: "Cargas Aéreas", icon: Globe },
-    { name: "Cargas Perigosas", icon: Zap },
-    { name: "Cargas Urgentes", icon: Clock },
-    { name: "Cargas de Projeto", icon: Box },
-    { name: "Importadores", icon: Landmark },
-    { name: "Exportadores", icon: Truck },
-    { name: "GRU Airport", icon: Radar },
-    { name: "Viracopos (VCP)", icon: Radar },
-    { name: "Operações Complexas", icon: Pickaxe },
-    { name: "Logística Reversa", icon: Sparkles },
-    { name: "Pharma", icon: Pill },
+import * as LucideIcons from "lucide-react";
+import { HelpCircle } from "lucide-react";
+
+interface SectorsProps {
+  data?: {
+    headerBadge: string;
+    headerTitle: string;
+    headerDescription: string;
+    sectors: { id: string; title: string; iconName: string }[];
+  }
+}
+
+const DynamicIcon = ({ name, className }: { name: string, className?: string }) => {
+  const Icon = (LucideIcons as any)[name];
+  return Icon ? <Icon className={className} /> : <HelpCircle className={className} />;
+};
+
+export const Sectors = ({ data }: SectorsProps) => {
+  const defaultSectors = [
+    { title: "Agentes de Carga", iconName: "Users" },
+    { title: "Comissárias", iconName: "Shield" },
+    { title: "Cargas Aéreas", iconName: "Globe" },
+    { title: "Cargas Perigosas", iconName: "Zap" },
+    { title: "Cargas Urgentes", iconName: "Clock" },
+    { title: "Cargas de Projeto", iconName: "Box" },
+    { title: "Importadores", iconName: "Landmark" },
+    { title: "Exportadores", iconName: "Truck" },
+    { title: "GRU Airport", iconName: "Radar" },
+    { title: "Viracopos (VCP)", iconName: "Radar" },
+    { title: "Operações Complexas", iconName: "Pickaxe" },
+    { title: "Logística Reversa", iconName: "Sparkles" },
+    { title: "Pharma", iconName: "Pill" },
   ];
+
+  const currentSectors = data?.sectors || defaultSectors;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -49,7 +68,7 @@ export const Sectors = () => {
           >
             <Badge variant="outline" className="gap-2 text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-6 py-2 rounded-full font-bold">
               <FaIndustry className="h-4 w-4" />
-              Segmentos
+              {data?.headerBadge || "Segmentos"}
             </Badge>
           </motion.div>
           <motion.h2
@@ -59,7 +78,16 @@ export const Sectors = () => {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-6xl font-bold text-emerald-950 tracking-tight"
           >
-            Setores que <span className="text-primary">atendemos</span>
+            {data?.headerTitle ? (
+               data.headerTitle.split(" ").map((word, i) => (
+                <span key={i}>
+                  {i > 0 && " "}
+                  {word.toLowerCase() === "atendemos" ? <span className="text-primary">{word}</span> : word}
+                </span>
+              ))
+            ) : (
+              <>Setores que <span className="text-primary">atendemos</span></>
+            )}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -68,7 +96,7 @@ export const Sectors = () => {
             transition={{ delay: 0.2 }}
             className="text-slate-600 max-w-2xl mx-auto text-lg"
           >
-            Soluções logísticas integradas e personalizadas para as demandas mais exigentes do mercado global.
+            {data?.headerDescription || "Soluções logísticas integradas e personalizadas para as demandas mais exigentes do mercado global."}
           </motion.p>
         </div>
 
@@ -79,7 +107,7 @@ export const Sectors = () => {
           viewport={{ once: true }}
           className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-6"
         >
-          {sectors.map((sector, idx) => (
+          {currentSectors.map((sector, idx) => (
             <motion.div
               key={idx}
               variants={itemVariants}
@@ -88,9 +116,11 @@ export const Sectors = () => {
             >
               <div className="absolute inset-0 bg-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl" />
 
-              <sector.icon className="h-7 w-7 text-primary group-hover:text-orange-500 transition-colors" />
+              <div className="h-7 w-7 text-primary group-hover:text-orange-500 transition-colors">
+                <DynamicIcon name={sector.iconName} />
+              </div>
               <p className="text-[11px] font-black uppercase tracking-[0.2em] text-center text-slate-400 group-hover:text-emerald-900 transition-colors">
-                {sector.name}
+                {sector.title}
               </p>
             </motion.div>
           ))}

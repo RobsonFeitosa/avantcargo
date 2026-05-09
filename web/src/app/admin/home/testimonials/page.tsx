@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -12,8 +12,13 @@ import {
   MessageSquareQuote, 
   GripVertical,
   Trash2,
-  Plus
+  Plus,
+  Loader2
 } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { testimonialsActions } from "@/admin/actions/home-sections.actions";
+import { useAuth } from "@/admin/hooks_generic/providers/auth";
 
 import {
   DndContext,
@@ -77,29 +82,69 @@ function SortableItem({ id, children }: SortableItemProps) {
 }
 
 export default function TestimonialsConfig() {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const [headerBadge, setHeaderBadge] = useState("DEPOIMENTOS");
+  const [headerTitle, setHeaderTitle] = useState("O que nossos clientes dizem");
+  const [headerDescription, setHeaderDescription] = useState("Alguns depoimentos de pessoas e empresas que acreditam em nosso trabalho.");
+
   const [testimonials, setTestimonials] = useState([
     { 
       id: "test-1", 
       name: "Osvaldo Mendes", 
       role: "CEO",
-      stars: 5,
-      message: "Atendimento personalizado, rápido, eficiente e proativo. Experiência positiva, recomendamos." 
+      content: "Atendimento personalizado, rápido, eficiente e proativo. Experiência positiva, recomendamos." 
     },
     { 
       id: "test-2", 
       name: "Hewerton Precioso", 
       role: "Engenheiro Eletrônico — Especializado em partes e peças",
-      stars: 5,
-      message: "Grata surpresa com o atendimento e com os resultados do trabalho contratado. Alto nível moral e intelectual, rapidez e precisão nas respostas e disponibilidade para pesquisar dúvidas inerentes da dinâmica da legislação. Gratidão!" 
+      content: "Grata surpresa com o atendimento e com os resultados do trabalho contratado. Alto nível moral e intelectual, rapidez e precisão nas respostas e disponibilidade para pesquisar dúvidas inerentes da dinâmica da legislação. Gratidão!" 
     },
     { 
       id: "test-3", 
       name: "Diogo Fazolo", 
       role: "Mestre em Direito — Especialista em Direito Aduaneiro",
-      stars: 5,
-      message: "Conheço a empresa já há alguns anos, atendimento excelente, muita competência e conhecimento da legislação aduaneira. Tenho plena confiança em indicar o trabalho do Sr. Matheus Diniz." 
+      content: "Conheço a empresa já há alguns anos, atendimento excelente, muita competência e conhecimento da legislação aduaneira. Tenho plena confiança em indicar o trabalho do Sr. Matheus Diniz." 
     },
   ]);
+
+  const { data: configData, isLoading } = useQuery({
+    queryKey: ["testimonials"],
+    queryFn: () => testimonialsActions.get(),
+    enabled: !!user,
+  });
+
+  useEffect(() => {
+    if (configData?.result) {
+      const { result } = configData;
+      setHeaderBadge(result.headerBadge || "DEPOIMENTOS");
+      setHeaderTitle(result.headerTitle || "O que nossos clientes dizem");
+      setHeaderDescription(result.headerDescription || "");
+      setTestimonials(result.testimonials || []);
+    }
+  }, [configData]);
+
+  const mutation = useMutation({
+    mutationFn: (data: any) => testimonialsActions.update(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["testimonials"] });
+      toast.success("Configurações salvas com sucesso!");
+    },
+    onError: () => {
+      toast.error("Erro ao salvar configurações.");
+    }
+  });
+
+  const handleSave = () => {
+    mutation.mutate({
+      headerBadge,
+      headerTitle,
+      headerDescription,
+      testimonials
+    });
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -123,13 +168,21 @@ export default function TestimonialsConfig() {
     const newId = `test-${Date.now()}`;
     setTestimonials([
       ...testimonials, 
-      { id: newId, name: "", role: "", stars: 5, message: "" }
+      { id: newId, name: "", role: "", content: "" }
     ]);
   };
 
   const removeTestimonial = (idToRemove: string) => {
     setTestimonials(testimonials.filter(t => t.id !== idToRemove));
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex h-[400px] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
@@ -142,7 +195,6 @@ export default function TestimonialsConfig() {
 
       <div className="flex flex-col gap-8">
         <div className="w-full max-w-4xl">
-          {/* Cabeçalho da Seção */}
           <Card className="border-none shadow-sm overflow-hidden h-fit">
             <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
               <div className="flex items-center gap-2">
@@ -156,26 +208,53 @@ export default function TestimonialsConfig() {
             <CardContent className="pt-6 space-y-4">
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Badge Superior</Label>
-                <Input maxLength={80} defaultValue="DEPOIMENTOS" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                <Input 
+                  maxLength={80} 
+                  value={headerBadge} 
+                  onChange={(e) => setHeaderBadge(e.target.value)}
+                  className="border-emerald-100 focus-visible:ring-emerald-500" 
+                />
               </div>
               
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título Principal</Label>
-                <Input maxLength={80} defaultValue="O que nossos clientes dizem" className="border-emerald-100 focus-visible:ring-emerald-500 text-lg font-semibold" />
+                <Input 
+                  maxLength={80} 
+                  value={headerTitle} 
+                  onChange={(e) => setHeaderTitle(e.target.value)}
+                  className="border-emerald-100 focus-visible:ring-emerald-500 text-lg font-semibold" 
+                />
               </div>
 
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Subtítulo / Descrição</Label>
-                <Textarea maxLength={250} defaultValue="Alguns depoimentos de pessoas e empresas que acreditam em nosso trabalho." className="min-h-[80px] border-emerald-100 focus-visible:ring-emerald-500" />
+                <Textarea 
+                  maxLength={250} 
+                  value={headerDescription} 
+                  onChange={(e) => setHeaderDescription(e.target.value)}
+                  className="min-h-[80px] border-emerald-100 focus-visible:ring-emerald-500" 
+                />
               </div>
 
               <div className="flex justify-end gap-4 pt-4 mt-2 border-t border-emerald-50">
-                <Button variant="outline" className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8">
+                <Button 
+                  variant="outline" 
+                  className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8"
+                  onClick={() => queryClient.invalidateQueries({ queryKey: ["testimonials"] })}
+                >
                   Descartar
                 </Button>
-                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10">
-                  <Save className="w-4 h-4 mr-2" />
-                  Salvar
+                <Button 
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10"
+                  onClick={handleSave}
+                  disabled={mutation.isPending}
+                >
+                  {mutation.isPending ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <Save className="w-4 h-4 mr-2" />
+                  )}
+                  Salvar Alterações
                 </Button>
               </div>
             </CardContent>
@@ -183,7 +262,6 @@ export default function TestimonialsConfig() {
         </div>
 
         <div className="w-full">
-          {/* Lista de Depoimentos */}
           <Card className="border-none shadow-sm overflow-hidden">
             <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -241,8 +319,8 @@ export default function TestimonialsConfig() {
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-4 gap-3">
-                          <div className="col-span-3 space-y-1">
+                        <div className="grid grid-cols-1 gap-3">
+                          <div className="space-y-1">
                             <Label className="text-emerald-900/70 font-semibold text-[10px]">Cargo / Função</Label>
                             <Input maxLength={80} value={testimonial.role} 
                               onChange={(e) => {
@@ -255,30 +333,15 @@ export default function TestimonialsConfig() {
                               className="border-emerald-100 focus-visible:ring-emerald-500 text-xs h-8" 
                             />
                           </div>
-                          <div className="col-span-1 space-y-1">
-                            <Label className="text-emerald-900/70 font-semibold text-[10px]">Estrelas (1-5)</Label>
-                            <Input maxLength={5} type="number"
-                              min="1"
-                              max="5"
-                              value={testimonial.stars} 
-                              onChange={(e) => {
-                                const newItems = [...testimonials];
-                                const idx = newItems.findIndex(t => t.id === testimonial.id);
-                                newItems[idx].stars = Number(e.target.value) || 5;
-                                setTestimonials(newItems);
-                              }}
-                              className="border-emerald-100 focus-visible:ring-emerald-500 text-center h-8" 
-                            />
-                          </div>
                         </div>
 
                         <div className="space-y-1">
                           <Label className="text-emerald-900/70 font-semibold text-[10px]">Mensagem</Label>
-                          <Textarea maxLength={300} value={testimonial.message} 
+                          <Textarea maxLength={300} value={testimonial.content} 
                             onChange={(e) => {
                               const newItems = [...testimonials];
                               const idx = newItems.findIndex(t => t.id === testimonial.id);
-                              newItems[idx].message = e.target.value;
+                              newItems[idx].content = e.target.value;
                               setTestimonials(newItems);
                             }}
                             placeholder="Depoimento..."
@@ -296,27 +359,12 @@ export default function TestimonialsConfig() {
                   <p className="text-xs text-emerald-900/60 font-medium">
                     Mostrando {testimonials.length} depoimentos
                   </p>
-                  <div className="flex items-center gap-1">
-                    <Button variant="outline" size="sm" className="h-8 w-8 p-0 border-emerald-100 text-emerald-700" disabled>
-                      {"<"}
-                    </Button>
-                    <Button variant="outline" size="sm" className="h-8 w-8 p-0 bg-emerald-50 border-emerald-200 text-emerald-800">
-                      1
-                    </Button>
-                    <Button variant="outline" size="sm" className="h-8 w-8 p-0 border-emerald-100 text-emerald-700">
-                      2
-                    </Button>
-                    <Button variant="outline" size="sm" className="h-8 w-8 p-0 border-emerald-100 text-emerald-700">
-                      {">"}
-                    </Button>
-                  </div>
                 </div>
               )}
             </CardContent>
           </Card>
         </div>
       </div>
-
     </div>
   );
 }

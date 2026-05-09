@@ -187,68 +187,77 @@ export default function About() {
           </div>
         </section>
 
-        {/* Founder Section */}
+        {/* Founders Section */}
         <section className="py-32 bg-slate-50/50 border-y border-slate-100">
           <div className="container">
             <div className="text-center space-y-4 mb-20">
               <Badge variant="outline" className="text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-4 py-1 rounded-full text-[10px] font-bold">
                 A Equipe por Trás do Sucesso
               </Badge>
-              <h2 className="text-4xl font-bold text-emerald-950">Conheça o <span className="text-primary">fundador</span></h2>
+              <h2 className="text-4xl font-bold text-emerald-950">Conheça os <span className="text-primary">fundadores</span></h2>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-              <div className="lg:col-span-5">
-                <div className="relative aspect-[4/5] rounded-[40px] overflow-hidden border border-slate-200 bg-white">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              {/* Founder 1 */}
+              <div className="space-y-8 flex flex-col">
+                <div className="relative aspect-video lg:aspect-[4/3] rounded-[40px] overflow-hidden border border-slate-200 bg-white">
                   <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/40 to-transparent z-10" />
                   <div className="absolute inset-0 bg-slate-100 flex items-center justify-center text-slate-300 italic">
                     [Foto: Matheus Diniz]
                   </div>
                 </div>
-              </div>
 
-              <div className="lg:col-span-7 space-y-8">
-                <div className="p-8 rounded-[32px] border border-orange-500/20 bg-white space-y-6 shadow-sm">
+                <div className="p-8 md:p-10 rounded-[32px] border border-orange-500/20 bg-white space-y-6 shadow-sm flex-1 flex flex-col">
                   <div className="space-y-2">
                     <Badge className="bg-orange-500 text-white hover:bg-orange-500 uppercase tracking-widest text-[10px] font-bold">Fundador & CEO</Badge>
                     <h3 className="text-3xl font-bold text-emerald-950">Matheus Diniz</h3>
                     <p className="text-orange-600 font-bold">Especialista em Comércio Exterior — +20 anos de experiência</p>
                   </div>
 
-                  <div className="space-y-4 text-slate-600 leading-relaxed">
+                  <div className="space-y-4 text-slate-600 leading-relaxed text-sm md:text-base flex-1">
                     <p>
-                      Com quase 30 anos de atuação no comércio exterior brasileiro, Matheus Diniz é referência nacional em Importação, Exportação e assessoria aduaneira. Sua trajetória é marcada pelo profundo conhecimento das normas do MDIC, Receita Federal e demais órgãos intervenientes.
-                    </p>
-                    <p>
-                      Formado em Comércio Exterior, com especializações em Direito Aduaneiro e Tributário, construiu ao longo de duas décadas um relacionamento institucional sólido que se traduz em resultados concretos para os clientes da AVANTCARGO.
+                      Com quase 30 anos de atuação no comércio exterior brasileiro, Matheus Diniz é referência nacional em Importação, Exportação e assessoria aduaneira. Sua trajetória é marcada pelo profundo conhecimento das normas do MDIC e Receita Federal.
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-6 pt-6 border-t border-slate-100">
-                    <div>
-                      <p className="text-2xl font-bold text-emerald-950">20+</p>
-                      <p className="text-[10px] text-slate-400 uppercase tracking-widest">Anos de exp.</p>
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-emerald-950">3500+</p>
-                      <p className="text-[10px] text-slate-400 uppercase tracking-widest">Importações</p>
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-emerald-950">+200M</p>
-                      <p className="text-[10px] text-slate-400 uppercase tracking-widest">Ex-Tarifário</p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4 pt-4">
-                    <Button className="bg-primary hover:bg-emerald-700 text-white rounded-xl h-12 px-8 font-bold gap-2">
+                  <div className="flex flex-col sm:flex-row gap-4 pt-6 mt-auto">
+                    <Button className="bg-primary hover:bg-emerald-700 text-white rounded-xl h-12 px-6 font-bold gap-2 w-full sm:w-auto">
                       <FaWhatsapp /> Fale com Matheus
-                    </Button>
-                    <Button variant="outline" className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl h-12 px-8 font-bold gap-2">
-                      <MessageSquare className="h-4 w-4 text-primary" /> Enviar mensagem
                     </Button>
                   </div>
                 </div>
               </div>
+
+              {/* Founder 2 */}
+              <div className="space-y-8 flex flex-col">
+                <div className="relative aspect-video lg:aspect-[4/3] rounded-[40px] overflow-hidden border border-slate-200 bg-white">
+                  <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/40 to-transparent z-10" />
+                  <div className="absolute inset-0 bg-slate-100 flex items-center justify-center text-slate-300 italic">
+                    [Foto: Sócio / Fundador 2]
+                  </div>
+                </div>
+
+                <div className="p-8 md:p-10 rounded-[32px] border border-emerald-500/20 bg-white space-y-6 shadow-sm flex-1 flex flex-col">
+                  <div className="space-y-2">
+                    <Badge className="bg-emerald-600 text-white hover:bg-emerald-600 uppercase tracking-widest text-[10px] font-bold">Sócio / Fundador</Badge>
+                    <h3 className="text-3xl font-bold text-emerald-950">Nome do Sócio</h3>
+                    <p className="text-emerald-600 font-bold">Especialista Operacional — +15 anos de experiência</p>
+                  </div>
+
+                  <div className="space-y-4 text-slate-600 leading-relaxed text-sm md:text-base flex-1">
+                    <p>
+                      Com ampla experiência na gestão operacional aduaneira e logística internacional, coordena todas as etapas do processo garantindo segurança, compliance e agilidade de ponta a ponta para os clientes.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-4 pt-6 mt-auto">
+                    <Button className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl h-12 px-6 font-bold gap-2 w-full sm:w-auto">
+                      <FaWhatsapp /> Falar com o Sócio
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </section>

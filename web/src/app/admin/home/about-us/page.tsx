@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -11,9 +11,14 @@ import {
   Layout, 
   CheckCircle2, 
   Award,
-  GripVertical
+  GripVertical,
+  Loader2
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { aboutUsActions } from "@/admin/actions/about-us.actions";
+import { useAuth } from "@/admin/hooks_generic/providers/auth";
 
 import {
   DndContext,
@@ -77,6 +82,15 @@ function SortableItem({ id, children }: SortableItemProps) {
 }
 
 export default function AboutUsConfig() {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const [headerBadge, setHeaderBadge] = useState("QUEM SOMOS");
+  const [headerTitle, setHeaderTitle] = useState("Mais de 20 anos de expertise em Comércio Exterior");
+  const [headerDescription, setHeaderDescription] = useState("Atuamos com excelência em todos os portos, aeroportos e fronteiras do Brasil, garantindo que sua carga chegue ao destino final sem imprevistos e com o melhor custo-benefício.");
+  const [primaryButtonText, setPrimaryButtonText] = useState("Conheça nossa história");
+  const [secondaryButtonText, setSecondaryButtonText] = useState("Fale conosco");
+
   const [features, setFeatures] = useState([
     { 
       id: "feat-1", 
@@ -118,6 +132,48 @@ export default function AboutUsConfig() {
     },
   ]);
 
+  const { data: configData, isLoading } = useQuery({
+    queryKey: ["about-us"],
+    queryFn: () => aboutUsActions.get(),
+    enabled: !!user,
+  });
+
+  useEffect(() => {
+    if (configData?.result) {
+      const { result } = configData;
+      setHeaderBadge(result.headerBadge || "QUEM SOMOS");
+      setHeaderTitle(result.headerTitle || "Mais de 20 anos de expertise em Comércio Exterior");
+      setHeaderDescription(result.headerDescription || "");
+      setPrimaryButtonText(result.primaryButtonText || "Conheça nossa história");
+      setSecondaryButtonText(result.secondaryButtonText || "Fale conosco");
+      setFeatures(result.differentials || []);
+      setAchievements(result.achievements || []);
+    }
+  }, [configData]);
+
+  const mutation = useMutation({
+    mutationFn: (data: any) => aboutUsActions.update(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["about-us"] });
+      toast.success("Configurações salvas com sucesso!");
+    },
+    onError: () => {
+      toast.error("Erro ao salvar configurações.");
+    }
+  });
+
+  const handleSave = () => {
+    mutation.mutate({
+      headerBadge,
+      headerTitle,
+      headerDescription,
+      primaryButtonText,
+      secondaryButtonText,
+      differentials: features,
+      achievements
+    });
+  };
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -147,6 +203,14 @@ export default function AboutUsConfig() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex h-[400px] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
       <div className="flex flex-col gap-2">
@@ -158,7 +222,6 @@ export default function AboutUsConfig() {
 
       <div className="grid gap-8 lg:grid-cols-2">
         <div className="space-y-8">
-          {/* Cabeçalho da Seção */}
           <Card className="border-none shadow-sm overflow-hidden h-fit">
             <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
               <div className="flex items-center gap-2">
@@ -172,17 +235,32 @@ export default function AboutUsConfig() {
             <CardContent className="pt-6 space-y-4">
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Badge Superior</Label>
-                <Input maxLength={80} defaultValue="QUEM SOMOS" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                <Input 
+                  maxLength={80} 
+                  value={headerBadge} 
+                  onChange={(e) => setHeaderBadge(e.target.value)}
+                  className="border-emerald-100 focus-visible:ring-emerald-500" 
+                />
               </div>
               
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título Principal</Label>
-                <Textarea maxLength={250} defaultValue="Mais de 20 anos de expertise em Comércio Exterior" className="min-h-[80px] border-emerald-100 focus-visible:ring-emerald-500 text-lg font-semibold" />
+                <Textarea 
+                  maxLength={250} 
+                  value={headerTitle} 
+                  onChange={(e) => setHeaderTitle(e.target.value)}
+                  className="min-h-[80px] border-emerald-100 focus-visible:ring-emerald-500 text-lg font-semibold" 
+                />
               </div>
 
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Subtítulo / Descrição</Label>
-                <Textarea maxLength={250} defaultValue="Atuamos com excelência em todos os portos, aeroportos e fronteiras do Brasil, garantindo que sua carga chegue ao destino final sem imprevistos e com o melhor custo-benefício." className="min-h-[120px] border-emerald-100 focus-visible:ring-emerald-500" />
+                <Textarea 
+                  maxLength={250} 
+                  value={headerDescription} 
+                  onChange={(e) => setHeaderDescription(e.target.value)}
+                  className="min-h-[120px] border-emerald-100 focus-visible:ring-emerald-500" 
+                />
               </div>
 
               <Separator className="bg-emerald-50 my-2" />
@@ -190,17 +268,26 @@ export default function AboutUsConfig() {
               <div className="grid grid-cols-2 gap-4 pt-2">
                 <div className="space-y-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão Primário</Label>
-                  <Input maxLength={80} defaultValue="Conheça nossa história" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                  <Input 
+                    maxLength={80} 
+                    value={primaryButtonText} 
+                    onChange={(e) => setPrimaryButtonText(e.target.value)}
+                    className="border-emerald-100 focus-visible:ring-emerald-500" 
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão Secundário</Label>
-                  <Input maxLength={80} defaultValue="Fale conosco" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                  <Input 
+                    maxLength={80} 
+                    value={secondaryButtonText} 
+                    onChange={(e) => setSecondaryButtonText(e.target.value)}
+                    className="border-emerald-100 focus-visible:ring-emerald-500" 
+                  />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Lista de Diferenciais (Esquerda) */}
           <Card className="border-none shadow-sm overflow-hidden h-fit">
             <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
               <div className="flex items-center gap-2">
@@ -247,7 +334,6 @@ export default function AboutUsConfig() {
         </div>
 
         <div className="space-y-8">
-          {/* Conquistas / Indicadores (Direita) */}
           <Card className="border-none shadow-sm overflow-hidden h-fit">
             <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
               <div className="flex items-center gap-2">
@@ -295,11 +381,23 @@ export default function AboutUsConfig() {
       </div>
 
       <div className="flex justify-end gap-4 border-t border-emerald-50 pt-8 mt-4">
-        <Button variant="outline" className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8">
+        <Button 
+          variant="outline" 
+          className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8"
+          onClick={() => queryClient.invalidateQueries({ queryKey: ["about-us"] })}
+        >
           Descartar
         </Button>
-        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10">
-          <Save className="w-4 h-4 mr-2" />
+        <Button 
+          className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10"
+          onClick={handleSave}
+          disabled={mutation.isPending}
+        >
+          {mutation.isPending ? (
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          ) : (
+            <Save className="w-4 h-4 mr-2" />
+          )}
           Salvar Alterações
         </Button>
       </div>

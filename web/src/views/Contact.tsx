@@ -19,6 +19,13 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -26,40 +33,100 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { MapPin, Phone, Mail, Clock, Send, Instagram, ChevronRight } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send, Instagram, ChevronRight, Loader2 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { generalContactActions } from "@/admin/actions/general-contact.actions";
+import { contactMessagesActions } from "@/admin/actions/contact-messages.actions";
+import { toast } from "sonner";
+import { useState } from "react";
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: "",
+    company: "",
+    email: "",
+    phone: "",
+    service: "",
+    message: ""
+  });
+
+  const { data: configResponse, isLoading } = useQuery({
+    queryKey: ["general-contact"],
+    queryFn: () => generalContactActions.get(),
+  });
+
+  const config = configResponse?.result;
+
+  const mutation = useMutation({
+    mutationFn: (data: any) => contactMessagesActions.create(data),
+    onSuccess: () => {
+      toast.success("Mensagem enviada com sucesso! Entraremos em contato em breve.");
+      setFormData({
+        name: "",
+        company: "",
+        email: "",
+        phone: "",
+        service: "",
+        message: ""
+      });
+    },
+    onError: () => {
+      toast.error("Erro ao enviar mensagem. Por favor, tente novamente mais tarde.");
+    }
+  });
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.phone || !formData.message) {
+      toast.error("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+    mutation.mutate(formData);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleServiceChange = (value: string) => {
+    setFormData(prev => ({ ...prev, service: value }));
+  };
+
   const contacts = [
     {
       icon: FaWhatsapp,
       title: "WhatsApp",
-      value: "(11) 96450-3217",
-      desc: "Resposta rápida — seg a sex, 8h-18h",
+      value: config?.whatsappNumber || "(11) 96450-3217",
+      desc: config?.whatsappSubtitle || "Resposta rápida — seg a sex, 8h-18h",
+      link: config?.whatsappUrl || "https://wa.me/5511964503217",
       color: "text-green-500",
       bg: "bg-green-500/10",
     },
     {
       icon: Mail,
       title: "E-mail",
-      value: "comercia@avantcargo.com.br",
-      desc: "Resposta em até 24h úteis",
+      value: config?.email || "comercial@avantcargo.com.br",
+      desc: config?.emailSubtitle || "Resposta em até 24h úteis",
+      link: `mailto:${config?.email || "comercial@avantcargo.com.br"}`,
       color: "text-orange-500",
       bg: "bg-orange-500/10",
     },
     {
       icon: Instagram,
       title: "Instagram",
-      value: "@avantcargo",
-      desc: "Acompanhe nossas novidades",
+      value: config?.instagramUser || "@avantcargo",
+      desc: config?.instagramSubtitle || "Acompanhe nossas novidades",
+      link: config?.instagramUrl || "https://instagram.com/avantcargo",
       color: "text-pink-500",
       bg: "bg-pink-500/10",
     },
   ];
 
-  const faqs = [
+  const faqs = config?.faqs || [
     {
       q: "O que é o Ex-Tarifário e como funciona?",
       a: "O Ex-Tarifário é um regime que permite a redução temporária da alíquota do Imposto de Importação de bens de capital (BK) e de informática e telecomunicação (BIT), quando não houver produção nacional equivalente.",
@@ -81,6 +148,14 @@ export default function Contact() {
       a: "Os principais documentos incluem catálogo técnico detalhado, faturas proforma, e especificações que comprovem a tecnologia e a finalidade do bem a ser importado.",
     },
   ];
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-white">
+        <Loader2 className="h-10 w-10 animate-spin text-emerald-600" />
+      </div>
+    );
+  }
 
   return (
     <LandingLayout>
@@ -106,10 +181,10 @@ export default function Contact() {
 
               <div className="space-y-4 max-w-3xl">
                 <h1 className="text-4xl md:text-6xl font-bold text-emerald-950 tracking-tight leading-tight">
-                  Fale com a <span className="text-orange-500 uppercase">AvantCargo</span>
+                  {config?.headerTitleDark || "Fale com a"} <span className="text-orange-500 uppercase">{config?.headerTitleHighlight || "AvantCargo"}</span>
                 </h1>
                 <p className="text-lg text-slate-600 leading-relaxed">
-                  Tire suas dúvidas, solicite uma análise gratuita de Ex-Tarifário ou entre em contato para iniciar seu processo de comércio exterior.
+                  {config?.headerDescription || "Tire suas dúvidas, solicite uma análise gratuita de Ex-Tarifário ou entre em contato para iniciar seu processo de comércio exterior."}
                 </p>
               </div>
             </div>
@@ -130,47 +205,62 @@ export default function Contact() {
                 >
                   <div className="space-y-8 relative z-10">
                     <div className="space-y-2">
-                      <h3 className="text-2xl font-bold text-emerald-950">Enviar mensagem</h3>
-                      <p className="text-slate-500 text-sm">Preencha o formulário e nossa equipe entrará em contato em até 24 horas úteis.</p>
+                      <h3 className="text-2xl font-bold text-emerald-950">{config?.formTitle || "Enviar mensagem"}</h3>
+                      <p className="text-slate-500 text-sm">{config?.formDescription || "Preencha o formulário e nossa equipe entrará em contato em até 24 horas úteis."}</p>
                     </div>
 
-                    <form className="space-y-6">
+                    <form className="space-y-6" onSubmit={handleFormSubmit}>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <label className="text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-1">
+                          <label className="h-5 text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-1">
                             Nome <span className="text-red-500">*</span>
                           </label>
                           <Input
+                            id="name"
+                            value={formData.name}
+                            onChange={handleChange}
                             placeholder="Seu nome completo"
                             className="h-12 bg-slate-50 border-slate-200 text-emerald-950 placeholder:text-slate-400 rounded-xl focus:border-orange-500/50 transition-all"
+                            required
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="text-xs font-bold text-slate-600 uppercase tracking-widest">
+                          <label className="h-5 text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center">
                             Empresa
                           </label>
                           <Input
+                            id="company"
+                            value={formData.company}
+                            onChange={handleChange}
                             placeholder="Nome da empresa"
                             className="h-12 bg-slate-50 border-slate-200 text-emerald-950 placeholder:text-slate-400 rounded-xl focus:border-orange-500/50 transition-all"
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-1">
+                          <label className="h-5 text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-1">
                             E-mail <span className="text-red-500">*</span>
                           </label>
                           <Input
+                            id="email"
+                            value={formData.email}
+                            onChange={handleChange}
                             placeholder="seu@email.com.br"
                             type="email"
                             className="h-12 bg-slate-50 border-slate-200 text-emerald-950 placeholder:text-slate-400 rounded-xl focus:border-orange-500/50 transition-all"
+                            required
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-1">
+                          <label className="h-5 text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-1">
                             Telefone <span className="text-red-500">*</span>
                           </label>
                           <Input
+                            id="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
                             placeholder="(41) 9 9999-9999"
                             className="h-12 bg-slate-50 border-slate-200 text-emerald-950 placeholder:text-slate-400 rounded-xl focus:border-orange-500/50 transition-all"
+                            required
                           />
                         </div>
                       </div>
@@ -179,7 +269,7 @@ export default function Contact() {
                         <label className="text-xs font-bold text-slate-600 uppercase tracking-widest">
                           Serviço de interesse
                         </label>
-                        <Select>
+                        <Select value={formData.service} onValueChange={handleServiceChange}>
                           <SelectTrigger className="h-12 bg-slate-50 border-slate-200 text-emerald-950 rounded-xl focus:border-orange-500/50 transition-all">
                             <SelectValue placeholder="Selecione um serviço..." />
                           </SelectTrigger>
@@ -197,14 +287,26 @@ export default function Contact() {
                           Mensagem
                         </label>
                         <Textarea
+                          id="message"
+                          value={formData.message}
+                          onChange={handleChange}
                           placeholder="Descreva brevemente sua necessidade..."
                           className="min-h-[120px] bg-slate-50 border-slate-200 text-emerald-950 placeholder:text-slate-400 rounded-xl focus:border-orange-500/50 transition-all resize-none"
+                          required
                         />
                       </div>
 
-                      <Button className="w-full h-14 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold text-lg rounded-xl shadow-lg shadow-blue-500/20 group">
-                        <Send className="mr-2 h-5 w-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                        Enviar mensagem
+                      <Button 
+                        type="submit"
+                        disabled={mutation.isPending}
+                        className="w-full h-14 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold text-lg rounded-xl shadow-lg shadow-blue-500/20 group"
+                      >
+                        {mutation.isPending ? (
+                          <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                        ) : (
+                          <Send className="mr-2 h-5 w-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                        )}
+                        {mutation.isPending ? "Enviando..." : "Enviar mensagem"}
                       </Button>
 
                       <div className="text-center">
@@ -224,13 +326,16 @@ export default function Contact() {
                   <h3 className="text-2xl font-bold text-emerald-950">Nossos contatos</h3>
                   <div className="space-y-4">
                     {contacts.map((contact, idx) => (
-                      <motion.div
+                      <motion.a
                         key={idx}
+                        href={contact.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         initial={{ opacity: 0, x: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: idx * 0.1 }}
-                        className="p-6 rounded-2xl bg-slate-50 border border-slate-200 hover:border-primary/20 hover:bg-white hover:shadow-md transition-all group flex items-center gap-6"
+                        className="p-6 rounded-2xl bg-slate-50 border border-slate-200 hover:border-primary/20 hover:bg-white hover:shadow-md transition-all group flex items-center gap-6 cursor-pointer"
                       >
                         <div className={`h-12 w-12 rounded-xl ${contact.bg} flex items-center justify-center ${contact.color} shrink-0`}>
                           <contact.icon className="h-6 w-6" />
@@ -243,7 +348,7 @@ export default function Contact() {
                           <p className="text-lg font-bold text-emerald-900">{contact.value}</p>
                           <p className="text-xs text-slate-500">{contact.desc}</p>
                         </div>
-                      </motion.div>
+                      </motion.a>
                     ))}
                   </div>
                 </div>
@@ -255,13 +360,35 @@ export default function Contact() {
                   </h3>
                   <div className="p-8 rounded-[32px] bg-slate-50 border border-slate-200 space-y-6">
                     <div className="space-y-2">
-                      <p className="text-emerald-900 font-medium">Av. República Argentina, 1237 — Sala 415</p>
-                      <p className="text-slate-500">Guarulhos, SP — CEP 80620-010</p>
-                      <p className="text-[10px] text-slate-300 font-mono mt-4">CNPJ 22.837.692/0001-05</p>
+                      <p className="text-emerald-900 font-medium whitespace-pre-line">{config?.address || "R. Tupi Paulista, 71 - Cidade Industrial Satélite\nGuarulhos, SP — CEP 07222-070"}</p>
+                      <p className="text-[10px] text-slate-300 font-mono mt-4">{config?.addressCnpj || "CNPJ: 22.837.582/0001-05"}</p>
                     </div>
-                    <Button variant="outline" className="w-full h-12 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl gap-2 font-bold shadow-sm">
-                      <MapPin className="h-4 w-4 text-primary" /> Ver no mapa
-                    </Button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="outline" className="w-full h-12 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-emerald-500/30 hover:text-emerald-700 rounded-xl gap-2 font-bold shadow-sm transition-all">
+                          <MapPin className="h-4 w-4 text-primary" /> Ver no mapa
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-[700px] p-0 overflow-hidden border-none rounded-2xl">
+                        <DialogHeader className="p-6 pb-2 bg-white">
+                          <DialogTitle className="text-emerald-950 font-bold flex items-center gap-2 text-xl">
+                            <MapPin className="h-6 w-6 text-orange-500" />
+                            Nossa Localização
+                          </DialogTitle>
+                        </DialogHeader>
+                        <div className="w-full h-[450px] bg-slate-100">
+                          <iframe 
+                            src={config?.addressMapsUrl || "https://www.google.com/maps?q=R.+Tupi+Paulista,+71+-+Cidade+Industrial+Satélite+de+São+Paulo,+Guarulhos+-+SP,+07222-070,+Brasil&output=embed"} 
+                            width="100%" 
+                            height="100%" 
+                            style={{ border: 0 }} 
+                            allowFullScreen 
+                            loading="lazy" 
+                            referrerPolicy="no-referrer-when-downgrade"
+                          ></iframe>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 </div>
 
@@ -273,9 +400,9 @@ export default function Contact() {
                     </div>
                     <div className="space-y-3">
                       {[
-                        { day: "Segunda — Sexta", hour: "8h às 18h" },
-                        { day: "Sábado", hour: "Fechado", inactive: true },
-                        { day: "Domingo", hour: "Fechado", inactive: true },
+                        { day: "Segunda — Sexta", hour: config?.hoursMonFri || "8h às 18h" },
+                        { day: "Sábado", hour: config?.hoursSat || "Fechado", inactive: (config?.hoursSat === "Fechado" || !config?.hoursSat) },
+                        { day: "Domingo", hour: config?.hoursSun || "Fechado", inactive: (config?.hoursSun === "Fechado" || !config?.hoursSun) },
                       ].map((item, idx) => (
                         <div key={idx} className="flex justify-between items-center text-sm">
                           <span className="text-slate-600">{item.day}</span>
@@ -295,10 +422,10 @@ export default function Contact() {
           <div className="container">
             <div className="text-center space-y-6 mb-20">
               <Badge variant="outline" className="text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-4 py-1 rounded-full text-[10px] font-bold">
-                FAQ
+                {config?.faqBadge || "FAQ"}
               </Badge>
               <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight">
-                Perguntas <span className="text-primary">frequentes</span>
+                {config?.faqTitle?.split(" ")[0] || "Perguntas"} <span className="text-primary">{config?.faqTitle?.split(" ").slice(1).join(" ") || "frequentes"}</span>
               </h2>
             </div>
 

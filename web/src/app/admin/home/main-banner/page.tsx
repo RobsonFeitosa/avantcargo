@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -14,9 +14,14 @@ import {
   MousePointer2, 
   GripVertical,
   Trash2,
-  Plus
+  Plus,
+  Loader2
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { mainBannerActions } from "@/admin/actions/main-banner.actions";
+import { useAuth } from "@/admin/hooks_generic/providers/auth";
 
 import {
   DndContext,
@@ -80,31 +85,91 @@ function SortableItem({ id, children }: SortableItemProps) {
 }
 
 export default function MainBannerConfig() {
-  const [features, setFeatures] = useState([
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  // Hero State
+  const [heroBadge, setHeroBadge] = useState("LOGÍSTICA AÉREA & SERVIÇOS ADUANEIROS");
+  const [heroTitle, setHeroTitle] = useState("Seu parceiro estratégico em Aeroportos GRU | VCP");
+  const [heroDescription, setHeroDescription] = useState("Soluções ágeis para agentes de carga e comissárias...");
+  const [heroPrimaryBtn, setHeroPrimaryBtn] = useState("Falar conosco");
+  const [heroSecondaryBtn, setHeroSecondaryBtn] = useState("Quem somos");
+  const [servicesSectionTitle, setServicesSectionTitle] = useState("NOSSOS PRINCIPAIS SERVIÇOS");
+
+  // Dynamic States
+  const [features, setFeatures] = useState<{ id: string; text: string }[]>([
     { id: "feat-1", text: "+20 anos de experiência" },
     { id: "feat-2", text: "Empresa 100% brasileira" },
     { id: "feat-3", text: "Guarulhos, SP" },
   ]);
 
-  const [services, setServices] = useState([
+  const [services, setServices] = useState<{ id: string; title: string; desc: string }[]>([
     { id: "serv-1", title: "Assessoria Aduaneira", desc: "Expertise global em todos os portos e aeroportos." },
     { id: "serv-2", title: "Consultoria Tributária", desc: "Otimização de impostos e regimes especiais." },
     { id: "serv-3", title: "Segurança Jurídica", desc: "Conformidade total com a legislação vigente." },
     { id: "serv-4", title: "Equipe Dedicada", desc: "Suporte especializado em cada etapa do processo." },
   ]);
 
-  const [stats, setStats] = useState([
+  const [stats, setStats] = useState<{ id: string; value: string; label: string }[]>([
     { id: "stat-1", value: "500+", label: "CLIENTES ATENDIDOS" },
     { id: "stat-2", value: "20+", label: "ANOS DE EXPERIÊNCIA" },
     { id: "stat-3", value: "98%", label: "SATISFAÇÃO" },
   ]);
 
-  const [secondaryStats, setSecondaryStats] = useState([
+  const [secondaryStats, setSecondaryStats] = useState<{ id: string; value: string; label: string }[]>([
     { id: "sstat-1", value: "20+", label: "ANOS DE EXPERIÊNCIA NO MERCADO" },
     { id: "sstat-2", value: "500+", label: "CLIENTES ATENDIDOS" },
     { id: "sstat-3", value: "98%", label: "TAXA DE RETENÇÃO E FIDELIDADE" },
     { id: "sstat-4", value: "100%", label: "SEGURANÇA JURÍDICA" },
   ]);
+
+  const { data: configData, isLoading } = useQuery({
+    queryKey: ["main-banner"],
+    queryFn: () => mainBannerActions.get(),
+    enabled: !!user,
+  });
+
+  useEffect(() => {
+    if (configData?.result) {
+      const { result } = configData;
+      setHeroBadge(result.heroBadge || "");
+      setHeroTitle(result.heroTitle || "");
+      setHeroDescription(result.heroDescription || "");
+      setHeroPrimaryBtn(result.heroPrimaryButtonText || "");
+      setHeroSecondaryBtn(result.heroSecondaryButtonText || "");
+      setServicesSectionTitle(result.servicesSectionTitle || "");
+      setFeatures(result.features || []);
+      setServices(result.services || []);
+      setStats(result.stats || []);
+      setSecondaryStats(result.footer_stats || []);
+    }
+  }, [configData]);
+
+  const mutation = useMutation({
+    mutationFn: (data: any) => mainBannerActions.update(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["main-banner"] });
+      toast.success("Configurações salvas com sucesso!");
+    },
+    onError: () => {
+      toast.error("Erro ao salvar configurações.");
+    }
+  });
+
+  const handleSave = () => {
+    mutation.mutate({
+      heroBadge,
+      heroTitle,
+      heroDescription,
+      heroPrimaryButtonText: heroPrimaryBtn,
+      heroSecondaryButtonText: heroSecondaryBtn,
+      servicesSectionTitle,
+      features,
+      services,
+      stats,
+      footer_stats: secondaryStats
+    });
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -157,6 +222,14 @@ export default function MainBannerConfig() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex h-[400px] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
       <div className="flex flex-col gap-2">
@@ -179,24 +252,49 @@ export default function MainBannerConfig() {
             <CardContent className="pt-6 space-y-4">
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Badge Superior</Label>
-                <Input maxLength={80} defaultValue="LOGÍSTICA AÉREA & SERVIÇOS ADUANEIROS" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                <Input 
+                  maxLength={80} 
+                  value={heroBadge} 
+                  onChange={(e) => setHeroBadge(e.target.value)}
+                  className="border-emerald-100 focus-visible:ring-emerald-500" 
+                />
               </div>
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título Principal</Label>
-                <Textarea maxLength={250} defaultValue="Seu parceiro estratégico em Aeroportos GRU | VCP" className="min-h-[80px] border-emerald-100 focus-visible:ring-emerald-500" />
+                <Textarea 
+                  maxLength={250} 
+                  value={heroTitle} 
+                  onChange={(e) => setHeroTitle(e.target.value)}
+                  className="min-h-[80px] border-emerald-100 focus-visible:ring-emerald-500" 
+                />
               </div>
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Subtítulo / Descrição</Label>
-                <Textarea maxLength={250} defaultValue="Soluções ágeis para agentes de carga e comissárias..." className="min-h-[120px] border-emerald-100 focus-visible:ring-emerald-500" />
+                <Textarea 
+                  maxLength={250} 
+                  value={heroDescription} 
+                  onChange={(e) => setHeroDescription(e.target.value)}
+                  className="min-h-[120px] border-emerald-100 focus-visible:ring-emerald-500" 
+                />
               </div>
               <div className="grid grid-cols-2 gap-4 pt-2">
                 <div className="space-y-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão Primário</Label>
-                  <Input maxLength={80} defaultValue="Falar conosco" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                  <Input 
+                    maxLength={80} 
+                    value={heroPrimaryBtn} 
+                    onChange={(e) => setHeroPrimaryBtn(e.target.value)}
+                    className="border-emerald-100 focus-visible:ring-emerald-500" 
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão Secundário</Label>
-                  <Input maxLength={80} defaultValue="Quem somos" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                  <Input 
+                    maxLength={80} 
+                    value={heroSecondaryBtn} 
+                    onChange={(e) => setHeroSecondaryBtn(e.target.value)}
+                    className="border-emerald-100 focus-visible:ring-emerald-500" 
+                  />
                 </div>
               </div>
             </CardContent>
@@ -244,7 +342,12 @@ export default function MainBannerConfig() {
             <CardContent className="pt-6 space-y-6">
               <div className="space-y-2 px-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título da Seção</Label>
-                <Input maxLength={80} defaultValue="NOSSOS PRINCIPAIS SERVIÇOS" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                <Input 
+                  maxLength={80} 
+                  value={servicesSectionTitle} 
+                  onChange={(e) => setServicesSectionTitle(e.target.value)}
+                  className="border-emerald-100 focus-visible:ring-emerald-500" 
+                />
               </div>
               <Separator className="bg-emerald-50" />
               <div className="space-y-1">
@@ -365,11 +468,23 @@ export default function MainBannerConfig() {
       </div>
 
       <div className="flex justify-end gap-4 border-t border-emerald-50 pt-8 mt-4">
-        <Button variant="outline" className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8">
+        <Button 
+          variant="outline" 
+          className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8"
+          onClick={() => queryClient.invalidateQueries({ queryKey: ["main-banner"] })}
+        >
           Descartar
         </Button>
-        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10">
-          <Save className="w-4 h-4 mr-2" />
+        <Button 
+          className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10"
+          onClick={handleSave}
+          disabled={mutation.isPending}
+        >
+          {mutation.isPending ? (
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          ) : (
+            <Save className="w-4 h-4 mr-2" />
+          )}
           Salvar Alterações
         </Button>
       </div>

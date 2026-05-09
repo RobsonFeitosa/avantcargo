@@ -4,7 +4,6 @@ import {
   Calendar,
   ClipboardList,
   CreditCard,
-  LayoutDashboard,
   Settings,
   Package,
   Tag,
@@ -13,6 +12,8 @@ import {
   LogOut,
   ChevronDown,
   PanelBottom,
+  Briefcase,
+  Phone
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -43,11 +44,6 @@ import logoImg from "@/assets/logo.png";
 
 const adminNavItems = [
   {
-    title: "Dashboard",
-    url: "/admin",
-    icon: LayoutDashboard,
-  },
-  {
     title: "Início",
     url: "/admin/home",
     icon: Package,
@@ -55,10 +51,41 @@ const adminNavItems = [
       { title: "Banner principal", url: "/admin/home/main-banner" },
       { title: "Principais serviços", url: "/admin/home/main-services" },
       { title: "Etapas de trabalho", url: "/admin/home/work-steps" },
-      { title: "Quem somos", url: "/admin/home/about-us" },
+      { title: "Quem somos (Resumo)", url: "/admin/home/about-us" },
       { title: "Setores", url: "/admin/home/sectors" },
       { title: "Depoimentos", url: "/admin/home/testimonials" },
       { title: "Contato", url: "/admin/home/contact" },
+    ],
+  },
+  {
+    title: "Quem Somos",
+    url: "/admin/about",
+    icon: Users,
+    items: [
+      { title: "Introdução & História", url: "/admin/about/history" },
+      { title: "Fundadores", url: "/admin/about/founders" },
+      { title: "Valores", url: "/admin/about/values" },
+      { title: "Diferenciais", url: "/admin/about/differentials" },
+      { title: "Chamada para Ação", url: "/admin/about/cta" },
+    ],
+  },
+  {
+    title: "Áreas de Atuação",
+    url: "#",
+    icon: Briefcase,
+    items: [
+      { title: "Representação", url: "/admin/areas/representation" },
+      { title: "Sistemas Comex", url: "/admin/areas/comex-systems" },
+      { title: "Transportes", url: "/admin/areas/transport" },
+    ],
+  },
+  {
+    title: "Contato",
+    url: "/admin/contact",
+    icon: Phone,
+    items: [
+      { title: "Configurações", url: "/admin/contact" },
+      { title: "Mensagens", url: "/admin/contact/messages" },
     ],
   },
   {
@@ -75,7 +102,6 @@ export function AdminSidebar() {
 
   const handleSignOut = () => {
     signOut();
-    router.push("/signin");
   };
 
   return (
@@ -91,7 +117,7 @@ export function AdminSidebar() {
             className="group-data-[collapsible=icon]:hidden"
           />
           <div className="hidden h-8 w-8 items-center justify-center rounded-lg bg-primary group-data-[collapsible=icon]:flex">
-            <LayoutDashboard size={20} className="text-white" />
+            <Package size={20} className="text-white" />
           </div>
         </Link>
       </SidebarHeader>

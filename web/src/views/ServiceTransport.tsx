@@ -2,10 +2,11 @@
 
 import { LandingLayout } from "@/components/layout/LandingLayout";
 import { Badge } from "@/components/ui/badge";
-import { Truck, CheckCircle2, MapPin, Zap, ShieldCheck, ClipboardCheck } from "lucide-react";
+import { Truck, CheckCircle2, MapPin, Zap, ShieldCheck, ClipboardCheck, MessageCircle } from "lucide-react";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import Image from "next/image";
 import exempl1transport from "@/assets/exempl1transport.jpg";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function ServiceTransport() {
   const features = [
@@ -51,8 +52,8 @@ export default function ServiceTransport() {
               <div className="flex-1 w-full">
                 <ScrollReveal direction="left">
                   <div className="relative aspect-video lg:aspect-[4/3] rounded-[40px] overflow-hidden shadow-2xl group">
-                    <Image 
-                      src={exempl1transport} 
+                    <Image
+                      src={exempl1transport}
                       alt="Transporte Rodoviário AvantCargo"
                       className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
                       priority
@@ -74,9 +75,15 @@ export default function ServiceTransport() {
                     Serviços exclusivos aos Agentes de Cargas e Comissarias de Despacho Aduaneiro.
                   </p>
                   <div className="pt-4">
-                    <button className="bg-primary text-white px-8 py-4 rounded-full font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-primary/20 text-lg">
+                    <a
+                      href="https://wa.me/5511964503217"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-primary/20 text-lg"
+                    >
+                      <FaWhatsapp className="w-5 h-5" />
                       Saiba Mais
-                    </button>
+                    </a>
                   </div>
                 </ScrollReveal>
               </div>
