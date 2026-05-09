@@ -1,0 +1,234 @@
+"use client";
+
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { 
+  Save, 
+  Layout, 
+  ListOrdered, 
+  GripVertical
+} from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+
+interface SortableItemProps {
+  id: string;
+  children: React.ReactNode;
+}
+
+function SortableItem({ id, children }: SortableItemProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 10 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`group flex items-start gap-3 p-4 rounded-xl border border-transparent transition-all ${
+        isDragging ? "bg-emerald-50 border-emerald-200 shadow-lg scale-[1.02]" : "hover:border-emerald-50 hover:bg-emerald-50/30"
+      }`}
+    >
+      <div
+        {...attributes}
+        {...listeners}
+        className="mt-2 cursor-grab active:cursor-grabbing text-emerald-900/20 group-hover:text-emerald-600 transition-colors"
+      >
+        <GripVertical size={20} />
+      </div>
+      <div className="flex-1 w-full">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+export default function WorkStepsConfig() {
+  const [steps, setSteps] = useState([
+    { 
+      id: "step-1", 
+      title: "Análise e Diagnóstico", 
+      desc: "Avaliamos a situação da empresa, os produtos e os objetivos para identificar as melhores oportunidades e regimes aduaneiros aplicáveis." 
+    },
+    { 
+      id: "step-2", 
+      title: "Planejamento e Estratégia", 
+      desc: "Definimos a estratégia mais adequada para cada operação, com foco em redução de custos, conformidade legal e agilidade no processo." 
+    },
+    { 
+      id: "step-3", 
+      title: "Execução e Acompanhamento", 
+      desc: "Realizamos todos os procedimentos junto aos órgãos competentes (Receita Federal, MDIC, Siscomex), monitorando cada etapa e respondendo às exigências com agilidade." 
+    },
+    { 
+      id: "step-4", 
+      title: "Resultado e Continuidade", 
+      desc: "Entregamos o resultado esperado e mantemos o relacionamento ativo, garantindo que sua empresa esteja sempre em conformidade e aproveitando os benefícios disponíveis." 
+    },
+  ]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEndSteps = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      setSteps((items) => {
+        const oldIndex = items.findIndex((i) => i.id === active.id);
+        const newIndex = items.findIndex((i) => i.id === over.id);
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+  };
+
+  return (
+    <div className="space-y-8 animate-in fade-in duration-500 pb-10">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-bold tracking-tight text-emerald-950">Etapas de Trabalho</h1>
+        <p className="text-emerald-900/60 font-medium">
+          Configure a seção de abordagem (Como trabalhamos) da página inicial.
+        </p>
+      </div>
+
+      <div className="grid gap-8 lg:grid-cols-2">
+        <div className="space-y-8">
+          {/* Cabeçalho da Seção */}
+          <Card className="border-none shadow-sm overflow-hidden h-fit">
+            <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
+              <div className="flex items-center gap-2">
+                <Layout className="w-5 h-5 text-emerald-600" />
+                <CardTitle className="text-lg font-bold text-emerald-950">Cabeçalho da Seção</CardTitle>
+              </div>
+              <CardDescription className="text-emerald-800/60 font-medium">
+                Textos introdutórios e botão de CTA.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-4">
+              <div className="space-y-2">
+                <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Badge Superior</Label>
+                <Input maxLength={80} defaultValue="COMO TRABALHAMOS" className="border-emerald-100 focus-visible:ring-emerald-500" />
+              </div>
+              
+              <div className="space-y-2">
+                <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título Principal</Label>
+                <Input maxLength={80} defaultValue="Nossa abordagem em 4 etapas" className="border-emerald-100 focus-visible:ring-emerald-500 text-lg font-semibold" />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Subtítulo / Descrição</Label>
+                <Textarea maxLength={250} defaultValue="Um fluxo de trabalho transparente e eficiente desenhado para mitigar riscos e maximizar resultados." className="min-h-[80px] border-emerald-100 focus-visible:ring-emerald-500" />
+              </div>
+
+              <Separator className="bg-emerald-50 my-2" />
+
+              <div className="space-y-2 pt-2">
+                <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão Inferior (CTA)</Label>
+                <Input maxLength={80} defaultValue="Falar com um especialista" className="border-emerald-100 focus-visible:ring-emerald-500" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="space-y-8">
+          {/* Etapas do Processo */}
+          <Card className="border-none shadow-sm overflow-hidden">
+            <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
+              <div className="flex items-center gap-2">
+                <ListOrdered className="w-5 h-5 text-emerald-600" />
+                <CardTitle className="text-lg font-bold text-emerald-950">Passo a Passo</CardTitle>
+              </div>
+              <CardDescription className="text-emerald-800/60 font-medium">
+                Edite e arraste para reordenar as etapas do processo. Os números (01, 02...) são gerados automaticamente pela ordem.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-1">
+              <DndContext id="dnd-work-steps" sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEndSteps}>
+                <SortableContext items={steps} strategy={verticalListSortingStrategy}>
+                  {steps.map((step, index) => (
+                    <SortableItem key={step.id} id={step.id}>
+                      <div className="flex flex-col gap-3 bg-white p-4 border border-emerald-50 rounded-lg shadow-sm">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
+                            {String(index + 1).padStart(2, '0')}
+                          </div>
+                          <Input maxLength={80} value={step.title} 
+                            onChange={(e) => {
+                              const newSteps = [...steps];
+                              const idx = newSteps.findIndex(s => s.id === step.id);
+                              newSteps[idx].title = e.target.value;
+                              setSteps(newSteps);
+                            }}
+                            className="border-emerald-100 focus-visible:ring-emerald-500 font-bold flex-1" 
+                          />
+                        </div>
+
+                        <div className="space-y-2 pl-11">
+                          <Label className="text-emerald-900/70 font-semibold text-[10px]">Descrição da Etapa</Label>
+                          <Textarea maxLength={300} value={step.desc} 
+                            onChange={(e) => {
+                              const newSteps = [...steps];
+                              const idx = newSteps.findIndex(s => s.id === step.id);
+                              newSteps[idx].desc = e.target.value;
+                              setSteps(newSteps);
+                            }}
+                            className="min-h-[80px] border-emerald-100 focus-visible:ring-emerald-500 text-sm resize-none" 
+                          />
+                        </div>
+                      </div>
+                    </SortableItem>
+                  ))}
+                </SortableContext>
+              </DndContext>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      <div className="flex justify-end gap-4 border-t border-emerald-50 pt-8 mt-4">
+        <Button variant="outline" className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8">
+          Descartar
+        </Button>
+        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10">
+          <Save className="w-4 h-4 mr-2" />
+          Salvar Alterações
+        </Button>
+      </div>
+    </div>
+  );
+}

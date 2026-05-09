@@ -36,18 +36,10 @@ export default function Contact() {
     {
       icon: FaWhatsapp,
       title: "WhatsApp",
-      value: "(41) 9617-2722",
+      value: "(11) 96450-3217",
       desc: "Resposta rápida — seg a sex, 8h-18h",
       color: "text-green-500",
       bg: "bg-green-500/10",
-    },
-    {
-      icon: Phone,
-      title: "Telefone Fixo",
-      value: "(11) 96450-3217",
-      desc: "Seg a sex, 8h-18h",
-      color: "text-blue-500",
-      bg: "bg-blue-500/10",
     },
     {
       icon: Mail,
@@ -85,6 +77,7 @@ export default function Contact() {
       a: "Sim, atendemos empresas em todo o território nacional, com expertise em todos os principais portos, aeroportos e pontos de fronteira do Brasil.",
     },
     {
+      q: "Quais são os principais documentos necessários?",
       a: "Os principais documentos incluem catálogo técnico detalhado, faturas proforma, e especificações que comprovem a tecnologia e a finalidade do bem a ser importado.",
     },
   ];
