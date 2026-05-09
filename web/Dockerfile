@@ -1,14 +1,18 @@
-# Estágio 1: Build
-FROM node:20-alpine AS build
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
+FROM node:22-alpine
 
-# Estágio 2: Servir com Nginx (Eficiente para produção)
-FROM nginx:stable-alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-# Se usar React Router, você precisará de um arquivo nginx.conf customizado
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+WORKDIR /app
+
+# Copia os arquivos de configuração do npm
+COPY package*.json ./
+
+# Instala as dependências
+RUN npm install --legacy-peer-deps
+
+# Copia o restante dos arquivos
+COPY . .
+
+# Expõe a porta que o Next.js usa
+EXPOSE 3000
+
+# Comando para rodar o Next.js em dev
+CMD ["npm", "run", "dev"]
