@@ -42,7 +42,7 @@ export class AuthGuard implements CanActivate {
 
             const { sub } = decoded as TokenPayload;
 
-            request.user = {
+            (request as any).user = {
                 id: sub,
             };
 

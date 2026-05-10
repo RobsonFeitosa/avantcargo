@@ -38,7 +38,7 @@ export class CreateUserUseCase {
         }))
 
         const newUser = user.toJSON();
-        delete newUser.password;
+        delete (newUser as any).password;
 
         return newUser;
     }
