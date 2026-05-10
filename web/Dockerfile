@@ -14,5 +14,5 @@ COPY . .
 # Expõe a porta que o Next.js usa
 EXPOSE 3000
 
-# Comando para rodar o Next.js em dev
-CMD ["npm", "run", "dev"]
+# No Dockerfile da pasta /web, altere a última linha para:
+CMD ["npx", "next", "dev", "-p", "3000", "-H", "0.0.0.0"]

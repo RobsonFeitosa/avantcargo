@@ -72,5 +72,27 @@ services:
       - api
       - web
 
+  # Serviço para popular o banco de dados (Seed)
+  seed:
+    image: postgres:16-alpine
+    container_name: seed-avantcargo
+    env_file:
+      - .env
+    volumes:
+      - ./init.sql:/init.sql
+    command: >
+      sh -c "
+      until PGPASSWORD=$${POSTGRES_PASSWORD} psql -h postgres -U $${POSTGRES_USER} -d $${POSTGRES_DB} -c 'SELECT 1 FROM migrations LIMIT 1;' > /dev/null 2>&1; do
+        echo 'Aguardando as migrations do TypeORM criarem as tabelas...';
+        sleep 2;
+      done;
+      echo 'Tabelas encontradas! Iniciando a carga de dados do init.sql...';
+      PGPASSWORD=$${POSTGRES_PASSWORD} psql -h postgres -U $${POSTGRES_USER} -d $${POSTGRES_DB} -f /init.sql;
+      echo 'Seed finalizado com sucesso.';
+      "
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 volumes:
   postgres_data:
