@@ -1,14 +1,11 @@
 version: '3.8'
 
 services:
-  # Banco de Dados
   postgres:
     image: postgres:16-alpine
     container_name: postgres-avantcargo
     restart: always
-    env_file:
-      - .env
-    # Porta 5432 exposta apenas para você gerenciar o banco da sua IDE se precisar
+    env_file: - .env
     ports:
       - "5432:5432"
     volumes:
@@ -19,76 +16,54 @@ services:
       timeout: 5s
       retries: 5
 
-  # Backend (API)
   api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile
+    build: ./api
     container_name: api-avantcargo
     restart: always
-    env_file:
-      - .env
+    env_file: - .env
     environment:
       - DATABASE_URL=${DATABASE_URL_DOCKER}
-    # Sem 'ports' externos aqui para segurança, o Nginx faz a ponte
     expose:
       - "3333"
-    volumes:
-      - ./api:/app
-      - /app/node_modules
-    command: sh -c "yarn typeorm:cli migration:run && yarn dev"
     depends_on:
       postgres:
         condition: service_healthy
 
-  # Frontend (Web)
   web:
-    build:
-      context: ./web
-      dockerfile: Dockerfile
+    build: ./web
     container_name: web-avantcargo
     restart: always
-    env_file:
-      - .env
+    env_file: - .env
     expose:
       - "3000"
-    volumes:
-      - ./web:/app
-      - /app/node_modules
-      - /app/.next
     depends_on:
       - api
 
-  # Proxy Reverso (Nginx) - A Porta de Entrada
   nginx:
     image: nginx:stable-alpine
     container_name: nginx-proxy
     restart: always
     ports:
-      - "80:80" # Acessível via IP Externo da VM
+      - "80:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - api
       - web
 
-  # Serviço para popular o banco de dados (Seed)
   seed:
     image: postgres:16-alpine
     container_name: seed-avantcargo
-    env_file:
-      - .env
+    env_file: - .env
     volumes:
       - ./init.sql:/init.sql
     command: >
       sh -c "
       until PGPASSWORD=$${POSTGRES_PASSWORD} psql -h postgres -U $${POSTGRES_USER} -d $${POSTGRES_DB} -c 'SELECT 1 FROM migrations LIMIT 1;' > /dev/null 2>&1; do
-        echo 'Aguardando as migrations do TypeORM criarem as tabelas...';
+        echo 'Aguardando as migrations...';
         sleep 2;
       done;
-      echo 'Tabelas encontradas! Iniciando a carga de dados do init.sql...';
       PGPASSWORD=$${POSTGRES_PASSWORD} psql -h postgres -U $${POSTGRES_USER} -d $${POSTGRES_DB} -f /init.sql;
-      echo 'Seed finalizado com sucesso.';
       "
     depends_on:
       postgres:

@@ -1,0 +1,13 @@
+services:
+  api:
+    # Em produção, não mapeamos volumes de código, usamos o que está dentro da imagem
+    command: sh -c "yarn typeorm:cli migration:run && yarn start"
+    environment:
+      - NODE_ENV=production
+
+  web:
+    # Comando de produção: builda e inicia o servidor otimizado
+    command: sh -c "npm run build && npm run start"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=/api
