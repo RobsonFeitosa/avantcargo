@@ -89,39 +89,21 @@ export default function MainBannerConfig() {
   const queryClient = useQueryClient();
 
   // Hero State
-  const [heroBadge, setHeroBadge] = useState("LOGÍSTICA AÉREA & SERVIÇOS ADUANEIROS");
-  const [heroTitle, setHeroTitle] = useState("Seu parceiro estratégico em Aeroportos GRU | VCP");
-  const [heroDescription, setHeroDescription] = useState("Soluções ágeis para agentes de carga e comissárias...");
-  const [heroPrimaryBtn, setHeroPrimaryBtn] = useState("Falar conosco");
-  const [heroSecondaryBtn, setHeroSecondaryBtn] = useState("Quem somos");
-  const [servicesSectionTitle, setServicesSectionTitle] = useState("NOSSOS PRINCIPAIS SERVIÇOS");
+  const [heroBadge, setHeroBadge] = useState("");
+  const [heroTitle, setHeroTitle] = useState("");
+  const [heroDescription, setHeroDescription] = useState("");
+  const [heroPrimaryBtn, setHeroPrimaryBtn] = useState("");
+  const [heroSecondaryBtn, setHeroSecondaryBtn] = useState("");
+  const [servicesSectionTitle, setServicesSectionTitle] = useState("");
 
   // Dynamic States
-  const [features, setFeatures] = useState<{ id: string; text: string }[]>([
-    { id: "feat-1", text: "+20 anos de experiência" },
-    { id: "feat-2", text: "Empresa 100% brasileira" },
-    { id: "feat-3", text: "Guarulhos, SP" },
-  ]);
+  const [features, setFeatures] = useState<{ id: string; text: string }[]>([]);
 
-  const [services, setServices] = useState<{ id: string; title: string; desc: string }[]>([
-    { id: "serv-1", title: "Assessoria Aduaneira", desc: "Expertise global em todos os portos e aeroportos." },
-    { id: "serv-2", title: "Consultoria Tributária", desc: "Otimização de impostos e regimes especiais." },
-    { id: "serv-3", title: "Segurança Jurídica", desc: "Conformidade total com a legislação vigente." },
-    { id: "serv-4", title: "Equipe Dedicada", desc: "Suporte especializado em cada etapa do processo." },
-  ]);
+  const [services, setServices] = useState<{ id: string; title: string; desc: string }[]>([]);
 
-  const [stats, setStats] = useState<{ id: string; value: string; label: string }[]>([
-    { id: "stat-1", value: "500+", label: "CLIENTES ATENDIDOS" },
-    { id: "stat-2", value: "20+", label: "ANOS DE EXPERIÊNCIA" },
-    { id: "stat-3", value: "98%", label: "SATISFAÇÃO" },
-  ]);
+  const [stats, setStats] = useState<{ id: string; value: string; label: string }[]>([]);
 
-  const [secondaryStats, setSecondaryStats] = useState<{ id: string; value: string; label: string }[]>([
-    { id: "sstat-1", value: "20+", label: "ANOS DE EXPERIÊNCIA NO MERCADO" },
-    { id: "sstat-2", value: "500+", label: "CLIENTES ATENDIDOS" },
-    { id: "sstat-3", value: "98%", label: "TAXA DE RETENÇÃO E FIDELIDADE" },
-    { id: "sstat-4", value: "100%", label: "SEGURANÇA JURÍDICA" },
-  ]);
+  const [secondaryStats, setSecondaryStats] = useState<{ id: string; value: string; label: string }[]>([]);
 
   const { data: configData, isLoading } = useQuery({
     queryKey: ["main-banner"],

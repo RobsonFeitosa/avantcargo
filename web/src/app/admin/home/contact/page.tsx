@@ -87,20 +87,15 @@ export default function ContactCTAConfig() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  const [headerBadge, setHeaderBadge] = useState("CONTATO");
-  const [headerTitle, setHeaderTitle] = useState("Precisa de assessoria em Comércio Exterior?");
-  const [headerDescription, setHeaderDescription] = useState("Fale agora com um especialista AVANTCARGO. Atendemos empresas de todo o Brasil com agilidade, competência e mais de 20 anos de experiência.");
+  const [headerBadge, setHeaderBadge] = useState("");
+  const [headerTitle, setHeaderTitle] = useState("");
+  const [headerDescription, setHeaderDescription] = useState("");
   
-  const [primaryButton, setPrimaryButton] = useState({ text: "Falar no WhatsApp", link: "https://wa.me/5511964503217" });
-  const [secondaryButton, setSecondaryButton] = useState({ text: "(11) 96450-3217", link: "tel:+5511964503217" });
-  const [textLink, setTextLink] = useState({ text: "Ou envie uma mensagem", link: "/contato" });
+  const [primaryButton, setPrimaryButton] = useState({ text: "", link: "" });
+  const [secondaryButton, setSecondaryButton] = useState({ text: "", link: "" });
+  const [textLink, setTextLink] = useState({ text: "", link: "" });
 
-  const [features, setFeatures] = useState([
-    { id: "feat-1", text: "Importação e Exportação" },
-    { id: "feat-2", text: "Ex-Tarifários — alíquota pode chegar a 0%" },
-    { id: "feat-3", text: "Drawback e Radar Siscomex" },
-    { id: "feat-4", text: "Gestão Aduaneira completa" },
-  ]);
+  const [features, setFeatures] = useState<{ id: string; text: string }[]>([]);
 
   const { data: configData, isLoading } = useQuery({
     queryKey: ["home-contact"],
@@ -111,8 +106,8 @@ export default function ContactCTAConfig() {
   useEffect(() => {
     if (configData?.result) {
       const { result } = configData;
-      setHeaderBadge(result.headerBadge || "CONTATO");
-      setHeaderTitle(result.headerTitle || "Precisa de assessoria em Comércio Exterior?");
+      setHeaderBadge(result.headerBadge || "");
+      setHeaderTitle(result.headerTitle || "");
       setHeaderDescription(result.headerDescription || "");
       setFeatures(result.features || []);
       setPrimaryButton(result.primaryButton || { text: "Falar no WhatsApp", link: "" });

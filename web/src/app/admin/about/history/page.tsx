@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -12,7 +12,8 @@ import {
   History,
   GripVertical,
   Plus,
-  Trash2
+  Trash2,
+  Loader2
 } from "lucide-react";
 
 import {
@@ -33,6 +34,10 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Separator } from "@/components/ui/separator";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { aboutUsActions } from "@/admin/actions/about-us.actions";
+import { useAuth } from "@/admin/hooks_generic/providers/auth";
+import { toast } from "sonner";
 
 interface SortableItemProps {
   id: string;
@@ -78,13 +83,56 @@ function SortableItem({ id, children }: SortableItemProps) {
 }
 
 export default function AboutHistoryConfig() {
-  const [timeline, setTimeline] = useState([
-    { id: "t-1", year: "2003", text: "Fundação da AVANTCARGO em Curitiba por especialistas do setor." },
-    { id: "t-2", year: "2008", text: "Expansão para atendimento nacional com equipe especializada." },
-    { id: "t-3", year: "2015", text: "Marca de 200+ processos de Ex-Tarifário aprovados no MDIC." },
-    { id: "t-4", year: "2020", text: "R$ 300M+ em economia gerada para clientes." },
-    { id: "t-5", year: "Hoje", text: "500+ processos aprovados / R$ 480M+ economizados / 98% aprovação." },
-  ]);
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const [historyHeroTitleDark, setHistoryHeroTitleDark] = useState("");
+  const [historyHeroTitleOrange, setHistoryHeroTitleOrange] = useState("");
+  const [historyHeroDescription, setHistoryHeroDescription] = useState("");
+  const [historyTitle, setHistoryTitle] = useState("");
+  const [historyText, setHistoryText] = useState("");
+  
+  const [timeline, setTimeline] = useState<{ id: string; year: string; text: string }[]>([]);
+
+  const { data: configData, isLoading } = useQuery({
+    queryKey: ["about-us-history"],
+    queryFn: () => aboutUsActions.get(),
+    enabled: !!user,
+  });
+
+  useEffect(() => {
+    if (configData?.result) {
+      const { result } = configData;
+      setHistoryHeroTitleDark(result.historyHeroTitleDark || "");
+      setHistoryHeroTitleOrange(result.historyHeroTitleOrange || "");
+      setHistoryHeroDescription(result.historyHeroDescription || "");
+      setHistoryTitle(result.historyTitle || "");
+      setHistoryText(result.historyText || "");
+      setTimeline(result.historyTimeline || []);
+    }
+  }, [configData]);
+
+  const mutation = useMutation({
+    mutationFn: (data: any) => aboutUsActions.update(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["about-us-history"] });
+      toast.success("Configurações salvas com sucesso!");
+    },
+    onError: () => {
+      toast.error("Erro ao salvar configurações.");
+    }
+  });
+
+  const handleSave = () => {
+    mutation.mutate({
+      historyHeroTitleDark,
+      historyHeroTitleOrange,
+      historyHeroDescription,
+      historyTitle,
+      historyText,
+      historyTimeline: timeline
+    });
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -113,6 +161,14 @@ export default function AboutHistoryConfig() {
     setTimeline(timeline.filter(t => t.id !== idToRemove));
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex h-[400px] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
       <div className="flex flex-col gap-2">
@@ -139,36 +195,73 @@ export default function AboutHistoryConfig() {
             <CardContent className="pt-6 space-y-4">
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título (Parte Escura)</Label>
-                <Input maxLength={60} defaultValue="Conheça a" className="border-emerald-100 focus-visible:ring-emerald-500 font-semibold" />
+                <Input 
+                  maxLength={60} 
+                  value={historyHeroTitleDark} 
+                  onChange={(e) => setHistoryHeroTitleDark(e.target.value)}
+                  className="border-emerald-100 focus-visible:ring-emerald-500 font-semibold" 
+                />
               </div>
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título (Parte Laranja)</Label>
-                <Input maxLength={60} defaultValue="AvantCargo" className="border-emerald-100 focus-visible:ring-emerald-500 font-semibold text-orange-600" />
+                <Input 
+                  maxLength={60} 
+                  value={historyHeroTitleOrange} 
+                  onChange={(e) => setHistoryHeroTitleOrange(e.target.value)}
+                  className="border-emerald-100 focus-visible:ring-emerald-500 font-semibold text-orange-600" 
+                />
               </div>
 
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Descrição Abaixo do Título</Label>
-                <Textarea maxLength={300} defaultValue="Mais de 20 anos de expertise em comércio exterior, ajudando empresas brasileiras a crescer de forma inteligente e competitiva no mercado global." className="min-h-[100px] border-emerald-100 focus-visible:ring-emerald-500" />
+                <Textarea 
+                  maxLength={300} 
+                  value={historyHeroDescription} 
+                  onChange={(e) => setHistoryHeroDescription(e.target.value)}
+                  className="min-h-[100px] border-emerald-100 focus-visible:ring-emerald-500" 
+                />
               </div>
 
               <Separator className="bg-emerald-50" />
 
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider text-orange-600">Título: Nossa História</Label>
-                <Input maxLength={120} defaultValue="Duas décadas de excelência em Comércio Exterior" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                <Input 
+                  maxLength={120} 
+                  value={historyTitle} 
+                  onChange={(e) => setHistoryTitle(e.target.value)}
+                  className="border-emerald-100 focus-visible:ring-emerald-500" 
+                />
               </div>
 
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Textos sobre a história (Parágrafos)</Label>
-                <Textarea maxLength={800} defaultValue="A AVANTCARGO nasceu em Curitiba, no Paraná, com uma missão clara: tornar o comércio exterior mais acessível, inteligente e rentável para as empresas brasileiras. Desde 2003, nossa assessoria vem construindo um histórico de resultados sólidos e relacionamentos de longo prazo com nossos clientes." className="min-h-[200px] border-emerald-100 focus-visible:ring-emerald-500" />
+                <Textarea 
+                  maxLength={800} 
+                  value={historyText} 
+                  onChange={(e) => setHistoryText(e.target.value)}
+                  className="min-h-[200px] border-emerald-100 focus-visible:ring-emerald-500" 
+                />
               </div>
 
               <div className="flex justify-end gap-4 pt-4 mt-2 border-t border-emerald-50">
-                <Button variant="outline" className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8">
+                <Button 
+                  variant="outline" 
+                  className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8"
+                  onClick={() => queryClient.invalidateQueries({ queryKey: ["about-us-history"] })}
+                >
                   Descartar
                 </Button>
-                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10">
-                  <Save className="w-4 h-4 mr-2" />
+                <Button 
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10"
+                  onClick={handleSave}
+                  disabled={mutation.isPending}
+                >
+                  {mutation.isPending ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <Save className="w-4 h-4 mr-2" />
+                  )}
                   Salvar
                 </Button>
               </div>

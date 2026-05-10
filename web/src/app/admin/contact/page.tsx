@@ -99,7 +99,6 @@ export default function ContactConfig() {
 
   const [whatsappNumber, setWhatsappNumber] = useState("");
   const [whatsappSubtitle, setWhatsappSubtitle] = useState("");
-  const [whatsappUrl, setWhatsappUrl] = useState("");
   
   const [email, setEmail] = useState("");
   const [emailSubtitle, setEmailSubtitle] = useState("");
@@ -127,6 +126,20 @@ export default function ContactConfig() {
     enabled: !!user,
   });
 
+  const formatPhone = (value: string) => {
+    if (!value) return value;
+    const phoneNumber = value.replace(/\D/g, "");
+    const phoneNumberLength = phoneNumber.length;
+    if (phoneNumberLength < 3) return phoneNumber;
+    if (phoneNumberLength < 7) {
+      return `(${phoneNumber.slice(0, 2)}) ${phoneNumber.slice(2)}`;
+    }
+    return `(${phoneNumber.slice(0, 2)}) ${phoneNumber.slice(2, 7)}-${phoneNumber.slice(
+      7,
+      11
+    )}`;
+  };
+
   useEffect(() => {
     if (configData?.result) {
       const { result } = configData;
@@ -135,9 +148,8 @@ export default function ContactConfig() {
       setHeaderDescription(result.headerDescription || "");
       setFormTitle(result.formTitle || "");
       setFormDescription(result.formDescription || "");
-      setWhatsappNumber(result.whatsappNumber || "");
+      setWhatsappNumber(formatPhone(result.whatsappNumber || ""));
       setWhatsappSubtitle(result.whatsappSubtitle || "");
-      setWhatsappUrl(result.whatsappUrl || "");
       setEmail(result.email || "");
       setEmailSubtitle(result.emailSubtitle || "");
       setInstagramUser(result.instagramUser || "");
@@ -173,9 +185,8 @@ export default function ContactConfig() {
       headerDescription,
       formTitle,
       formDescription,
-      whatsappNumber,
+      whatsappNumber: whatsappNumber.replace(/\D/g, ""), // Save clean number
       whatsappSubtitle,
-      whatsappUrl,
       email,
       emailSubtitle,
       instagramUser,
@@ -330,7 +341,8 @@ export default function ContactConfig() {
                       <Label className="text-emerald-900/70 font-semibold text-[10px]">Número (Visível)</Label>
                       <Input 
                         value={whatsappNumber} 
-                        onChange={(e) => setWhatsappNumber(e.target.value)}
+                        onChange={(e) => setWhatsappNumber(formatPhone(e.target.value))}
+                        placeholder="(00) 00000-0000"
                         className="border-emerald-100" 
                       />
                     </div>
@@ -339,14 +351,6 @@ export default function ContactConfig() {
                       <Input 
                         value={whatsappSubtitle} 
                         onChange={(e) => setWhatsappSubtitle(e.target.value)}
-                        className="border-emerald-100" 
-                      />
-                    </div>
-                    <div className="space-y-1 sm:col-span-2">
-                      <Label className="text-emerald-900/70 font-semibold text-[10px]">Link do WhatsApp (URL)</Label>
-                      <Input 
-                        value={whatsappUrl} 
-                        onChange={(e) => setWhatsappUrl(e.target.value)}
                         className="border-emerald-100" 
                       />
                     </div>
@@ -511,21 +515,23 @@ export default function ContactConfig() {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-6 border-b border-emerald-50">
                 <div className="space-y-2">
-                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Badge (Pílula)</Label>
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título da Seção</Label>
                   <Input 
-                    maxLength={40} 
-                    value={faqBadge} 
-                    onChange={(e) => setFaqBadge(e.target.value)}
-                    className="border-emerald-100" 
+                    maxLength={100} 
+                    value={faqTitle} 
+                    onChange={(e) => setFaqTitle(e.target.value)}
+                    placeholder="Ex: Perguntas frequentes"
+                    className="border-emerald-100 font-bold" 
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título da Seção</Label>
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Descrição da Seção</Label>
                   <Input 
-                    maxLength={60} 
-                    value={faqTitle} 
-                    onChange={(e) => setFaqTitle(e.target.value)}
-                    className="border-emerald-100 font-bold" 
+                    maxLength={255} 
+                    value={faqBadge} 
+                    onChange={(e) => setFaqBadge(e.target.value)}
+                    placeholder="Ex: Tire suas dúvidas sobre nossos serviços"
+                    className="border-emerald-100" 
                   />
                 </div>
               </div>

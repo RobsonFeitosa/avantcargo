@@ -15,7 +15,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Monitor, Truck, ChevronDown, Radar, Box } from "lucide-react";
 
-export const Navbar = () => {
+export const Navbar = ({ footerData }: { footerData?: any }) => {
+  const phone = footerData?.contact_info?.phone;
   const [scrolled, setScrolled] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const pathname = usePathname();
@@ -115,10 +116,21 @@ export const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          <Button className="bg-primary hover:bg-emerald-700 text-white font-bold shadow-lg shadow-primary/10 hover:scale-105 transition-transform px-8 rounded-full h-11" size="sm">
-            <FaWhatsapp className="mr-2 h-4 w-4" />
-            Whatsapp
-          </Button>
+          {phone && (
+            <Button 
+              asChild
+              className="bg-primary hover:bg-emerald-700 text-white font-bold shadow-lg shadow-primary/10 hover:scale-105 transition-transform px-8 rounded-full h-11" 
+              size="sm"
+            >
+              <Link 
+                href={`https://wa.me/55${phone.replace(/\D/g, "")}`}
+                target="_blank"
+              >
+                <FaWhatsapp className="mr-2 h-4 w-4" />
+                Whatsapp
+              </Link>
+            </Button>
+          )}
         </div>
       </div>
     </nav>

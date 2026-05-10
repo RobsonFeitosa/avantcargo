@@ -93,10 +93,10 @@ export default function RepresentationConfig() {
   const queryClient = useQueryClient();
 
   const [headerConfig, setHeaderConfig] = useState({
-    headerBadge: "REPRESENTAÇÃO ESTRATÉGICA",
-    headerTitleDark: "Representações",
-    headerTitleHighlight: "Aéreas",
-    headerDescription: "Integramos operações de importação e exportação com foco em agilidade, segurança e conformidade total nos principais aeroportos do Brasil."
+    headerBadge: "",
+    headerTitleDark: "",
+    headerTitleHighlight: "",
+    headerDescription: ""
   });
 
   const [imports, setImports] = useState<any[]>([]);

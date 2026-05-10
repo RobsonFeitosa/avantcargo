@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BsFillPeopleFill } from "react-icons/bs";
-import { CheckCircle2, Star, TrendingUp, Globe, Handshake, Scale, Award, Users } from "lucide-react";
+import { CheckCircle2, Star, TrendingUp, Globe, Handshake, Scale, Award, Users, HelpCircle } from "lucide-react";
+import * as LucideIcons from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 
 interface ExpertiseProps {
@@ -11,26 +12,33 @@ interface ExpertiseProps {
     headerDescription: string;
     primaryButtonText: string;
     secondaryButtonText: string;
-    differentials: { id: string; title: string; desc: string }[];
-    achievements: { id: string; title: string; desc: string }[];
+    primaryButtonLink?: string;
+    secondaryButtonLink?: string;
+    differentials: { id: string; icon: string; title: string; desc: string }[];
+    achievements: { id: string; icon: string; title: string; desc: string }[];
   }
 }
+
+const DynamicIcon = ({ name, className }: { name: string, className?: string }) => {
+  const Icon = (LucideIcons as any)[name];
+  return Icon ? <Icon className={className} /> : <Award className={className} />;
+};
 
 export const Expertise = ({ data }: ExpertiseProps) => {
   const leftIcons = [Award, Handshake, Scale];
   const rightIcons = [Star, TrendingUp, Globe, Users];
 
   const defaultDifferentials = [
-    { title: "98% de aprovação no MDIC", desc: "Taxa de sucesso em processos de Ex-Tarifário" },
-    { title: "Atendimento personalizado", desc: "Especialistas dedicados para cada cliente" },
-    { title: "Conformidade regulatória total", desc: "Processos 100% legais e auditáveis" },
+    { icon: "Award", title: "98% de aprovação no MDIC", desc: "Taxa de sucesso em processos de Ex-Tarifário" },
+    { icon: "Handshake", title: "Atendimento personalizado", desc: "Especialistas dedicados para cada cliente" },
+    { icon: "Scale", title: "Conformidade regulatória total", desc: "Processos 100% legais e auditáveis" },
   ];
 
   const defaultAchievements = [
-    { title: "Ex-Tarifário", desc: "Redução de até 100% no II — alíquota 0%" },
-    { title: "R$ 480M+ economizados", desc: "Para os nossos clientes" },
-    { title: "13+ setores", desc: "Indústria, Agro, Tech, Infraestrutura..." },
-    { title: "Matheus Diniz", desc: "Fundador & Especialista" },
+    { icon: "Star", title: "Ex-Tarifário", desc: "Redução de até 100% no II — alíquota 0%" },
+    { icon: "TrendingUp", title: "R$ 480M+ economizados", desc: "Para os nossos clientes" },
+    { icon: "Globe", title: "13+ setores", desc: "Indústria, Agro, Tech, Infraestrutura..." },
+    { icon: "User", title: "Matheus Diniz", desc: "Fundador & Especialista" },
   ];
 
   const currentDifferentials = data?.differentials || defaultDifferentials;
@@ -86,7 +94,7 @@ export const Expertise = ({ data }: ExpertiseProps) => {
                 return (
                   <div key={idx} className="flex items-center gap-6 p-6 rounded-2xl bg-white border border-slate-200 hover:border-primary/30 shadow-sm hover:shadow-md transition-all group">
                     <div className={`h-12 w-12 rounded-xl bg-slate-50 flex items-center justify-center text-orange-500 group-hover:scale-110 transition-transform`}>
-                      <Icon className="h-6 w-6" />
+                      <DynamicIcon name={item.icon} className="h-6 w-6" />
                     </div>
                     <div className="space-y-1">
                       <h4 className="font-bold text-emerald-900 text-lg">{item.title}</h4>
@@ -98,11 +106,22 @@ export const Expertise = ({ data }: ExpertiseProps) => {
             </div>
 
             <div className="flex flex-wrap gap-6 pt-4">
-              <Button className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-10 h-16 rounded-full shadow-lg shadow-orange-500/20 transition-all hover:scale-105 text-lg">
-                {data?.primaryButtonText || "Conheça nossa história"}
+              <Button 
+                asChild
+                className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-10 h-16 rounded-full shadow-lg shadow-orange-500/20 transition-all hover:scale-105 text-lg cursor-pointer"
+              >
+                <a href="/quem-somos">
+                  {data?.primaryButtonText || "Conheça nossa história"}
+                </a>
               </Button>
-              <Button variant="outline" className="bg-transparent border-slate-300 text-slate-700 hover:bg-slate-100 font-bold px-10 h-16 rounded-full transition-all text-lg">
-                {data?.secondaryButtonText || "Fale conosco"}
+              <Button 
+                asChild
+                variant="outline" 
+                className="bg-transparent border-slate-300 text-slate-700 hover:bg-slate-100 font-bold px-10 h-16 rounded-full transition-all text-lg cursor-pointer"
+              >
+                <a href="/contato">
+                  {data?.secondaryButtonText || "Fale conosco"}
+                </a>
               </Button>
             </div>
           </div>
@@ -114,7 +133,7 @@ export const Expertise = ({ data }: ExpertiseProps) => {
                 <div key={idx} className="p-6 rounded-2xl bg-white border border-slate-200 hover:border-primary/40 hover:bg-slate-50/50 shadow-sm transition-all group relative overflow-hidden">
                   <div className="flex items-center gap-6">
                     <div className={`h-12 w-12 rounded-xl bg-slate-50 flex items-center justify-center text-orange-500 group-hover:scale-110 transition-transform`}>
-                      <Icon className="h-6 w-6" />
+                      <DynamicIcon name={item.icon} className="h-6 w-6" />
                     </div>
                     <div className="space-y-1">
                       <h4 className="font-bold text-lg text-emerald-900">{item.title}</h4>

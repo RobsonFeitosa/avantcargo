@@ -84,33 +84,12 @@ export default function WorkStepsConfig() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  const [headerBadge, setHeaderBadge] = useState("COMO TRABALHAMOS");
-  const [headerTitle, setHeaderTitle] = useState("Nossa abordagem em 4 etapas");
-  const [headerDescription, setHeaderDescription] = useState("Um fluxo de trabalho transparente e eficiente desenhado para mitigar riscos e maximizar resultados.");
-  const [ctaText, setCtaText] = useState("Falar com um especialista");
+  const [headerBadge, setHeaderBadge] = useState("");
+  const [headerTitle, setHeaderTitle] = useState("");
+  const [headerDescription, setHeaderDescription] = useState("");
+  const [ctaText, setCtaText] = useState("");
 
-  const [steps, setSteps] = useState<{ id: string; title: string; desc: string }[]>([
-    { 
-      id: "step-1", 
-      title: "Análise e Diagnóstico", 
-      desc: "Avaliamos a situação da empresa, os produtos e os objetivos para identificar as melhores oportunidades e regimes aduaneiros aplicáveis." 
-    },
-    { 
-      id: "step-2", 
-      title: "Planejamento e Estratégia", 
-      desc: "Definimos a estratégia mais adequada para cada operação, com foco em redução de custos, conformidade legal e agilidade no processo." 
-    },
-    { 
-      id: "step-3", 
-      title: "Execução e Acompanhamento", 
-      desc: "Realizamos todos os procedimentos junto aos órgãos competentes (Receita Federal, MDIC, Siscomex), monitorando cada etapa e respondendo às exigências com agilidade." 
-    },
-    { 
-      id: "step-4", 
-      title: "Resultado e Continuidade", 
-      desc: "Entregamos o resultado esperado e mantemos o relacionamento ativo, garantindo que sua empresa esteja sempre em conformidade e aproveitando os benefícios disponíveis." 
-    },
-  ]);
+  const [steps, setSteps] = useState<{ id: string; title: string; desc: string }[]>([]);
 
   const { data: configData, isLoading } = useQuery({
     queryKey: ["work-steps"],
@@ -121,10 +100,10 @@ export default function WorkStepsConfig() {
   useEffect(() => {
     if (configData?.result) {
       const { result } = configData;
-      setHeaderBadge(result.headerBadge || "COMO TRABALHAMOS");
-      setHeaderTitle(result.headerTitle || "Nossa abordagem em 4 etapas");
-      setHeaderDescription(result.headerDescription || "Um fluxo de trabalho transparente e eficiente desenhado para mitigar riscos e maximizar resultados.");
-      setCtaText(result.ctaText || "Falar com um especialista");
+      setHeaderBadge(result.headerBadge || "");
+      setHeaderTitle(result.headerTitle || "");
+      setHeaderDescription(result.headerDescription || "");
+      setCtaText(result.ctaText || "");
       setSteps(result.steps || []);
     }
   }, [configData]);

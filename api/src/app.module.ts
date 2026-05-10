@@ -16,6 +16,8 @@ import { GeneralContactModule } from './modules/general-contact/general-contact.
 import { ContactMessageModule } from './modules/contact-messages/contact-messages.module';
 import { AirRepresentationModule } from './modules/air-representation/air-representation.module';
 import { UploadModule } from './shared/infra/http/uploads.module';
+import { ComexSystemsModule } from './modules/comex-systems/comex-systems.module';
+import { TransportModule } from './modules/transport/transport.module';
 
 @Module({
   imports: [
@@ -36,6 +38,8 @@ import { UploadModule } from './shared/infra/http/uploads.module';
     ContactMessageModule,
     AirRepresentationModule,
     UploadModule,
+    ComexSystemsModule,
+    TransportModule,
   ],
   providers: [
     {

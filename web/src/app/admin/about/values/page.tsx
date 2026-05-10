@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -18,7 +18,8 @@ import {
   Handshake,
   Zap,
   Lightbulb,
-  MessageSquare
+  MessageSquare,
+  Loader2
 } from "lucide-react";
 
 import {
@@ -39,6 +40,10 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Separator } from "@/components/ui/separator";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { aboutUsActions } from "@/admin/actions/about-us.actions";
+import { useAuth } from "@/admin/hooks_generic/providers/auth";
+import { toast } from "sonner";
 
 interface SortableItemProps {
   id: string;
@@ -84,11 +89,50 @@ function SortableItem({ id, children }: SortableItemProps) {
 }
 
 export default function AboutValuesConfig() {
-  const [values, setValues] = useState([
-    { id: "v-1", icon: "Shield", title: "Integridade", desc: "Atuamos sempre dentro da legalidade, garantindo que todos os processos sejam transparentes." },
-    { id: "v-2", icon: "Search", title: "Excelência Técnica", desc: "Nossa equipe se mantém constantemente atualizada com as mudanças regulatórias." },
-    { id: "v-3", icon: "Handshake", title: "Parceria de Longo Prazo", desc: "Não somos apenas prestadores de serviço — somos parceiros estratégicos." },
-  ]);
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const [valuesBadge, setValuesBadge] = useState("");
+  const [valuesTitle1, setValuesTitle1] = useState("");
+  const [valuesTitleHighlight, setValuesTitleHighlight] = useState("");
+
+  const [values, setValues] = useState<{ id: string; icon: string; title: string; desc: string }[]>([]);
+
+  const { data: configData, isLoading } = useQuery({
+    queryKey: ["about-us-values"],
+    queryFn: () => aboutUsActions.get(),
+    enabled: !!user,
+  });
+
+  useEffect(() => {
+    if (configData?.result) {
+      const { result } = configData;
+      setValuesBadge(result.valuesBadge || "");
+      setValuesTitle1(result.valuesTitle1 || "");
+      setValuesTitleHighlight(result.valuesTitleHighlight || "");
+      setValues(result.valuesList || []);
+    }
+  }, [configData]);
+
+  const mutation = useMutation({
+    mutationFn: (data: any) => aboutUsActions.update(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["about-us-values"] });
+      toast.success("Configurações salvas com sucesso!");
+    },
+    onError: () => {
+      toast.error("Erro ao salvar configurações.");
+    }
+  });
+
+  const handleSave = () => {
+    mutation.mutate({
+      valuesBadge,
+      valuesTitle1,
+      valuesTitleHighlight,
+      valuesList: values
+    });
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -117,6 +161,14 @@ export default function AboutValuesConfig() {
     setValues(values.filter(v => v.id !== idToRemove));
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex h-[400px] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
       <div className="flex flex-col gap-2">
@@ -139,15 +191,30 @@ export default function AboutValuesConfig() {
             <CardContent className="pt-6 space-y-4">
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Badge (Pílula)</Label>
-                <Input maxLength={40} defaultValue="Nossos Valores" className="border-emerald-100" />
+                <Input 
+                  maxLength={40} 
+                  value={valuesBadge} 
+                  onChange={(e) => setValuesBadge(e.target.value)}
+                  className="border-emerald-100" 
+                />
               </div>
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título (Parte 1)</Label>
-                <Input maxLength={60} defaultValue="O que nos" className="border-emerald-100" />
+                <Input 
+                  maxLength={60} 
+                  value={valuesTitle1} 
+                  onChange={(e) => setValuesTitle1(e.target.value)}
+                  className="border-emerald-100" 
+                />
               </div>
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Palavra em Destaque (Parte 2)</Label>
-                <Input maxLength={40} defaultValue="guia" className="border-emerald-100 text-emerald-600 font-bold" />
+                <Input 
+                  maxLength={40} 
+                  value={valuesTitleHighlight} 
+                  onChange={(e) => setValuesTitleHighlight(e.target.value)}
+                  className="border-emerald-100 text-emerald-600 font-bold" 
+                />
               </div>
             </CardContent>
           </Card>
@@ -243,11 +310,23 @@ export default function AboutValuesConfig() {
       </div>
 
       <div className="flex justify-end gap-4 border-t border-emerald-50 pt-8 mt-4">
-        <Button variant="outline" className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8">
+        <Button 
+          variant="outline" 
+          className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8"
+          onClick={() => queryClient.invalidateQueries({ queryKey: ["about-us-values"] })}
+        >
           Descartar
         </Button>
-        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10">
-          <Save className="w-4 h-4 mr-2" />
+        <Button 
+          className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10"
+          onClick={handleSave}
+          disabled={mutation.isPending}
+        >
+          {mutation.isPending ? (
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          ) : (
+            <Save className="w-4 h-4 mr-2" />
+          )}
           Salvar Alterações
         </Button>
       </div>

@@ -28,21 +28,16 @@ export default function FooterConfig() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  const [description, setDescription] = useState("AvantCargo - Logística e Serviços Aduaneiros. Referência em assessoria de comércio exterior, oferecendo soluções estratégicas e operacionais.");
-  const [socialLinks, setSocialLinks] = useState([
-    { icon: "Linkedin", link: "https://linkedin.com/company/avantcargo" },
-    { icon: "Instagram", link: "https://instagram.com/avantcargo" },
-    { icon: "Facebook", link: "https://facebook.com/avantcargo" },
-    { icon: "Twitter", link: "https://x.com/avantcargo" },
-  ]);
+  const [description, setDescription] = useState("");
+  const [socialLinks, setSocialLinks] = useState<{ icon: string; link: string }[]>([]);
   const [contactInfo, setContactInfo] = useState({
-    address: "Endereço: R. Tupi Paulista, 71 - Cidade Industrial Satélite de São Paulo, Guarulhos - SP, 07222-070, Brasil",
-    phone: "(11) 96450-3217",
-    email: "comercial@avantcargo.com.br"
+    address: "",
+    phone: "",
+    email: ""
   });
-  const [copyrightText, setCopyrightText] = useState("© 2026 AvantCargo - Logística e Serviços Aduaneiros. Todos os direitos reservados.");
-  const [termsLink, setTermsLink] = useState("/termos");
-  const [privacyLink, setPrivacyLink] = useState("/privacidade");
+  const [copyrightText, setCopyrightText] = useState("");
+  const [termsLink, setTermsLink] = useState("");
+  const [privacyLink, setPrivacyLink] = useState("");
 
   const { data: configData, isLoading } = useQuery({
     queryKey: ["footer"],
@@ -97,6 +92,18 @@ export default function FooterConfig() {
 
   const getSocialLink = (icon: string) => {
     return socialLinks.find(l => l.icon === icon)?.link || "";
+  };
+
+  const formatPhone = (value: string) => {
+    const digits = value.replace(/\D/g, "");
+    if (digits.length <= 2) return digits;
+    if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+    if (digits.length <= 10) return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7, 11)}`;
+  };
+
+  const handlePhoneChange = (value: string) => {
+    setContactInfo({ ...contactInfo, phone: formatPhone(value) });
   };
 
   if (isLoading) {
@@ -242,12 +249,13 @@ export default function FooterConfig() {
 
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider flex items-center gap-1">
-                  <Phone size={12} /> Telefone Principal
+                  <Phone size={12} /> Telefone Principal (WhatsApp)
                 </Label>
                 <Input 
-                  maxLength={40} 
+                  maxLength={20} 
                   value={contactInfo.phone} 
-                  onChange={(e) => setContactInfo({ ...contactInfo, phone: e.target.value })}
+                  onChange={(e) => handlePhoneChange(e.target.value)}
+                  placeholder="(00) 00000-0000"
                   className="border-emerald-100 focus-visible:ring-emerald-500" 
                 />
               </div>

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { FaBriefcase } from "react-icons/fa";
@@ -97,9 +98,16 @@ export const Services = ({ data }: ServicesProps) => {
                 {s.desc}
               </p>
 
-              <button className="text-sm font-bold text-primary flex items-center gap-2 group/btn hover:translate-x-1 transition-all duration-300">
+              <Link 
+                href={
+                  s.title.toLowerCase().includes("representação") ? "/servicos/representacao" :
+                  s.title.toLowerCase().includes("sistemas") ? "/servicos/sistemas-comex" :
+                  "/servicos/transporte"
+                }
+                className="text-sm font-bold text-primary flex items-center gap-2 group/btn hover:translate-x-1 transition-all duration-300"
+              >
                 Saiba mais <FaArrowRightLong className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-              </button>
+              </Link>
             </Card>
           ))}
         </div>

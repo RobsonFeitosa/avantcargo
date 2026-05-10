@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -13,7 +13,8 @@ import {
   GripVertical,
   Plus,
   Trash2,
-  Search
+  Search,
+  Loader2
 } from "lucide-react";
 
 import {
@@ -33,6 +34,10 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { aboutUsActions } from "@/admin/actions/about-us.actions";
+import { useAuth } from "@/admin/hooks_generic/providers/auth";
+import { toast } from "sonner";
 
 interface SortableItemProps {
   id: string;
@@ -78,11 +83,50 @@ function SortableItem({ id, children }: SortableItemProps) {
 }
 
 export default function AboutDifferentialsConfig() {
-  const [differentials, setDifferentials] = useState([
-    { id: "d-1", icon: "Star", title: "Especialistas em Ex-Tarifário", desc: "Somos referência nacional no mecanismo do Ex-Tarifário." },
-    { id: "d-2", icon: "Users", title: "Equipe multidisciplinar", desc: "Advogados tributaristas, especialistas em comércio exterior, trabalhando em conjunto." },
-    { id: "d-3", icon: "MapPin", title: "Presença nacional", desc: "Sediada em Curitiba, atendemos empresas em todo o território nacional." },
-  ]);
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const [differentialsBadge, setDifferentialsBadge] = useState("");
+  const [differentialsTitle1, setDifferentialsTitle1] = useState("");
+  const [differentialsTitleHighlight, setDifferentialsTitleHighlight] = useState("");
+
+  const [differentials, setDifferentials] = useState<{ id: string; icon: string; title: string; desc: string }[]>([]);
+
+  const { data: configData, isLoading } = useQuery({
+    queryKey: ["about-us-differentials"],
+    queryFn: () => aboutUsActions.get(),
+    enabled: !!user,
+  });
+
+  useEffect(() => {
+    if (configData?.result) {
+      const { result } = configData;
+      setDifferentialsBadge(result.differentialsBadge || "");
+      setDifferentialsTitle1(result.differentialsTitle1 || "");
+      setDifferentialsTitleHighlight(result.differentialsTitleHighlight || "");
+      setDifferentials(result.differentialsList || []);
+    }
+  }, [configData]);
+
+  const mutation = useMutation({
+    mutationFn: (data: any) => aboutUsActions.update(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["about-us-differentials"] });
+      toast.success("Configurações salvas com sucesso!");
+    },
+    onError: () => {
+      toast.error("Erro ao salvar configurações.");
+    }
+  });
+
+  const handleSave = () => {
+    mutation.mutate({
+      differentialsBadge,
+      differentialsTitle1,
+      differentialsTitleHighlight,
+      differentialsList: differentials
+    });
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -111,6 +155,14 @@ export default function AboutDifferentialsConfig() {
     setDifferentials(differentials.filter(d => d.id !== idToRemove));
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex h-[400px] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
       <div className="flex flex-col gap-2">
@@ -133,15 +185,30 @@ export default function AboutDifferentialsConfig() {
             <CardContent className="pt-6 space-y-4">
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Badge (Pílula)</Label>
-                <Input maxLength={40} defaultValue="Por que a AVANTCARGO?" className="border-emerald-100" />
+                <Input 
+                  maxLength={40} 
+                  value={differentialsBadge} 
+                  onChange={(e) => setDifferentialsBadge(e.target.value)}
+                  className="border-emerald-100" 
+                />
               </div>
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título (Parte 1)</Label>
-                <Input maxLength={60} defaultValue="Nossos" className="border-emerald-100" />
+                <Input 
+                  maxLength={60} 
+                  value={differentialsTitle1} 
+                  onChange={(e) => setDifferentialsTitle1(e.target.value)}
+                  className="border-emerald-100" 
+                />
               </div>
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Palavra em Destaque (Parte 2)</Label>
-                <Input maxLength={40} defaultValue="diferenciais" className="border-emerald-100 text-emerald-600 font-bold" />
+                <Input 
+                  maxLength={40} 
+                  value={differentialsTitleHighlight} 
+                  onChange={(e) => setDifferentialsTitleHighlight(e.target.value)}
+                  className="border-emerald-100 text-emerald-600 font-bold" 
+                />
               </div>
             </CardContent>
           </Card>
@@ -243,11 +310,23 @@ export default function AboutDifferentialsConfig() {
       </div>
 
       <div className="flex justify-end gap-4 border-t border-emerald-50 pt-8 mt-4">
-        <Button variant="outline" className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8">
+        <Button 
+          variant="outline" 
+          className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8"
+          onClick={() => queryClient.invalidateQueries({ queryKey: ["about-us-differentials"] })}
+        >
           Descartar
         </Button>
-        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10">
-          <Save className="w-4 h-4 mr-2" />
+        <Button 
+          className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10"
+          onClick={handleSave}
+          disabled={mutation.isPending}
+        >
+          {mutation.isPending ? (
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          ) : (
+            <Save className="w-4 h-4 mr-2" />
+          )}
           Salvar Alterações
         </Button>
       </div>

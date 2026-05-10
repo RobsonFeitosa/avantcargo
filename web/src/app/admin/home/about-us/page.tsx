@@ -12,8 +12,19 @@ import {
   CheckCircle2, 
   Award,
   GripVertical,
-  Loader2
+  Loader2,
+  Handshake,
+  Scale,
+  Star,
+  TrendingUp,
+  Globe,
+  User,
+  Search,
+  Plus
 } from "lucide-react";
+import * as LucideIcons from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -85,52 +96,15 @@ export default function AboutUsConfig() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  const [headerBadge, setHeaderBadge] = useState("QUEM SOMOS");
-  const [headerTitle, setHeaderTitle] = useState("Mais de 20 anos de expertise em Comércio Exterior");
-  const [headerDescription, setHeaderDescription] = useState("Atuamos com excelência em todos os portos, aeroportos e fronteiras do Brasil, garantindo que sua carga chegue ao destino final sem imprevistos e com o melhor custo-benefício.");
-  const [primaryButtonText, setPrimaryButtonText] = useState("Conheça nossa história");
-  const [secondaryButtonText, setSecondaryButtonText] = useState("Fale conosco");
+  const [headerBadge, setHeaderBadge] = useState("");
+  const [headerTitle, setHeaderTitle] = useState("");
+  const [headerDescription, setHeaderDescription] = useState("");
+  const [primaryButtonText, setPrimaryButtonText] = useState("");
+  const [secondaryButtonText, setSecondaryButtonText] = useState("");
 
-  const [features, setFeatures] = useState([
-    { 
-      id: "feat-1", 
-      title: "98% de aprovação no MDIC", 
-      desc: "Taxa de sucesso em processos de Ex-Tarifário" 
-    },
-    { 
-      id: "feat-2", 
-      title: "Atendimento personalizado", 
-      desc: "Especialistas dedicados para cada cliente" 
-    },
-    { 
-      id: "feat-3", 
-      title: "Conformidade regulatória total", 
-      desc: "Processos 100% legais e auditáveis" 
-    },
-  ]);
+  const [features, setFeatures] = useState([]);
 
-  const [achievements, setAchievements] = useState([
-    { 
-      id: "ach-1", 
-      title: "Ex-Tarifário", 
-      desc: "Redução de até 100% no II — alíquota 0%" 
-    },
-    { 
-      id: "ach-2", 
-      title: "R$ 480M+ economizados", 
-      desc: "Para os nossos clientes" 
-    },
-    { 
-      id: "ach-3", 
-      title: "13+ setores", 
-      desc: "Indústria, Agro, Tech, Infraestrutura..." 
-    },
-    { 
-      id: "ach-4", 
-      title: "Matheus Diniz", 
-      desc: "Fundador & Especialista" 
-    },
-  ]);
+  const [achievements, setAchievements] = useState([]);
 
   const { data: configData, isLoading } = useQuery({
     queryKey: ["about-us"],
@@ -141,13 +115,18 @@ export default function AboutUsConfig() {
   useEffect(() => {
     if (configData?.result) {
       const { result } = configData;
-      setHeaderBadge(result.headerBadge || "QUEM SOMOS");
-      setHeaderTitle(result.headerTitle || "Mais de 20 anos de expertise em Comércio Exterior");
+      setHeaderBadge(result.headerBadge || "");
+      setHeaderTitle(result.headerTitle || "");
       setHeaderDescription(result.headerDescription || "");
-      setPrimaryButtonText(result.primaryButtonText || "Conheça nossa história");
-      setSecondaryButtonText(result.secondaryButtonText || "Fale conosco");
-      setFeatures(result.differentials || []);
-      setAchievements(result.achievements || []);
+      setPrimaryButtonText(result.primaryButtonText || "");
+      setSecondaryButtonText(result.secondaryButtonText || "");
+      
+      if (result.differentials?.length > 0) {
+        setFeatures(result.differentials.map((f: any) => ({ ...f, icon: f.icon || "Award" })));
+      }
+      if (result.achievements?.length > 0) {
+        setAchievements(result.achievements.map((a: any) => ({ ...a, icon: a.icon || "Star" })));
+      }
     }
   }, [configData]);
 
@@ -170,8 +149,51 @@ export default function AboutUsConfig() {
       primaryButtonText,
       secondaryButtonText,
       differentials: features,
-      achievements
+      achievements,
+      // Hardcoded links as requested
+      primaryButtonLink: "/quem-somos",
+      secondaryButtonLink: "/contato"
     });
+  };
+
+  const availableIcons = [
+    "Award", "Handshake", "Scale", "Star", "TrendingUp", "Globe", "User", 
+    "ShieldCheck", "Shield", "Zap", "Heart", "Clock", "CheckCircle2", "Target",
+    "Lightbulb", "Rocket", "Users", "Anchor", "Truck", "Box"
+  ];
+
+  const IconPicker = ({ currentIcon, onSelect }: { currentIcon: string, onSelect: (icon: string) => void }) => {
+    const IconComponent = (LucideIcons as any)[currentIcon] || LucideIcons.HelpCircle;
+    
+    return (
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="outline" size="icon" className="w-10 h-10 border-emerald-100 text-emerald-600 shrink-0">
+            <IconComponent size={20} />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-64 p-2">
+          <ScrollArea className="h-48">
+            <div className="grid grid-cols-4 gap-2">
+              {availableIcons.map((iconName) => {
+                const Icon = (LucideIcons as any)[iconName];
+                return (
+                  <Button
+                    key={iconName}
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => onSelect(iconName)}
+                    className={currentIcon === iconName ? "bg-emerald-50 text-emerald-600" : ""}
+                  >
+                    <Icon size={18} />
+                  </Button>
+                );
+              })}
+            </div>
+          </ScrollArea>
+        </PopoverContent>
+      </Popover>
+    );
   };
 
   const sensors = useSensors(
@@ -303,27 +325,38 @@ export default function AboutUsConfig() {
                 <SortableContext items={features} strategy={verticalListSortingStrategy}>
                   {features.map((feature) => (
                     <SortableItem key={feature.id} id={feature.id}>
-                      <div className="flex flex-col gap-2 bg-white p-3 border border-emerald-50 rounded-lg shadow-sm">
-                        <Input maxLength={80} value={feature.title} 
-                          onChange={(e) => {
+                      <div className="flex items-center gap-3 bg-white p-3 border border-emerald-50 rounded-lg shadow-sm">
+                        <IconPicker 
+                          currentIcon={feature.icon || "Award"} 
+                          onSelect={(newIcon) => {
                             const newFeatures = [...features];
                             const idx = newFeatures.findIndex(f => f.id === feature.id);
-                            newFeatures[idx].title = e.target.value;
+                            newFeatures[idx].icon = newIcon;
                             setFeatures(newFeatures);
                           }}
-                          placeholder="Título"
-                          className="border-emerald-100 focus-visible:ring-emerald-500 font-bold" 
                         />
-                        <Input maxLength={80} value={feature.desc} 
-                          onChange={(e) => {
-                            const newFeatures = [...features];
-                            const idx = newFeatures.findIndex(f => f.id === feature.id);
-                            newFeatures[idx].desc = e.target.value;
-                            setFeatures(newFeatures);
-                          }}
-                          placeholder="Descrição"
-                          className="border-emerald-100 focus-visible:ring-emerald-500 text-xs" 
-                        />
+                        <div className="flex flex-col gap-2 flex-1">
+                          <Input maxLength={80} value={feature.title} 
+                            onChange={(e) => {
+                              const newFeatures = [...features];
+                              const idx = newFeatures.findIndex(f => f.id === feature.id);
+                              newFeatures[idx].title = e.target.value;
+                              setFeatures(newFeatures);
+                            }}
+                            placeholder="Título"
+                            className="border-emerald-100 focus-visible:ring-emerald-500 font-bold" 
+                          />
+                          <Input maxLength={80} value={feature.desc} 
+                            onChange={(e) => {
+                              const newFeatures = [...features];
+                              const idx = newFeatures.findIndex(f => f.id === feature.id);
+                              newFeatures[idx].desc = e.target.value;
+                              setFeatures(newFeatures);
+                            }}
+                            placeholder="Descrição"
+                            className="border-emerald-100 focus-visible:ring-emerald-500 text-xs" 
+                          />
+                        </div>
                       </div>
                     </SortableItem>
                   ))}
@@ -349,27 +382,38 @@ export default function AboutUsConfig() {
                 <SortableContext items={achievements} strategy={verticalListSortingStrategy}>
                   {achievements.map((achievement) => (
                     <SortableItem key={achievement.id} id={achievement.id}>
-                      <div className="flex flex-col gap-2 bg-white p-3 border border-emerald-50 rounded-lg shadow-sm">
-                        <Input maxLength={80} value={achievement.title} 
-                          onChange={(e) => {
+                      <div className="flex items-center gap-3 bg-white p-3 border border-emerald-50 rounded-lg shadow-sm">
+                        <IconPicker 
+                          currentIcon={achievement.icon || "Star"} 
+                          onSelect={(newIcon) => {
                             const newAchievements = [...achievements];
                             const idx = newAchievements.findIndex(a => a.id === achievement.id);
-                            newAchievements[idx].title = e.target.value;
+                            newAchievements[idx].icon = newIcon;
                             setAchievements(newAchievements);
                           }}
-                          placeholder="Título / Marco"
-                          className="border-emerald-100 focus-visible:ring-emerald-500 font-bold" 
                         />
-                        <Input maxLength={80} value={achievement.desc} 
-                          onChange={(e) => {
-                            const newAchievements = [...achievements];
-                            const idx = newAchievements.findIndex(a => a.id === achievement.id);
-                            newAchievements[idx].desc = e.target.value;
-                            setAchievements(newAchievements);
-                          }}
-                          placeholder="Descrição"
-                          className="border-emerald-100 focus-visible:ring-emerald-500 text-xs" 
-                        />
+                        <div className="flex flex-col gap-2 flex-1">
+                          <Input maxLength={80} value={achievement.title} 
+                            onChange={(e) => {
+                              const newAchievements = [...achievements];
+                              const idx = newAchievements.findIndex(a => a.id === achievement.id);
+                              newAchievements[idx].title = e.target.value;
+                              setAchievements(newAchievements);
+                            }}
+                            placeholder="Título / Marco"
+                            className="border-emerald-100 focus-visible:ring-emerald-500 font-bold" 
+                          />
+                          <Input maxLength={80} value={achievement.desc} 
+                            onChange={(e) => {
+                              const newAchievements = [...achievements];
+                              const idx = newAchievements.findIndex(a => a.id === achievement.id);
+                              newAchievements[idx].desc = e.target.value;
+                              setAchievements(newAchievements);
+                            }}
+                            placeholder="Descrição"
+                            className="border-emerald-100 focus-visible:ring-emerald-500 text-xs" 
+                          />
+                        </div>
                       </div>
                     </SortableItem>
                   ))}

@@ -1,14 +1,92 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Save, Handshake, MousePointerClick } from "lucide-react";
+import { Save, Handshake, MousePointerClick, Loader2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { aboutUsActions } from "@/admin/actions/about-us.actions";
+import { useAuth } from "@/admin/hooks_generic/providers/auth";
+import { toast } from "sonner";
 
 export default function AboutCTAConfig() {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const [ctaTitleDark, setCtaTitleDark] = useState("");
+  const [ctaTitleHighlight, setCtaTitleHighlight] = useState("");
+  const [ctaDescription, setCtaDescription] = useState("");
+  const [ctaPrimaryButtonText, setCtaPrimaryButtonText] = useState("");
+  const [ctaPrimaryButtonLink, setCtaPrimaryButtonLink] = useState("");
+  const [ctaSecondaryButtonText, setCtaSecondaryButtonText] = useState("");
+  const [ctaSecondaryButtonLink, setCtaSecondaryButtonLink] = useState("");
+
+  const { data: configData, isLoading } = useQuery({
+    queryKey: ["about-us-cta"],
+    queryFn: () => aboutUsActions.get(),
+    enabled: !!user,
+  });
+
+  useEffect(() => {
+    if (configData?.result) {
+      const { result } = configData;
+      setCtaTitleDark(result.ctaTitleDark || "");
+      setCtaTitleHighlight(result.ctaTitleHighlight || "");
+      setCtaDescription(result.ctaDescription || "");
+      setCtaPrimaryButtonText(result.ctaPrimaryButtonText || "");
+      setCtaPrimaryButtonLink(result.ctaPrimaryButtonLink || "");
+      setCtaSecondaryButtonText(result.ctaSecondaryButtonText || "");
+      setCtaSecondaryButtonLink(result.ctaSecondaryButtonLink || "");
+    }
+  }, [configData]);
+
+  const mutation = useMutation({
+    mutationFn: (data: any) => aboutUsActions.update(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["about-us-cta"] });
+      toast.success("Configurações salvas com sucesso!");
+    },
+    onError: () => {
+      toast.error("Erro ao salvar configurações.");
+    }
+  });
+
+  const handleSave = () => {
+    mutation.mutate({
+      ctaTitleDark,
+      ctaTitleHighlight,
+      ctaDescription,
+      ctaPrimaryButtonText,
+      ctaPrimaryButtonLink,
+      ctaSecondaryButtonText,
+      ctaSecondaryButtonLink
+    });
+  };
+
+  const formatPhone = (value: string) => {
+    const digits = value.replace(/\D/g, "");
+    if (digits.length <= 2) return digits;
+    if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+    if (digits.length <= 10) return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7, 11)}`;
+  };
+
+  const handlePhoneChange = (value: string, setter: (v: string) => void) => {
+    setter(formatPhone(value));
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex h-[400px] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
       <div className="flex flex-col gap-2">
@@ -35,17 +113,32 @@ export default function AboutCTAConfig() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título (Parte Escura)</Label>
-                  <Input maxLength={60} defaultValue="Vamos trabalhar" className="border-emerald-100 focus-visible:ring-emerald-500 font-bold" />
+                  <Input 
+                    maxLength={60} 
+                    value={ctaTitleDark} 
+                    onChange={(e) => setCtaTitleDark(e.target.value)}
+                    className="border-emerald-100 focus-visible:ring-emerald-500 font-bold" 
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Palavra em Destaque (Laranja)</Label>
-                  <Input maxLength={40} defaultValue="juntos?" className="border-emerald-100 focus-visible:ring-emerald-500 font-bold text-orange-600" />
+                  <Input 
+                    maxLength={40} 
+                    value={ctaTitleHighlight} 
+                    onChange={(e) => setCtaTitleHighlight(e.target.value)}
+                    className="border-emerald-100 focus-visible:ring-emerald-500 font-bold text-orange-600" 
+                  />
                 </div>
               </div>
               
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Descrição Convidativa</Label>
-                <Textarea maxLength={200} defaultValue="Descubra como a AVANTCARGO pode ajudar sua empresa a reduzir custos de importação e operar com mais eficiência no comércio exterior." className="min-h-[100px] border-emerald-100 focus-visible:ring-emerald-500" />
+                <Textarea 
+                  maxLength={200} 
+                  value={ctaDescription} 
+                  onChange={(e) => setCtaDescription(e.target.value)}
+                  className="min-h-[100px] border-emerald-100 focus-visible:ring-emerald-500" 
+                />
               </div>
             </CardContent>
           </Card>
@@ -74,11 +167,22 @@ export default function AboutCTAConfig() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <Label className="text-emerald-900/70 font-semibold text-[10px]">Texto</Label>
-                    <Input maxLength={40} defaultValue="Falar conosco" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                    <Input 
+                      maxLength={40} 
+                      value={ctaPrimaryButtonText} 
+                      onChange={(e) => setCtaPrimaryButtonText(e.target.value)}
+                      className="border-emerald-100 focus-visible:ring-emerald-500" 
+                    />
                   </div>
                   <div className="space-y-1">
-                    <Label className="text-emerald-900/70 font-semibold text-[10px]">Link (WhatsApp/URL)</Label>
-                    <Input maxLength={100} defaultValue="https://wa.me/5511964503217" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                    <Label className="text-emerald-900/70 font-semibold text-[10px]">Número (WhatsApp)</Label>
+                    <Input 
+                      maxLength={20} 
+                      value={ctaPrimaryButtonLink} 
+                      onChange={(e) => handlePhoneChange(e.target.value, setCtaPrimaryButtonLink)}
+                      placeholder="(00) 00000-0000"
+                      className="border-emerald-100 focus-visible:ring-emerald-500" 
+                    />
                   </div>
                 </div>
               </div>
@@ -94,11 +198,21 @@ export default function AboutCTAConfig() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <Label className="text-emerald-900/70 font-semibold text-[10px]">Texto</Label>
-                    <Input maxLength={40} defaultValue="Enviar mensagem" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                    <Input 
+                      maxLength={40} 
+                      value={ctaSecondaryButtonText} 
+                      onChange={(e) => setCtaSecondaryButtonText(e.target.value)}
+                      className="border-emerald-100 focus-visible:ring-emerald-500" 
+                    />
                   </div>
                   <div className="space-y-1">
                     <Label className="text-emerald-900/70 font-semibold text-[10px]">Link (Página)</Label>
-                    <Input maxLength={100} defaultValue="/contato" className="border-emerald-100 focus-visible:ring-emerald-500" />
+                    <Input 
+                      maxLength={100} 
+                      value={ctaSecondaryButtonLink} 
+                      onChange={(e) => setCtaSecondaryButtonLink(e.target.value)}
+                      className="border-emerald-100 focus-visible:ring-emerald-500" 
+                    />
                   </div>
                 </div>
               </div>
@@ -109,11 +223,23 @@ export default function AboutCTAConfig() {
       </div>
 
       <div className="flex justify-end gap-4 border-t border-emerald-50 pt-8 mt-4">
-        <Button variant="outline" className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8">
+        <Button 
+          variant="outline" 
+          className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8"
+          onClick={() => queryClient.invalidateQueries({ queryKey: ["about-us-cta"] })}
+        >
           Descartar
         </Button>
-        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10">
-          <Save className="w-4 h-4 mr-2" />
+        <Button 
+          className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10"
+          onClick={handleSave}
+          disabled={mutation.isPending}
+        >
+          {mutation.isPending ? (
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          ) : (
+            <Save className="w-4 h-4 mr-2" />
+          )}
           Salvar Alterações
         </Button>
       </div>

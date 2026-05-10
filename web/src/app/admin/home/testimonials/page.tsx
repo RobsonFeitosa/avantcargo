@@ -85,30 +85,11 @@ export default function TestimonialsConfig() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  const [headerBadge, setHeaderBadge] = useState("DEPOIMENTOS");
-  const [headerTitle, setHeaderTitle] = useState("O que nossos clientes dizem");
-  const [headerDescription, setHeaderDescription] = useState("Alguns depoimentos de pessoas e empresas que acreditam em nosso trabalho.");
+  const [headerBadge, setHeaderBadge] = useState("");
+  const [headerTitle, setHeaderTitle] = useState("");
+  const [headerDescription, setHeaderDescription] = useState("");
 
-  const [testimonials, setTestimonials] = useState([
-    { 
-      id: "test-1", 
-      name: "Osvaldo Mendes", 
-      role: "CEO",
-      content: "Atendimento personalizado, rápido, eficiente e proativo. Experiência positiva, recomendamos." 
-    },
-    { 
-      id: "test-2", 
-      name: "Hewerton Precioso", 
-      role: "Engenheiro Eletrônico — Especializado em partes e peças",
-      content: "Grata surpresa com o atendimento e com os resultados do trabalho contratado. Alto nível moral e intelectual, rapidez e precisão nas respostas e disponibilidade para pesquisar dúvidas inerentes da dinâmica da legislação. Gratidão!" 
-    },
-    { 
-      id: "test-3", 
-      name: "Diogo Fazolo", 
-      role: "Mestre em Direito — Especialista em Direito Aduaneiro",
-      content: "Conheço a empresa já há alguns anos, atendimento excelente, muita competência e conhecimento da legislação aduaneira. Tenho plena confiança em indicar o trabalho do Sr. Matheus Diniz." 
-    },
-  ]);
+  const [testimonials, setTestimonials] = useState([]);
 
   const { data: configData, isLoading } = useQuery({
     queryKey: ["testimonials"],
@@ -119,8 +100,8 @@ export default function TestimonialsConfig() {
   useEffect(() => {
     if (configData?.result) {
       const { result } = configData;
-      setHeaderBadge(result.headerBadge || "DEPOIMENTOS");
-      setHeaderTitle(result.headerTitle || "O que nossos clientes dizem");
+      setHeaderBadge(result.headerBadge || "");
+      setHeaderTitle(result.headerTitle || "");
       setHeaderDescription(result.headerDescription || "");
       setTestimonials(result.testimonials || []);
     }

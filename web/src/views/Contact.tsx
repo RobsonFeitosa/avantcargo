@@ -100,9 +100,13 @@ export default function Contact() {
     {
       icon: FaWhatsapp,
       title: "WhatsApp",
-      value: config?.whatsappNumber || "(11) 96450-3217",
+      value: config?.whatsappNumber 
+        ? config.whatsappNumber.length === 11 
+          ? `(${config.whatsappNumber.slice(0, 2)}) ${config.whatsappNumber.slice(2, 7)}-${config.whatsappNumber.slice(7)}`
+          : `(${config.whatsappNumber.slice(0, 2)}) ${config.whatsappNumber.slice(2, 6)}-${config.whatsappNumber.slice(6)}`
+        : "(11) 96450-3217",
       desc: config?.whatsappSubtitle || "Resposta rápida — seg a sex, 8h-18h",
-      link: config?.whatsappUrl || "https://wa.me/5511964503217",
+      link: `https://wa.me/55${config?.whatsappNumber?.replace(/\D/g, "") || "11964503217"}`,
       color: "text-green-500",
       bg: "bg-green-500/10",
     },
@@ -420,13 +424,15 @@ export default function Contact() {
         {/* FAQ Section */}
         <section className="py-32 border-t border-slate-100">
           <div className="container">
-            <div className="text-center space-y-6 mb-20">
-              <Badge variant="outline" className="text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-4 py-1 rounded-full text-[10px] font-bold">
-                {config?.faqBadge || "FAQ"}
-              </Badge>
+            <div className="text-center space-y-4 mb-20">
               <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight">
                 {config?.faqTitle?.split(" ")[0] || "Perguntas"} <span className="text-primary">{config?.faqTitle?.split(" ").slice(1).join(" ") || "frequentes"}</span>
               </h2>
+              {config?.faqBadge && (
+                <p className="text-slate-600 max-w-2xl mx-auto text-lg">
+                  {config.faqBadge}
+                </p>
+              )}
             </div>
 
             <div className="max-w-3xl mx-auto">

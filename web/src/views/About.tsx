@@ -17,7 +17,8 @@ import {
   RefreshCw,
   CheckCircle2,
   Star,
-  Clock
+  Clock,
+  Loader2
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa6";
 import { motion } from "framer-motion";
@@ -31,9 +32,35 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
+import { aboutUsActions } from "@/admin/actions/about-us.actions";
+
+const iconMap: Record<string, any> = {
+  Shield,
+  Users,
+  Award,
+  Handshake,
+  Zap,
+  Lightbulb,
+  MessageSquare,
+  Search,
+  MapPin,
+  TrendingUp,
+  RefreshCw,
+  CheckCircle2,
+  Star,
+  Clock
+};
 
 export default function About() {
-  const timeline = [
+  const { data: configData, isLoading } = useQuery({
+    queryKey: ["about-us-public"],
+    queryFn: () => aboutUsActions.get(),
+  });
+
+  const config = configData?.result;
+
+  const timeline = config?.historyTimeline || [
     { year: "2003", text: "Fundação da AVANTCARGO em Curitiba por especialistas do setor." },
     { year: "2008", text: "Expansão para atendimento nacional com equipe especializada." },
     { year: "2015", text: "Marca de 200+ processos de Ex-Tarifário aprovados no MDIC." },
@@ -41,77 +68,92 @@ export default function About() {
     { year: "Hoje", text: "500+ processos aprovados / R$ 480M+ economizados / 98% aprovação." },
   ];
 
-  const values = [
+  const values = (config?.valuesList || [
     {
-      icon: Shield,
+      icon: "Shield",
       title: "Integridade",
       desc: "Atuamos sempre dentro da legalidade, garantindo que todos os processos sejam transparentes, auditáveis e em conformidade com a legislação vigente.",
     },
     {
-      icon: Search,
+      icon: "Search",
       title: "Excelência Técnica",
       desc: "Nossa equipe se mantém constantemente atualizada com as mudanças regulatórias, garantindo as melhores estratégias para cada cliente.",
     },
     {
-      icon: Handshake,
+      icon: "Handshake",
       title: "Parceria de Longo Prazo",
       desc: "Não somos apenas prestadores de serviço — somos parceiros estratégicos que crescem junto com nossos clientes ao longo do tempo.",
     },
     {
-      icon: Zap,
+      icon: "Zap",
       title: "Agilidade",
       desc: "Entendemos que tempo é dinheiro. Trabalhamos com processos rigorosos e processos eficientes para garantir respostas rápidas e resultados ágeis.",
     },
     {
-      icon: Lightbulb,
+      icon: "Lightbulb",
       title: "Inovação",
       desc: "Buscamos continuamente novas formas de otimizar processos e encontrar oportunidades de redução tributária para nossos clientes.",
     },
     {
-      icon: MessageSquare,
+      icon: "MessageSquare",
       title: "Comunicação Clara",
       desc: "Simplificamos a complexidade do comércio exterior, mantendo nossos clientes informados em linguagem acessível em cada etapa do processo.",
     },
-  ];
+  ]).map((v: any) => ({
+    ...v,
+    icon: iconMap[v.icon] || Shield
+  }));
 
-  const differentials = [
+  const differentials = (config?.differentialsList || [
     {
       num: "01",
-      icon: Star,
+      icon: "Star",
       title: "Especialistas em Ex-Tarifário",
       desc: "Somos referência nacional no mecanismo do Ex-Tarifário, com profundo conhecimento das normas do MDIC e histórico comprovado de 98% de aprovação.",
     },
     {
       num: "02",
-      icon: Users,
+      icon: "Users",
       title: "Equipe multidisciplinar",
       desc: "Advogados tributaristas, especialistas em comércio exterior, engenheiros e economistas trabalhando em conjunto para oferecer a melhor solução.",
     },
     {
       num: "03",
-      icon: MapPin,
+      icon: "MapPin",
       title: "Presença nacional",
       desc: "Sediada em Curitiba, atendemos empresas em todo o território nacional com a mesma qualidade e dedicação, independente do porto ou setor.",
     },
     {
       num: "04",
-      icon: TrendingUp,
+      icon: "TrendingUp",
       title: "Resultados mensuráveis",
       desc: "Trabalhamos com metas claras e relatórios detalhados, para que você saiba exatamente quanto está economizando com nossa assessoria.",
     },
     {
       num: "05",
-      icon: RefreshCw,
+      icon: "RefreshCw",
       title: "Acompanhamento contínuo",
       desc: "Monitoramos cada processo do início ao fim, respondendo a exigências, atualizando documentações e garantindo o melhor desfecho para cada caso.",
     },
     {
       num: "06",
-      icon: CheckCircle2,
+      icon: "CheckCircle2",
       title: "Conformidade total",
       desc: "Todos os processos são 100% legais, homologados pelos órgãos competentes, protegendo sua empresa de riscos fiscais e regulatórios.",
     },
-  ];
+  ]).map((d: any, idx: number) => ({
+    ...d,
+    num: (idx + 1).toString().padStart(2, '0'),
+    icon: iconMap[d.icon] || Star
+  }));
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-white">
+        <Loader2 className="h-10 w-10 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <LandingLayout>
@@ -137,10 +179,10 @@ export default function About() {
 
               <div className="space-y-4 max-w-3xl">
                 <h1 className="text-4xl md:text-6xl font-bold text-emerald-950 tracking-tight leading-tight">
-                  Conheça a <span className="text-orange-500 uppercase">AvantCargo</span>
+                  {config?.historyHeroTitleDark || "Conheça a"} <span className="text-orange-500 uppercase">{config?.historyHeroTitleOrange || "AvantCargo"}</span>
                 </h1>
                 <p className="text-lg text-slate-600 leading-relaxed">
-                  Mais de 20 anos de expertise em comércio exterior, ajudando empresas brasileiras a crescer de forma inteligente e competitiva no mercado global.
+                  {config?.historyHeroDescription || "Mais de 20 anos de expertise em comércio exterior, ajudando empresas brasileiras a crescer de forma inteligente e competitiva no mercado global."}
                 </p>
               </div>
             </div>
@@ -156,24 +198,20 @@ export default function About() {
                   Nossa História
                 </Badge>
                 <h2 className="text-4xl font-bold text-emerald-950 leading-tight">
-                  Duas décadas de <span className="text-orange-500">excelência</span> em Comércio Exterior
+                  {config?.historyTitle || "Duas décadas de excelência em Comércio Exterior"}
                 </h2>
-                <div className="space-y-6 text-slate-600 leading-relaxed">
-                  <p>
-                    A AVANTCARGO nasceu em Curitiba, no Paraná, com uma missão clara: tornar o comércio exterior mais acessível, inteligente e rentável para as empresas brasileiras. Desde 2003, nossa assessoria vem construindo um histórico de resultados sólidos e relacionamentos de longo prazo com nossos clientes.
-                  </p>
-                  <p>
-                    Especializamo-nos nos mecanismos mais estratégicos do comércio exterior brasileiro — em especial no <span className="text-emerald-950 font-bold">Ex-Tarifário</span>, ferramenta que permite a redução de até 100% no imposto de importação para máquinas e equipamentos sem similar nacional.
-                  </p>
-                  <p>
-                    Nossa equipe tem formação técnica multidisciplinar — direito, economia, engenharia, comércio exterior — cada um trazendo conhecimento da legislação aduaneira brasileira e das exigências dos órgãos reguladores.
-                  </p>
+                <div className="space-y-6 text-slate-600 leading-relaxed whitespace-pre-wrap">
+                  {config?.historyText || `A AVANTCARGO nasceu em Curitiba, no Paraná, com uma missão clara: tornar o comércio exterior mais acessível, inteligente e rentável para as empresas brasileiras. Desde 2003, nossa assessoria vem construindo um histórico de resultados sólidos e relacionamentos de longo prazo com nossos clientes.
+
+Especializamo-nos nos mecanismos mais estratégicos do comércio exterior brasileiro — em especial no Ex-Tarifário, ferramenta que permite a redução de até 100% no imposto de importação para máquinas e equipamentos sem similar nacional.
+
+Nossa equipe tem formação técnica multidisciplinar — direito, economia, engenharia, comércio exterior — cada um trazendo conhecimento da legislação aduaneira brasileira e das exigências dos órgãos reguladores.`}
                 </div>
               </div>
 
               <div className="p-8 md:p-12 rounded-[40px] bg-slate-50 border border-slate-200 relative overflow-hidden">
                 <div className="space-y-10 relative z-10">
-                  {timeline.map((item, idx) => (
+                  {timeline.map((item: any, idx: number) => (
                     <div key={idx} className="flex gap-6 group">
                       <div className="shrink-0 pt-1">
                         <span className="text-sm font-black text-slate-400 group-hover:text-orange-500 transition-colors">{item.year}</span>
@@ -192,9 +230,9 @@ export default function About() {
           <div className="container">
             <div className="text-center space-y-4 mb-20">
               <Badge variant="outline" className="text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-4 py-1 rounded-full text-[10px] font-bold">
-                A Equipe por Trás do Sucesso
+                {config?.foundersBadge || "A Equipe por Trás do Sucesso"}
               </Badge>
-              <h2 className="text-4xl font-bold text-emerald-950">Conheça os <span className="text-primary">fundadores</span></h2>
+              <h2 className="text-4xl font-bold text-emerald-950">{config?.foundersTitle || "Conheça os"} <span className="text-primary">{config?.foundersTitleHighlight || "fundadores"}</span></h2>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -202,28 +240,47 @@ export default function About() {
               <div className="space-y-8 flex flex-col">
                 <div className="relative aspect-video lg:aspect-[4/3] rounded-[40px] overflow-hidden border border-slate-200 bg-white">
                   <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/40 to-transparent z-10" />
-                  <div className="absolute inset-0 bg-slate-100 flex items-center justify-center text-slate-300 italic">
-                    [Foto: Matheus Diniz]
-                  </div>
+                  {config?.founder1Image ? (
+                    <Image 
+                      src={config.founder1Image} 
+                      alt={config.founder1Name || "Matheus Diniz"} 
+                      fill 
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-slate-100 flex items-center justify-center text-slate-300 italic">
+                      [Foto: {config?.founder1Name || "Matheus Diniz"}]
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-8 md:p-10 rounded-[32px] border border-orange-500/20 bg-white space-y-6 shadow-sm flex-1 flex flex-col">
                   <div className="space-y-2">
-                    <Badge className="bg-orange-500 text-white hover:bg-orange-500 uppercase tracking-widest text-[10px] font-bold">Fundador & CEO</Badge>
-                    <h3 className="text-3xl font-bold text-emerald-950">Matheus Diniz</h3>
-                    <p className="text-orange-600 font-bold">Especialista em Comércio Exterior — +20 anos de experiência</p>
+                    <Badge className="bg-orange-500 text-white hover:bg-orange-500 uppercase tracking-widest text-[10px] font-bold">{config?.founder1Cargo || "Fundador & CEO"}</Badge>
+                    <h3 className="text-3xl font-bold text-emerald-950">{config?.founder1Name || "Matheus Diniz"}</h3>
+                    <p className="text-orange-600 font-bold">{config?.founder1Subtitle || "Especialista em Comércio Exterior — +20 anos de experiência"}</p>
                   </div>
 
                   <div className="space-y-4 text-slate-600 leading-relaxed text-sm md:text-base flex-1">
                     <p>
-                      Com quase 30 anos de atuação no comércio exterior brasileiro, Matheus Diniz é referência nacional em Importação, Exportação e assessoria aduaneira. Sua trajetória é marcada pelo profundo conhecimento das normas do MDIC e Receita Federal.
+                      {config?.founder1Bio || "Com quase 30 anos de atuação no comércio exterior brasileiro, Matheus Diniz é referência nacional em Importação, Exportação e assessoria aduaneira. Sua trajetória é marcada pelo profundo conhecimento das normas do MDIC e Receita Federal."}
                     </p>
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-4 pt-6 mt-auto">
-                    <Button className="bg-primary hover:bg-emerald-700 text-white rounded-xl h-12 px-6 font-bold gap-2 w-full sm:w-auto">
-                      <FaWhatsapp /> Fale com Matheus
-                    </Button>
+                    {config?.founder1ButtonLink && (
+                      <Button 
+                        asChild
+                        className="bg-primary hover:bg-emerald-700 text-white rounded-xl h-12 px-6 font-bold gap-2 w-full sm:w-auto"
+                      >
+                        <Link 
+                          href={`https://wa.me/55${config.founder1ButtonLink.replace(/\D/g, "")}`} 
+                          target="_blank"
+                        >
+                          <FaWhatsapp /> {config?.founder1ButtonText || "Fale com Matheus"}
+                        </Link>
+                      </Button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -232,28 +289,47 @@ export default function About() {
               <div className="space-y-8 flex flex-col">
                 <div className="relative aspect-video lg:aspect-[4/3] rounded-[40px] overflow-hidden border border-slate-200 bg-white">
                   <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/40 to-transparent z-10" />
-                  <div className="absolute inset-0 bg-slate-100 flex items-center justify-center text-slate-300 italic">
-                    [Foto: Sócio / Fundador 2]
-                  </div>
+                  {config?.founder2Image ? (
+                    <Image 
+                      src={config.founder2Image} 
+                      alt={config.founder2Name || "Nome do Sócio"} 
+                      fill 
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-slate-100 flex items-center justify-center text-slate-300 italic">
+                      [Foto: {config?.founder2Name || "Nome do Sócio"}]
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-8 md:p-10 rounded-[32px] border border-emerald-500/20 bg-white space-y-6 shadow-sm flex-1 flex flex-col">
                   <div className="space-y-2">
-                    <Badge className="bg-emerald-600 text-white hover:bg-emerald-600 uppercase tracking-widest text-[10px] font-bold">Sócio / Fundador</Badge>
-                    <h3 className="text-3xl font-bold text-emerald-950">Nome do Sócio</h3>
-                    <p className="text-emerald-600 font-bold">Especialista Operacional — +15 anos de experiência</p>
+                    <Badge className="bg-emerald-600 text-white hover:bg-emerald-600 uppercase tracking-widest text-[10px] font-bold">{config?.founder2Cargo || "Sócio / Fundador"}</Badge>
+                    <h3 className="text-3xl font-bold text-emerald-950">{config?.founder2Name || "Nome do Sócio"}</h3>
+                    <p className="text-emerald-600 font-bold">{config?.founder2Subtitle || "Especialista Operacional — +15 anos de experiência"}</p>
                   </div>
 
                   <div className="space-y-4 text-slate-600 leading-relaxed text-sm md:text-base flex-1">
                     <p>
-                      Com ampla experiência na gestão operacional aduaneira e logística internacional, coordena todas as etapas do processo garantindo segurança, compliance e agilidade de ponta a ponta para os clientes.
+                      {config?.founder2Bio || "Com ampla experiência na gestão operacional aduaneira e logística internacional, coordena todas as etapas do processo garantindo segurança, compliance e agilidade de ponta a ponta para os clientes."}
                     </p>
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-4 pt-6 mt-auto">
-                    <Button className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl h-12 px-6 font-bold gap-2 w-full sm:w-auto">
-                      <FaWhatsapp /> Falar com o Sócio
-                    </Button>
+                    {config?.founder2ButtonLink && (
+                      <Button 
+                        asChild
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl h-12 px-6 font-bold gap-2 w-full sm:w-auto"
+                      >
+                        <Link 
+                          href={`https://wa.me/55${config.founder2ButtonLink.replace(/\D/g, "")}`} 
+                          target="_blank"
+                        >
+                          <FaWhatsapp /> {config?.founder2ButtonText || "Falar com o Sócio"}
+                        </Link>
+                      </Button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -267,15 +343,15 @@ export default function About() {
           <div className="container text-center space-y-20">
             <div className="space-y-6">
               <Badge variant="outline" className="text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-4 py-1 rounded-full text-[10px] font-bold">
-                Nossos Valores
+                {config?.valuesBadge || "Nossos Valores"}
               </Badge>
               <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight">
-                O que nos <span className="text-primary">guia</span>
+                {config?.valuesTitle1 || "O que nos"} <span className="text-primary">{config?.valuesTitleHighlight || "guia"}</span>
               </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {values.map((v, idx) => (
+              {values.map((v: any, idx: number) => (
                 <div key={idx} className="p-10 rounded-[32px] bg-white border border-slate-200 hover:border-primary/30 shadow-sm hover:shadow-md transition-all group text-center space-y-6">
                   <div className="h-14 w-14 rounded-2xl bg-slate-50 flex items-center justify-center mx-auto text-primary group-hover:scale-110 transition-transform">
                     <v.icon className="h-7 w-7" />
@@ -293,15 +369,15 @@ export default function About() {
           <div className="container text-center space-y-20">
             <div className="space-y-6">
               <Badge variant="outline" className="text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-4 py-1 rounded-full text-[10px] font-bold">
-                Por que a AVANTCARGO?
+                {config?.differentialsBadge || "Por que a AVANTCARGO?"}
               </Badge>
               <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight">
-                Nossos <span className="text-primary">diferenciais</span>
+                {config?.differentialsTitle1 || "Nossos"} <span className="text-primary">{config?.differentialsTitleHighlight || "diferenciais"}</span>
               </h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {differentials.map((d, idx) => (
+              {differentials.map((d: any, idx: number) => (
                 <div key={idx} className="p-8 rounded-3xl bg-white border border-slate-200 hover:bg-slate-50 transition-all group text-left relative overflow-hidden shadow-sm">
                   <div className="flex items-start gap-6 relative z-10">
                     <div className="text-4xl font-black text-slate-100 group-hover:text-primary/10 transition-colors">
@@ -327,19 +403,37 @@ export default function About() {
             <div className="p-12 md:p-16 rounded-[48px] bg-gradient-to-br from-primary/5 to-orange-500/5 border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-12">
               <div className="space-y-4 text-center md:text-left">
                 <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight leading-tight">
-                  Vamos trabalhar <span className="text-orange-500">juntos?</span>
+                  {config?.ctaTitleDark || "Vamos trabalhar"} <span className="text-orange-500">{config?.ctaTitleHighlight || "juntos?"}</span>
                 </h2>
                 <p className="text-slate-600 max-w-xl text-lg">
-                  Descubra como a AVANTCARGO pode ajudar sua empresa a reduzir custos de importação e operar com mais eficiência no comércio exterior.
+                  {config?.ctaDescription || "Descubra como a AVANTCARGO pode ajudar sua empresa a reduzir custos de importação e operar com mais eficiência no comércio exterior."}
                 </p>
               </div>
               <div className="flex flex-col gap-4 w-full md:w-auto">
-                <Button className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-14 px-10 rounded-full shadow-lg shadow-orange-500/20 text-lg gap-2">
-                  <FaWhatsapp /> Falar conosco
-                </Button>
-                <Button variant="outline" className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 h-14 px-10 rounded-full text-lg gap-2">
-                  <MessageSquare className="h-4 w-4 text-primary" /> Enviar mensagem
-                </Button>
+                {config?.ctaPrimaryButtonLink && (
+                  <Button 
+                    asChild
+                    className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-14 px-10 rounded-full shadow-lg shadow-orange-500/20 text-lg gap-2"
+                  >
+                    <Link 
+                      href={`https://wa.me/55${config.ctaPrimaryButtonLink.replace(/\D/g, "")}`} 
+                      target="_blank"
+                    >
+                      <FaWhatsapp /> {config?.ctaPrimaryButtonText || "Falar conosco"}
+                    </Link>
+                  </Button>
+                )}
+                {config?.ctaSecondaryButtonLink && (
+                  <Button 
+                    asChild
+                    variant="outline" 
+                    className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 h-14 px-10 rounded-full text-lg gap-2"
+                  >
+                    <Link href={config?.ctaSecondaryButtonLink || "/contato"}>
+                      <MessageSquare className="h-4 w-4 text-primary" /> {config?.ctaSecondaryButtonText || "Enviar mensagem"}
+                    </Link>
+                  </Button>
+                )}
               </div>
             </div>
           </div>

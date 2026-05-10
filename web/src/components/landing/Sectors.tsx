@@ -37,22 +37,8 @@ export const Sectors = ({ data }: SectorsProps) => {
     { title: "Pharma", iconName: "Pill" },
   ];
 
+  // Garantindo que use os dados do banco se o objeto data existir
   const currentSectors = data?.sectors || defaultSectors;
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  };
 
   return (
     <section className="py-32 bg-emerald-50/10 relative overflow-hidden">
@@ -61,23 +47,13 @@ export const Sectors = ({ data }: SectorsProps) => {
 
       <div className="container relative z-10">
         <div className="text-center space-y-6 mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
+          <div>
             <Badge variant="outline" className="gap-2 text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-6 py-2 rounded-full font-bold">
               <FaIndustry className="h-4 w-4" />
               {data?.headerBadge || "Segmentos"}
             </Badge>
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl font-bold text-emerald-950 tracking-tight"
-          >
+          </div>
+          <h2 className="text-4xl md:text-6xl font-bold text-emerald-950 tracking-tight">
             {data?.headerTitle ? (
                data.headerTitle.split(" ").map((word, i) => (
                 <span key={i}>
@@ -88,31 +64,17 @@ export const Sectors = ({ data }: SectorsProps) => {
             ) : (
               <>Setores que <span className="text-primary">atendemos</span></>
             )}
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-slate-600 max-w-2xl mx-auto text-lg"
-          >
+          </h2>
+          <p className="text-slate-600 max-w-2xl mx-auto text-lg">
             {data?.headerDescription || "Soluções logísticas integradas e personalizadas para as demandas mais exigentes do mercado global."}
-          </motion.p>
+          </p>
         </div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-6"
-        >
-          {currentSectors.map((sector, idx) => (
-            <motion.div
-              key={idx}
-              variants={itemVariants}
-              whileHover={{ scale: 1.05, y: -5 }}
-              className="p-8 flex flex-col items-center justify-center gap-5 rounded-2xl bg-white border border-emerald-100 hover:border-orange-500/30 hover:shadow-xl hover:shadow-orange-500/5 transition-all group relative cursor-default"
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-6">
+          {currentSectors.map((sector: any, idx: number) => (
+            <div
+              key={sector.id || idx}
+              className="p-8 flex flex-col items-center justify-center gap-5 rounded-2xl bg-white border border-emerald-100 hover:border-orange-500/30 hover:shadow-xl hover:shadow-orange-500/5 transition-all group relative cursor-default h-full"
             >
               <div className="absolute inset-0 bg-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl" />
 
@@ -122,9 +84,9 @@ export const Sectors = ({ data }: SectorsProps) => {
               <p className="text-[11px] font-black uppercase tracking-[0.2em] text-center text-slate-400 group-hover:text-emerald-900 transition-colors">
                 {sector.title}
               </p>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

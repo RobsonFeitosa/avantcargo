@@ -84,30 +84,11 @@ export default function MainServicesConfig() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  const [headerBadge, setHeaderBadge] = useState("O QUE FAZEMOS");
-  const [headerTitle, setHeaderTitle] = useState("Principais Serviços");
-  const [headerDescription, setHeaderDescription] = useState("Oferecemos soluções completas para integrar sua empresa ao mercado internacional com eficiência e segurança.");
+  const [headerBadge, setHeaderBadge] = useState("");
+  const [headerTitle, setHeaderTitle] = useState("");
+  const [headerDescription, setHeaderDescription] = useState("");
 
-  const [cards, setCards] = useState<{ id: string; badge: string; title: string; desc: string }[]>([
-    { 
-      id: "card-1", 
-      badge: "MAIS POPULAR", 
-      title: "Representação", 
-      desc: "Soluções completas de Importação e Exportação com foco em agilidade, segurança e conformidade total em GRU e VCP." 
-    },
-    { 
-      id: "card-2", 
-      badge: "", 
-      title: "Sistemas Comex", 
-      desc: "Suporte especializado em E-awb e lançamentos no Portal Único, reduzindo burocracia e acelerando processos digitais." 
-    },
-    { 
-      id: "card-3", 
-      badge: "", 
-      title: "Transporte & Logística", 
-      desc: "Coleta, etiquetagem, pré-cadastro e entrega nos terminais com segurança e agilidade no pré-embarque internacional." 
-    },
-  ]);
+  const [cards, setCards] = useState<{ id: string; badge: string; title: string; desc: string }[]>([]);
 
   const { data: configData, isLoading } = useQuery({
     queryKey: ["main-services"],

@@ -13,8 +13,26 @@ import {
   Component, 
   GripVertical,
   ExternalLink,
-  Loader2
+  Loader2,
+  Plus,
+  Trash2,
+  Search,
+  Users,
+  Shield,
+  Globe,
+  Zap,
+  Clock,
+  Box,
+  Building,
+  Truck,
+  Target,
+  Hammer,
+  RefreshCw,
+  Pill,
+  HelpCircle
 } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -91,25 +109,11 @@ export default function SectorsConfig() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  const [headerBadge, setHeaderBadge] = useState("SEGMENTOS");
-  const [headerTitle, setHeaderTitle] = useState("Setores que atendemos");
-  const [headerDescription, setHeaderDescription] = useState("Soluções logísticas integradas e personalizadas para as demandas mais exigentes do mercado global.");
+  const [headerBadge, setHeaderBadge] = useState("");
+  const [headerTitle, setHeaderTitle] = useState("");
+  const [headerDescription, setHeaderDescription] = useState("");
 
-  const [sectors, setSectors] = useState([
-    { id: "sec-1", title: "AGENTES DE CARGA", iconName: "Users" },
-    { id: "sec-2", title: "COMISSÁRIAS", iconName: "Shield" },
-    { id: "sec-3", title: "CARGAS AÉREAS", iconName: "Globe" },
-    { id: "sec-4", title: "CARGAS PERIGOSAS", iconName: "Zap" },
-    { id: "sec-5", title: "CARGAS URGENTES", iconName: "Clock" },
-    { id: "sec-6", title: "CARGAS DE PROJETO", iconName: "Box" },
-    { id: "sec-7", title: "IMPORTADORES", iconName: "Building" },
-    { id: "sec-8", title: "EXPORTADORES", iconName: "Truck" },
-    { id: "sec-9", title: "GRU AIRPORT", iconName: "Target" },
-    { id: "sec-10", title: "VIRACOPOS (VCP)", iconName: "Target" },
-    { id: "sec-11", title: "OPERAÇÕES COMPLEXAS", iconName: "Hammer" },
-    { id: "sec-12", title: "LOGÍSTICA REVERSA", iconName: "RefreshCw" },
-    { id: "sec-13", title: "PHARMA", iconName: "Pill" },
-  ]);
+  const [sectors, setSectors] = useState([]);
 
   const { data: configData, isLoading } = useQuery({
     queryKey: ["sectors"],
@@ -120,8 +124,8 @@ export default function SectorsConfig() {
   useEffect(() => {
     if (configData?.result) {
       const { result } = configData;
-      setHeaderBadge(result.headerBadge || "SEGMENTOS");
-      setHeaderTitle(result.headerTitle || "Setores que atendemos");
+      setHeaderBadge(result.headerBadge || "");
+      setHeaderTitle(result.headerTitle || "");
       setHeaderDescription(result.headerDescription || "");
       setSectors(result.sectors || []);
     }
@@ -145,6 +149,63 @@ export default function SectorsConfig() {
       headerDescription,
       sectors
     });
+  };
+
+  const addSector = () => {
+    // Usando crypto.randomUUID() ou um timestamp mais preciso para o ID
+    const newId = crypto.randomUUID();
+    setSectors([...sectors, { 
+      id: newId, 
+      title: "NOVO SETOR", 
+      iconName: "Box",
+      desc: "" 
+    }]);
+    
+    toast.info("Novo setor adicionado ao final da lista");
+  };
+
+  const removeSector = (id: string) => {
+    setSectors(sectors.filter(s => s.id !== id));
+  };
+
+  const availableIcons = [
+    "Users", "Shield", "Globe", "Zap", "Clock", "Box", "Building", "Truck", 
+    "Target", "Hammer", "RefreshCw", "Pill", "ShieldCheck", "Anchor", 
+    "Rocket", "Lightbulb", "Heart", "Star", "TrendingUp", "Award", "User"
+  ];
+
+  const IconPicker = ({ currentIcon, onSelect }: { currentIcon: string, onSelect: (icon: string) => void }) => {
+    const IconComponent = (LucideIcons as any)[currentIcon] || HelpCircle;
+    
+    return (
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="outline" size="icon" className="w-10 h-10 border-emerald-100 text-emerald-600 shrink-0">
+            <IconComponent size={20} />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-64 p-2">
+          <ScrollArea className="h-48">
+            <div className="grid grid-cols-4 gap-2">
+              {availableIcons.map((iconName) => {
+                const Icon = (LucideIcons as any)[iconName];
+                return (
+                  <Button
+                    key={iconName}
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => onSelect(iconName)}
+                    className={currentIcon === iconName ? "bg-emerald-50 text-emerald-600" : ""}
+                  >
+                    <Icon size={18} />
+                  </Button>
+                );
+              })}
+            </div>
+          </ScrollArea>
+        </PopoverContent>
+      </Popover>
+    );
   };
 
   const sensors = useSensors(
@@ -236,15 +297,25 @@ export default function SectorsConfig() {
                   <Component className="w-5 h-5 text-emerald-600" />
                   <CardTitle className="text-lg font-bold text-emerald-950">Grid de Setores</CardTitle>
                 </div>
-                <a 
-                  href="https://lucide.dev/icons" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-[11px] font-medium text-emerald-600 hover:text-emerald-700 hover:underline bg-emerald-100/50 px-2 py-1 rounded-md transition-colors"
-                >
-                  <ExternalLink size={12} />
-                  Consultar Ícones
-                </a>
+                <div className="flex items-center gap-2">
+                  <Button 
+                    onClick={addSector}
+                    size="sm" 
+                    variant="outline" 
+                    className="h-8 border-emerald-200 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
+                  >
+                    <Plus size={14} className="mr-1" /> Adicionar
+                  </Button>
+                  <a 
+                    href="https://lucide.dev/icons" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 text-[11px] font-medium text-emerald-600 hover:text-emerald-700 hover:underline bg-emerald-100/50 px-2 py-1 rounded-md transition-colors"
+                  >
+                    <ExternalLink size={12} />
+                    Consultar Ícones
+                  </a>
+                </div>
               </div>
               <CardDescription className="text-emerald-800/60 font-medium">
                 Edite os nomes dos setores e o ícone correspondente. O ícone será atualizado em tempo real.
@@ -256,9 +327,15 @@ export default function SectorsConfig() {
                   {sectors.map((sector) => (
                     <SortableItem key={sector.id} id={sector.id}>
                       <div className="flex gap-3 bg-white p-2 border border-emerald-50 rounded-lg shadow-sm items-center">
-                        <div className="w-8 h-8 rounded-md bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
-                          <DynamicIcon name={sector.iconName} size={18} />
-                        </div>
+                        <IconPicker 
+                          currentIcon={sector.iconName} 
+                          onSelect={(newIcon) => {
+                            const newSectors = [...sectors];
+                            const idx = newSectors.findIndex(s => s.id === sector.id);
+                            newSectors[idx].iconName = newIcon;
+                            setSectors(newSectors);
+                          }}
+                        />
                         <Input maxLength={80} value={sector.title} 
                           onChange={(e) => {
                             const newSectors = [...sectors];
@@ -269,16 +346,14 @@ export default function SectorsConfig() {
                           placeholder="Nome do Setor"
                           className="border-emerald-100 focus-visible:ring-emerald-500 font-bold flex-1" 
                         />
-                        <Input maxLength={80} value={sector.iconName} 
-                          onChange={(e) => {
-                            const newSectors = [...sectors];
-                            const idx = newSectors.findIndex(s => s.id === sector.id);
-                            newSectors[idx].iconName = e.target.value;
-                            setSectors(newSectors);
-                          }}
-                          placeholder="Ex: Users"
-                          className="border-emerald-100 focus-visible:ring-emerald-500 text-xs w-32" 
-                        />
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-8 w-8 text-slate-300 hover:text-red-500 hover:bg-red-50"
+                          onClick={() => removeSector(sector.id)}
+                        >
+                          <Trash2 size={14} />
+                        </Button>
                       </div>
                     </SortableItem>
                   ))}

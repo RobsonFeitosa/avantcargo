@@ -52,13 +52,9 @@ export default function Landing() {
     queryFn: () => homeContactActions.get(),
   });
 
-  const { data: footerData } = useQuery({
-    queryKey: ["footer"],
-    queryFn: () => footerActions.get(),
-  });
 
   return (
-    <LandingLayout footerData={footerData?.result}>
+    <LandingLayout>
       <div className="bg-gradient-to-br from-primary/5 via-slate-50 to-orange-500/5">
         <Hero data={bannerData?.result} />
         <StatsBar stats={bannerData?.result?.footer_stats} />
