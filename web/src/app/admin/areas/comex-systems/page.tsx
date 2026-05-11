@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -16,8 +16,14 @@ import {
   MonitorSmartphone,
   LayoutGrid,
   Search,
-  MessageSquare
+  MessageSquare,
+  Loader2,
+  Upload,
+  Image as ImageIcon,
+  Layers
 } from "lucide-react";
+
+import { formatPhoneNumber } from "@/admin/utils/formatMask";
 
 import {
   DndContext,
@@ -37,6 +43,11 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Separator } from "@/components/ui/separator";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { comexSystemsActions } from "@/admin/actions/comex-systems.actions";
+import { toast } from "sonner";
+import { useAuth } from "@/admin/hooks_generic/providers/auth";
+import Image from "next/image";
 
 interface SortableItemProps {
   id: string;
@@ -82,22 +93,99 @@ function SortableItem({ id, children }: SortableItemProps) {
 }
 
 export default function ComexSystemsConfig() {
-  const [differentials, setDifferentials] = useState([
-    { id: "d-1", icon: "ShieldCheck", text: "Equipe dedicada 24 horas por 7 dias por semana." },
-    { id: "d-2", icon: "ShieldCheck", text: "Know-How de excelência." },
-    { id: "d-3", icon: "ShieldCheck", text: "Atendimento direto - sem burocracia." },
-    { id: "d-4", icon: "ShieldCheck", text: "CCT Importação." },
-    { id: "d-5", icon: "ShieldCheck", text: "MRUC nas exportações." },
-    { id: "d-6", icon: "ShieldCheck", text: "CE Mercante (futuro CCT Marítimo)." },
-    { id: "d-7", icon: "ShieldCheck", text: "Pucomex." },
-    { id: "d-8", icon: "ShieldCheck", text: "Sistemas Aeroportuários." },
-    { id: "d-9", icon: "ShieldCheck", text: "Follow-up automatizados." },
-    { id: "d-10", icon: "ShieldCheck", text: "Acompanhamento em tempo real." },
-    { id: "d-11", icon: "ShieldCheck", text: "Lançamentos ágeis." },
-    { id: "d-12", icon: "ShieldCheck", text: "Envio de extratos atualizados." },
-    { id: "d-13", icon: "ShieldCheck", text: "Bloqueio + Desbloqueio de cargas." },
-    { id: "d-14", icon: "ShieldCheck", text: "Atualizações Sistemáticas." },
-  ]);
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const [headerConfig, setHeaderConfig] = useState({
+    headerBadge: "",
+    headerTitleDark: "",
+    headerTitleHighlight: "",
+    headerDescription: "",
+    highlightTitle: "",
+    highlightText: "",
+    buttonText: "",
+    buttonLink: "",
+    cardTitle: "",
+    cardTopics: "",
+    diffsSectionTitle: "",
+    diffsSectionSubtitle: ""
+  });
+
+  const [ctaConfig, setCtaConfig] = useState({
+    heroWhatsappText: "",
+    heroWhatsappNumber: "",
+    heroMessageText: "",
+    heroMessageLink: "",
+    footerCtaTitleDark: "",
+    footerCtaTitleHighlight: "",
+    footerCtaDescription: "",
+    footerWhatsappText: "",
+    footerWhatsappNumber: "",
+    footerMessageText: "",
+    footerMessageLink: ""
+  });
+
+  const [differentials, setDifferentials] = useState<any[]>([]);
+  const [sections, setSections] = useState<any[]>([]);
+
+  const { data: configData, isLoading } = useQuery({
+    queryKey: ["comex-systems-config"],
+    queryFn: () => comexSystemsActions.get(),
+    enabled: !!user,
+  });
+
+  useEffect(() => {
+    if (configData?.result) {
+      const { result } = configData;
+      setHeaderConfig({
+        headerBadge: result.headerBadge || "TECNOLOGIA E CONFORMIDADE",
+        headerTitleDark: result.headerTitleDark || "Sistemas",
+        headerTitleHighlight: result.headerTitleHighlight || "Comex",
+        headerDescription: result.headerDescription || "A base sólida por trás dos líderes do mercado! Deixe a responsabilidade técnica conosco e foque no crescimento do seu negócio.",
+        highlightTitle: result.highlightTitle || "Prioridade Máxima em Lançamentos",
+        highlightText: result.highlightText || "Quando o assunto é impulsionar seu negócio através dos nossos serviços...",
+        buttonText: result.buttonText || "Saiba Mais",
+        buttonLink: result.buttonLink || "https://wa.me/5511964503217",
+        cardTitle: result.cardTitle || "Por que Avant?",
+        cardTopics: result.cardTopics || "Atendimento direto - sem burocracia\nPrecisão técnica...",
+        diffsSectionTitle: result.diffsSectionTitle || "Diferenciais e Capacidades",
+        diffsSectionSubtitle: result.diffsSectionSubtitle || "Excelência técnica e suporte contínuo para garantir a fluidez da sua operação internacional."
+      });
+      setCtaConfig({
+        heroWhatsappText: result.heroWhatsappText || "",
+        heroWhatsappNumber: result.heroWhatsappNumber || "",
+        heroMessageText: result.heroMessageText || "",
+        heroMessageLink: result.heroMessageLink || "",
+        footerCtaTitleDark: result.footerCtaTitleDark || "",
+        footerCtaTitleHighlight: result.footerCtaTitleHighlight || "",
+        footerCtaDescription: result.footerCtaDescription || "",
+        footerWhatsappText: result.footerWhatsappText || "",
+        footerWhatsappNumber: result.footerWhatsappNumber || "",
+        footerMessageText: result.footerMessageText || "",
+        footerMessageLink: result.footerMessageLink || ""
+      });
+      if (result.differentials && result.differentials.length > 0) {
+        setDifferentials(result.differentials);
+      } else {
+        setDifferentials([
+          { id: "d-1", icon: "ShieldCheck", text: "Equipe dedicada 24 horas por 7 dias por semana." },
+          { id: "d-2", icon: "ShieldCheck", text: "Know-How de excelência." },
+        ]);
+      }
+      setSections(result.sections || []);
+    }
+  }, [configData]);
+
+  const updateMutation = useMutation({
+    mutationFn: (data: any) => comexSystemsActions.update(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["comex-systems-config"] });
+      toast.success("Configurações salvas com sucesso!");
+    },
+    onError: () => {
+      toast.error("Erro ao salvar configurações.");
+    }
+  });
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -105,6 +193,36 @@ export default function ComexSystemsConfig() {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+
+  const uploadMutation = useMutation({
+    mutationFn: ({ file, id }: { file: File; id: string }) =>
+      comexSystemsActions.uploadImage(file),
+    onSuccess: (data, variables) => {
+      const fileName = data.result ? data.result.fileName : data.fileName;
+      const updated = sections.map(s =>
+        s.id === variables.id ? { ...s, image: fileName } : s
+      );
+      setSections(updated);
+      updateMutation.mutate({
+        ...headerConfig,
+        ...ctaConfig,
+        differentials,
+        sections: updated,
+      });
+      toast.success("Imagem vinculada com sucesso!");
+    },
+    onError: () => toast.error("Erro ao enviar imagem."),
+  });
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("A imagem não pode ultrapassar 5MB");
+      return;
+    }
+    uploadMutation.mutate({ file, id });
+  };
 
   const handleDragEndDiff = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -125,6 +243,23 @@ export default function ComexSystemsConfig() {
     setDifferentials(differentials.filter(d => d.id !== id));
   };
 
+  const handleDragEndSections = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      setSections((items) => {
+        const oldIndex = items.findIndex((i) => i.id === active.id);
+        const newIndex = items.findIndex((i) => i.id === over.id);
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+  };
+
+  const addSection = () => {
+    setSections([...sections, { id: `sec-${Date.now()}`, icon: "CheckCircle", title: "", desc: "", topics: "" }]);
+  };
+
+  const removeSection = (id: string) => setSections(sections.filter(s => s.id !== id));
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
       <div className="flex flex-col gap-2">
@@ -135,9 +270,11 @@ export default function ComexSystemsConfig() {
       </div>
 
       <Tabs defaultValue="header" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 bg-emerald-50/50 border border-emerald-100 p-1 rounded-xl h-auto mb-8">
+        <TabsList className="grid w-full grid-cols-4 bg-emerald-50/50 border border-emerald-100 p-1 rounded-xl h-auto mb-8">
           <TabsTrigger value="header" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Cabeçalho & Destaque</TabsTrigger>
+          <TabsTrigger value="sections" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Blocos de Conteúdo</TabsTrigger>
           <TabsTrigger value="differentials" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Grid de Capacidades</TabsTrigger>
+          <TabsTrigger value="cta" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Botões e CTAs</TabsTrigger>
         </TabsList>
 
         <TabsContent value="header" className="space-y-8 focus-visible:outline-none focus-visible:ring-0 mt-0">
@@ -153,21 +290,21 @@ export default function ComexSystemsConfig() {
             <CardContent className="pt-6 space-y-4">
               <div className="space-y-2 max-w-xl">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Badge (Pílula)</Label>
-                <Input maxLength={40} defaultValue="TECNOLOGIA E CONFORMIDADE" className="border-emerald-100" />
+                <Input maxLength={40} value={headerConfig.headerBadge} onChange={e => setHeaderConfig({...headerConfig, headerBadge: e.target.value})} className="border-emerald-100" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título (Parte Escura)</Label>
-                  <Input maxLength={60} defaultValue="Sistemas" className="border-emerald-100" />
+                  <Input maxLength={60} value={headerConfig.headerTitleDark} onChange={e => setHeaderConfig({...headerConfig, headerTitleDark: e.target.value})} className="border-emerald-100" />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Palavra em Destaque (Parte Verde)</Label>
-                  <Input maxLength={40} defaultValue="Comex" className="border-emerald-100 text-emerald-600 font-bold" />
+                  <Input maxLength={40} value={headerConfig.headerTitleHighlight} onChange={e => setHeaderConfig({...headerConfig, headerTitleHighlight: e.target.value})} className="border-emerald-100 text-emerald-600 font-bold" />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Descrição</Label>
-                <Textarea maxLength={250} defaultValue="A base sólida por trás dos líderes do mercado! Deixe a responsabilidade técnica conosco e foque no crescimento do seu negócio." className="min-h-[80px] border-emerald-100" />
+                <Textarea maxLength={250} value={headerConfig.headerDescription} onChange={e => setHeaderConfig({...headerConfig, headerDescription: e.target.value})} className="min-h-[80px] border-emerald-100" />
               </div>
             </CardContent>
           </Card>
@@ -187,13 +324,14 @@ export default function ComexSystemsConfig() {
                   <h3 className="font-bold text-emerald-950 border-b border-emerald-50 pb-2">Coluna de Texto (Esquerda)</h3>
                   <div className="space-y-2">
                     <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título Principal</Label>
-                    <Input maxLength={100} defaultValue="Prioridade Máxima em Lançamentos" className="border-emerald-100 font-bold" />
+                    <Input maxLength={100} value={headerConfig.highlightTitle} onChange={e => setHeaderConfig({...headerConfig, highlightTitle: e.target.value})} className="border-emerald-100 font-bold" />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Texto Longo</Label>
                     <Textarea 
                       maxLength={800} 
-                      defaultValue="Quando o assunto é impulsionar seu negócio através dos nossos serviços, tratamos com prioridade máxima. Deixar a responsabilidade de lançamentos com a Avant te garante tranquilidade e a certeza da excelência em cada etapa da operação.&#10;&#10;Nossa equipe dedicada 24x7 cuida de todo o processo com estratégia, precisão e compromisso com resultados, para que você possa focar no que realmente importa: crescer e escalar com segurança." 
+                      value={headerConfig.highlightText}
+                      onChange={e => setHeaderConfig({...headerConfig, highlightText: e.target.value})}
                       className="min-h-[200px] border-emerald-100" 
                     />
                   </div>
@@ -202,8 +340,8 @@ export default function ComexSystemsConfig() {
                       <MessageSquare className="w-3 h-3" /> Configuração do Botão WhatsApp
                     </Label>
                     <div className="grid grid-cols-2 gap-4">
-                      <Input maxLength={30} defaultValue="Saiba Mais" placeholder="Texto do botão" className="border-emerald-100" />
-                      <Input maxLength={100} defaultValue="https://wa.me/5511964503217" placeholder="Link do WhatsApp" className="border-emerald-100" />
+                      <Input maxLength={30} value={headerConfig.buttonText} onChange={e => setHeaderConfig({...headerConfig, buttonText: e.target.value})} placeholder="Texto do botão" className="border-emerald-100" />
+                      <Input maxLength={15} value={headerConfig.buttonLink} onChange={e => setHeaderConfig({...headerConfig, buttonLink: formatPhoneNumber(e.target.value)})} placeholder="(11) 96450-3217" className="border-emerald-100" />
                     </div>
                   </div>
                 </div>
@@ -213,13 +351,14 @@ export default function ComexSystemsConfig() {
                   <h3 className="font-bold text-emerald-950 border-b border-slate-200 pb-2">Card Escuro (Direita)</h3>
                   <div className="space-y-2">
                     <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título do Card</Label>
-                    <Input maxLength={50} defaultValue="Por que Avant?" className="border-slate-200 bg-white" />
+                    <Input maxLength={50} value={headerConfig.cardTitle} onChange={e => setHeaderConfig({...headerConfig, cardTitle: e.target.value})} className="border-slate-200 bg-white" />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Tópicos com Check (1 por linha)</Label>
                     <Textarea 
                       maxLength={400} 
-                      defaultValue="Atendimento direto - sem burocracia&#10;Precisão técnica em cada lançamento&#10;Escalabilidade com segurança operacional" 
+                      value={headerConfig.cardTopics}
+                      onChange={e => setHeaderConfig({...headerConfig, cardTopics: e.target.value})}
                       className="min-h-[120px] border-slate-200 bg-white font-mono text-sm leading-relaxed" 
                     />
                   </div>
@@ -228,6 +367,150 @@ export default function ComexSystemsConfig() {
             </CardContent>
           </Card>
 
+        </TabsContent>
+
+        <TabsContent value="sections" className="space-y-8 focus-visible:outline-none focus-visible:ring-0 mt-0">
+          <Card className="border-none shadow-sm overflow-hidden h-fit">
+            <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-2">
+                  <Layers className="w-5 h-5 text-emerald-600" />
+                  <CardTitle className="text-lg font-bold text-emerald-950">Blocos de Conteúdo</CardTitle>
+                </div>
+                <Button onClick={addSection} size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20 shrink-0">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Adicionar Bloco
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-2">
+              <DndContext id="dnd-comex-sections" sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEndSections}>
+                <SortableContext items={sections} strategy={verticalListSortingStrategy}>
+                  {sections.map((item) => (
+                    <SortableItem key={item.id} id={item.id}>
+                      <div className="flex flex-col xl:flex-row gap-6 bg-white p-6 border border-emerald-50 rounded-xl shadow-sm relative group/item">
+
+                        <div className="xl:w-64 space-y-2 shrink-0">
+                          <div className="flex items-center justify-between">
+                            <Label className="text-emerald-900/70 font-semibold text-[10px]">Imagem do Bloco</Label>
+                            {item.image && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updated = sections.map(s => s.id === item.id ? { ...s, image: undefined } : s);
+                                  setSections(updated);
+                                  updateMutation.mutate({ ...headerConfig, ...ctaConfig, differentials, sections: updated });
+                                }}
+                                className="text-[10px] text-red-500 hover:text-red-700 hover:underline"
+                              >
+                                Remover
+                              </button>
+                            )}
+                          </div>
+                          <div
+                            onClick={() => document.getElementById(`file-sec-${item.id}`)?.click()}
+                            className="relative border-2 border-dashed border-emerald-100 rounded-xl p-4 text-center hover:bg-emerald-50 transition-colors cursor-pointer group flex flex-col items-center justify-center h-32 overflow-hidden"
+                          >
+                            {item.image ? (
+                              <div className="absolute inset-0">
+                                <Image src={`${process.env.NEXT_PUBLIC_API_URL}/files/${item.image}`} alt="Preview" fill className="object-cover" />
+                                <div className="absolute inset-0 bg-emerald-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
+                                  <ImageIcon className="text-white w-6 h-6" />
+                                  <span className="text-[10px] text-white font-medium bg-emerald-950/50 px-2 py-1 rounded-full">Trocar Imagem</span>
+                                </div>
+                              </div>
+                            ) : (
+                              <>
+                                <div className="p-2 bg-white rounded-full shadow-sm group-hover:scale-110 transition-transform">
+                                  <Upload className="w-4 h-4 text-emerald-600" />
+                                </div>
+                                <span className="text-xs font-medium text-emerald-800 mt-2">Clique para alterar</span>
+                              </>
+                            )}
+                            <input
+                              type="file"
+                              id={`file-sec-${item.id}`}
+                              className="hidden"
+                              accept="image/*"
+                              onChange={(e) => handleImageUpload(e, item.id)}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex-1 space-y-4">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-1">
+                              <Label className="text-emerald-900/70 font-semibold text-[10px]">Título do Bloco</Label>
+                              <Input
+                                maxLength={60}
+                                value={item.title}
+                                onChange={(e) => {
+                                  const updated = sections.map(s => s.id === item.id ? { ...s, title: e.target.value } : s);
+                                  setSections(updated);
+                                }}
+                                className="border-emerald-100 font-bold text-emerald-950"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <div className="flex items-center justify-between h-4">
+                                <Label className="text-emerald-900/70 font-semibold text-[10px]">Nome do Ícone</Label>
+                                <a href="https://lucide.dev/icons" target="_blank" rel="noopener noreferrer" className="text-[9px] text-emerald-600 hover:underline flex items-center gap-1">
+                                  <Search size={10} /> Consultar
+                                </a>
+                              </div>
+                              <Input
+                                maxLength={30}
+                                value={item.icon}
+                                onChange={(e) => {
+                                  const updated = sections.map(s => s.id === item.id ? { ...s, icon: e.target.value } : s);
+                                  setSections(updated);
+                                }}
+                                className="border-emerald-100"
+                              />
+                            </div>
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-emerald-900/70 font-semibold text-[10px]">Descrição Longa</Label>
+                            <Textarea
+                              maxLength={300}
+                              value={item.desc}
+                              onChange={(e) => {
+                                const updated = sections.map(s => s.id === item.id ? { ...s, desc: e.target.value } : s);
+                                setSections(updated);
+                              }}
+                              className="min-h-[80px] border-emerald-100"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-emerald-900/70 font-semibold text-[10px]">Tópicos (1 por linha)</Label>
+                            <Textarea
+                              maxLength={600}
+                              value={item.topics}
+                              onChange={(e) => {
+                                const updated = sections.map(s => s.id === item.id ? { ...s, topics: e.target.value } : s);
+                                setSections(updated);
+                              }}
+                              placeholder="Solução ágil...&#10;Atendimento exclusivo..."
+                              className="min-h-[100px] border-emerald-100 font-mono text-sm leading-relaxed"
+                            />
+                          </div>
+                        </div>
+
+                        <Button
+                          onClick={() => removeSection(item.id)}
+                          variant="ghost"
+                          size="icon"
+                          className="absolute -right-3 -top-3 text-red-400 hover:text-red-600 hover:bg-red-50 bg-white border border-red-100 shadow-sm opacity-0 group-hover/item:opacity-100 transition-opacity h-8 w-8 rounded-full z-10"
+                        >
+                          <Trash2 size={14} />
+                        </Button>
+                      </div>
+                    </SortableItem>
+                  ))}
+                </SortableContext>
+              </DndContext>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="differentials" className="space-y-8 focus-visible:outline-none focus-visible:ring-0 mt-0">
@@ -255,11 +538,11 @@ export default function ComexSystemsConfig() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-6 border-b border-emerald-50">
                 <div className="space-y-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título da Seção</Label>
-                  <Input maxLength={60} defaultValue="Diferenciais e Capacidades" className="border-emerald-100 font-bold" />
+                  <Input maxLength={60} value={headerConfig.diffsSectionTitle} onChange={e => setHeaderConfig({...headerConfig, diffsSectionTitle: e.target.value})} className="border-emerald-100 font-bold" />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Subtítulo da Seção</Label>
-                  <Input maxLength={150} defaultValue="Excelência técnica e suporte contínuo para garantir a fluidez da sua operação internacional." className="border-emerald-100" />
+                  <Input maxLength={150} value={headerConfig.diffsSectionSubtitle} onChange={e => setHeaderConfig({...headerConfig, diffsSectionSubtitle: e.target.value})} className="border-emerald-100" />
                 </div>
               </div>
 
@@ -323,14 +606,103 @@ export default function ComexSystemsConfig() {
           </Card>
 
         </TabsContent>
+
+        <TabsContent value="cta" className="space-y-8 focus-visible:outline-none focus-visible:ring-0 mt-0">
+          <Card className="border-none shadow-sm h-fit">
+            <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
+              <div className="flex items-center gap-2">
+                <MessageSquare className="w-5 h-5 text-emerald-600" />
+                <CardTitle className="text-lg font-bold text-emerald-950">Botões do Cabeçalho</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão WhatsApp - Texto</Label>
+                  <Input maxLength={40} placeholder="Ex: Falar com especialista" value={ctaConfig.heroWhatsappText} onChange={(e) => setCtaConfig({ ...ctaConfig, heroWhatsappText: e.target.value })} className="border-emerald-100" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão WhatsApp - Número</Label>
+                  <Input maxLength={15} placeholder="Ex: (11) 96450-3217" value={ctaConfig.heroWhatsappNumber} onChange={(e) => setCtaConfig({ ...ctaConfig, heroWhatsappNumber: formatPhoneNumber(e.target.value) })} className="border-emerald-100" />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão Secundário - Texto</Label>
+                  <Input maxLength={40} placeholder="Ex: Enviar mensagem" value={ctaConfig.heroMessageText} onChange={(e) => setCtaConfig({ ...ctaConfig, heroMessageText: e.target.value })} className="border-emerald-100" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão Secundário - Link</Label>
+                  <Input maxLength={100} placeholder="Ex: /contato" value={ctaConfig.heroMessageLink} onChange={(e) => setCtaConfig({ ...ctaConfig, heroMessageLink: e.target.value })} className="border-emerald-100" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-none shadow-sm h-fit">
+            <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
+              <div className="flex items-center gap-2">
+                <Layout className="w-5 h-5 text-emerald-600" />
+                <CardTitle className="text-lg font-bold text-emerald-950">Chamada para Ação (Rodapé)</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título (Parte Escura)</Label>
+                  <Input maxLength={60} placeholder="Ex: Operação Urgente?" value={ctaConfig.footerCtaTitleDark} onChange={(e) => setCtaConfig({ ...ctaConfig, footerCtaTitleDark: e.target.value })} className="border-emerald-100" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Palavra em Destaque (Laranja)</Label>
+                  <Input maxLength={40} placeholder="Ex: Nós cuidamos!" value={ctaConfig.footerCtaTitleHighlight} onChange={(e) => setCtaConfig({ ...ctaConfig, footerCtaTitleHighlight: e.target.value })} className="border-emerald-100" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Descrição</Label>
+                <Textarea maxLength={250} placeholder="Texto de apoio da chamada..." value={ctaConfig.footerCtaDescription} onChange={(e) => setCtaConfig({ ...ctaConfig, footerCtaDescription: e.target.value })} className="min-h-[80px] border-emerald-100" />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão WhatsApp - Texto</Label>
+                  <Input maxLength={40} placeholder="Ex: Falar no WhatsApp" value={ctaConfig.footerWhatsappText} onChange={(e) => setCtaConfig({ ...ctaConfig, footerWhatsappText: e.target.value })} className="border-emerald-100" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão WhatsApp - Número</Label>
+                  <Input maxLength={15} placeholder="Ex: (11) 96450-3217" value={ctaConfig.footerWhatsappNumber} onChange={(e) => setCtaConfig({ ...ctaConfig, footerWhatsappNumber: formatPhoneNumber(e.target.value) })} className="border-emerald-100" />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão Secundário - Texto</Label>
+                  <Input maxLength={40} placeholder="Ex: Enviar mensagem" value={ctaConfig.footerMessageText} onChange={(e) => setCtaConfig({ ...ctaConfig, footerMessageText: e.target.value })} className="border-emerald-100" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão Secundário - Link</Label>
+                  <Input maxLength={100} placeholder="Ex: /contato" value={ctaConfig.footerMessageLink} onChange={(e) => setCtaConfig({ ...ctaConfig, footerMessageLink: e.target.value })} className="border-emerald-100" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
 
       <div className="flex justify-end gap-4 border-t border-emerald-50 pt-8 mt-4">
-        <Button variant="outline" className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8">
+        <Button variant="outline" onClick={() => queryClient.invalidateQueries({ queryKey: ["comex-systems-config"] })} className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8">
           Descartar
         </Button>
-        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10">
-          <Save className="w-4 h-4 mr-2" />
+        <Button 
+          onClick={() => {
+            updateMutation.mutate({
+              ...headerConfig,
+              ...ctaConfig,
+              differentials,
+              sections,
+            });
+          }}
+          disabled={updateMutation.isPending}
+          className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10"
+        >
+          {updateMutation.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
           Salvar Alterações
         </Button>
       </div>

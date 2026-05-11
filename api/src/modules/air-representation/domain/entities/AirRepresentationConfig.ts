@@ -32,6 +32,39 @@ export class AirRepresentationConfig {
     @Column({ type: 'jsonb', name: 'export_sections', nullable: true })
     exportSections: AirRepresentationSection[];
 
+    @Column({ name: 'hero_whatsapp_text', nullable: true })
+    heroWhatsappText: string;
+
+    @Column({ name: 'hero_whatsapp_number', nullable: true })
+    heroWhatsappNumber: string;
+
+    @Column({ name: 'hero_message_text', nullable: true })
+    heroMessageText: string;
+
+    @Column({ name: 'hero_message_link', nullable: true })
+    heroMessageLink: string;
+
+    @Column({ name: 'footer_cta_title_dark', nullable: true })
+    footerCtaTitleDark: string;
+
+    @Column({ name: 'footer_cta_title_highlight', nullable: true })
+    footerCtaTitleHighlight: string;
+
+    @Column({ name: 'footer_cta_description', nullable: true })
+    footerCtaDescription: string;
+
+    @Column({ name: 'footer_whatsapp_text', nullable: true })
+    footerWhatsappText: string;
+
+    @Column({ name: 'footer_whatsapp_number', nullable: true })
+    footerWhatsappNumber: string;
+
+    @Column({ name: 'footer_message_text', nullable: true })
+    footerMessageText: string;
+
+    @Column({ name: 'footer_message_link', nullable: true })
+    footerMessageLink: string;
+
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
 

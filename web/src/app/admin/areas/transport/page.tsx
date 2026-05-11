@@ -17,8 +17,11 @@ import {
   LayoutGrid,
   Search,
   Upload,
-  MessageSquare
+  MessageSquare,
+  Loader2
 } from "lucide-react";
+
+import { formatPhoneNumber } from "@/admin/utils/formatMask";
 
 import {
   DndContext,
@@ -37,6 +40,11 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { transportActions } from "@/admin/actions/transport.actions";
+import { toast } from "sonner";
+import { useAuth } from "@/admin/hooks_generic/providers/auth";
+import Image from "next/image";
 
 interface SortableItemProps {
   id: string;
@@ -82,20 +90,133 @@ function SortableItem({ id, children }: SortableItemProps) {
 }
 
 export default function TransportConfig() {
-  const [differentials, setDifferentials] = useState([
-    { id: "t-1", icon: "CheckCircle2", text: "Transporte rodoviário especializado em Importações e Exportações Aéreas." },
-    { id: "t-2", icon: "CheckCircle2", text: "Veículo dedicado à sua operação." },
-    { id: "t-3", icon: "CheckCircle2", text: "Transportes urgentes, veículos despachados imediatamente." },
-    { id: "t-4", icon: "CheckCircle2", text: "Preparação de cargas para Exportação." },
-    { id: "t-5", icon: "CheckCircle2", text: "Repesagem e Fotografias." },
-    { id: "t-6", icon: "CheckCircle2", text: "Follow-up Automatizados." },
-    { id: "t-7", icon: "CheckCircle2", text: "Pré-cadastro e agendamentos nos aeroportos." },
-    { id: "t-8", icon: "CheckCircle2", text: "Etiquetagem." },
-    { id: "t-9", icon: "CheckCircle2", text: "Distribuição das Importações." },
-    { id: "t-10", icon: "CheckCircle2", text: "Armazenagem." },
-    { id: "t-11", icon: "CheckCircle2", text: "Reposição de gelo." },
-    { id: "t-12", icon: "CheckCircle2", text: "Check-list completo de cargas especiais." },
-  ]);
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const [headerConfig, setHeaderConfig] = useState({
+    headerBadge: "",
+    headerTitleDark: "",
+    headerTitleHighlight: "",
+    headerDescription: "",
+    highlightImage: "",
+    highlightTitle: "",
+    highlightText1: "",
+    highlightQuote: "",
+    highlightText2: "",
+    buttonText: "",
+    buttonLink: "",
+    diffsSectionTitle: "",
+    diffsSectionHighlight: "",
+    diffsSectionDescription: ""
+  });
+
+  const [ctaConfig, setCtaConfig] = useState({
+    heroWhatsappText: "",
+    heroWhatsappNumber: "",
+    heroMessageText: "",
+    heroMessageLink: "",
+    footerCtaTitleDark: "",
+    footerCtaTitleHighlight: "",
+    footerCtaDescription: "",
+    footerWhatsappText: "",
+    footerWhatsappNumber: "",
+    footerMessageText: "",
+    footerMessageLink: ""
+  });
+
+  const [differentials, setDifferentials] = useState<any[]>([]);
+
+  const { data: configData, isLoading } = useQuery({
+    queryKey: ["transport-config"],
+    queryFn: () => transportActions.get(),
+    enabled: !!user,
+  });
+
+  import { useEffect } from "react";
+
+  useEffect(() => {
+    if (configData?.result) {
+      const { result } = configData;
+      setHeaderConfig({
+        headerBadge: result.headerBadge || "LOGÍSTICA NACIONAL E INTERNACIONAL",
+        headerTitleDark: result.headerTitleDark || "Transporte",
+        headerTitleHighlight: result.headerTitleHighlight || "Rodoviário",
+        headerDescription: result.headerDescription || "transporte nacional, cargas urgentes, transporte importação, transporte exportação.\nSoluções exclusivas para Agentes de Carga.",
+        highlightImage: result.highlightImage || "",
+        highlightTitle: result.highlightTitle || "Estratégia e Crescimento para seu Negócio",
+        highlightText1: result.highlightText1 || "Entendendo a necessidade de nossos clientes...",
+        highlightQuote: result.highlightQuote || "Ofereça soluções aos seus clientes...",
+        highlightText2: result.highlightText2 || "Serviços exclusivos aos Agentes de Cargas...",
+        buttonText: result.buttonText || "Saiba Mais",
+        buttonLink: result.buttonLink || "https://wa.me/5511964503217",
+        diffsSectionTitle: result.diffsSectionTitle || "Diferenciais",
+        diffsSectionHighlight: result.diffsSectionHighlight || "Logísticos",
+        diffsSectionDescription: result.diffsSectionDescription || "Soluções completas de transporte e pré-embarque para garantir o sucesso da sua operação."
+      });
+      setCtaConfig({
+        heroWhatsappText: result.heroWhatsappText || "",
+        heroWhatsappNumber: result.heroWhatsappNumber || "",
+        heroMessageText: result.heroMessageText || "",
+        heroMessageLink: result.heroMessageLink || "",
+        footerCtaTitleDark: result.footerCtaTitleDark || "",
+        footerCtaTitleHighlight: result.footerCtaTitleHighlight || "",
+        footerCtaDescription: result.footerCtaDescription || "",
+        footerWhatsappText: result.footerWhatsappText || "",
+        footerWhatsappNumber: result.footerWhatsappNumber || "",
+        footerMessageText: result.footerMessageText || "",
+        footerMessageLink: result.footerMessageLink || ""
+      });
+      if (result.differentials && result.differentials.length > 0) {
+        setDifferentials(result.differentials);
+      } else {
+        setDifferentials([
+          { id: "t-1", icon: "CheckCircle2", text: "Transporte rodoviário especializado em Importações e Exportações Aéreas." },
+          { id: "t-2", icon: "CheckCircle2", text: "Veículo dedicado à sua operação." },
+        ]);
+      }
+    }
+  }, [configData]);
+
+  const updateMutation = useMutation({
+    mutationFn: (data: any) => transportActions.update(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["transport-config"] });
+      toast.success("Configurações salvas com sucesso!");
+    },
+    onError: () => {
+      toast.error("Erro ao salvar configurações.");
+    }
+  });
+
+  const uploadMutation = useMutation({
+    mutationFn: (file: File) => transportActions.uploadImage(file),
+    onSuccess: (data) => {
+      const fileName = data.result ? data.result.fileName : data.fileName;
+      const updatedConfig = { ...headerConfig, highlightImage: fileName };
+      setHeaderConfig(updatedConfig);
+      updateMutation.mutate({
+        ...updatedConfig,
+        ...ctaConfig,
+        differentials
+      });
+      toast.success("Imagem vinculada com sucesso!");
+    },
+    onError: () => {
+      toast.error("Erro ao enviar imagem.");
+    }
+  });
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("A imagem não pode ultrapassar 5MB");
+      return;
+    }
+
+    uploadMutation.mutate(file);
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -133,9 +254,10 @@ export default function TransportConfig() {
       </div>
 
       <Tabs defaultValue="header" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 bg-emerald-50/50 border border-emerald-100 p-1 rounded-xl h-auto mb-8">
+        <TabsList className="grid w-full grid-cols-3 bg-emerald-50/50 border border-emerald-100 p-1 rounded-xl h-auto mb-8">
           <TabsTrigger value="header" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Cabeçalho & Destaque</TabsTrigger>
           <TabsTrigger value="differentials" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Grid de Capacidades</TabsTrigger>
+          <TabsTrigger value="cta" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Botões e CTAs</TabsTrigger>
         </TabsList>
 
         <TabsContent value="header" className="space-y-8 focus-visible:outline-none focus-visible:ring-0 mt-0">
@@ -151,21 +273,21 @@ export default function TransportConfig() {
             <CardContent className="pt-6 space-y-4">
               <div className="space-y-2 max-w-xl">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Badge (Pílula)</Label>
-                <Input maxLength={40} defaultValue="LOGÍSTICA NACIONAL E INTERNACIONAL" className="border-emerald-100" />
+                <Input maxLength={40} value={headerConfig.headerBadge} onChange={e => setHeaderConfig({...headerConfig, headerBadge: e.target.value})} className="border-emerald-100" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título (Parte Escura)</Label>
-                  <Input maxLength={60} defaultValue="Transporte" className="border-emerald-100" />
+                  <Input maxLength={60} value={headerConfig.headerTitleDark} onChange={e => setHeaderConfig({...headerConfig, headerTitleDark: e.target.value})} className="border-emerald-100" />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Palavra em Destaque (Parte Verde)</Label>
-                  <Input maxLength={40} defaultValue="Rodoviário" className="border-emerald-100 text-emerald-600 font-bold" />
+                  <Input maxLength={40} value={headerConfig.headerTitleHighlight} onChange={e => setHeaderConfig({...headerConfig, headerTitleHighlight: e.target.value})} className="border-emerald-100 text-emerald-600 font-bold" />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Descrição</Label>
-                <Textarea maxLength={250} defaultValue="transporte nacional, cargas urgentes, transporte importação, transporte exportação.&#10;Soluções exclusivas para Agentes de Carga." className="min-h-[80px] border-emerald-100" />
+                <Textarea maxLength={250} value={headerConfig.headerDescription} onChange={e => setHeaderConfig({...headerConfig, headerDescription: e.target.value})} className="min-h-[80px] border-emerald-100" />
               </div>
             </CardContent>
           </Card>
@@ -183,12 +305,54 @@ export default function TransportConfig() {
                 
                 {/* Imagem (Esquerda) */}
                 <div className="xl:col-span-4 space-y-2 shrink-0">
-                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Imagem de Destaque</Label>
-                  <div className="border-2 border-dashed border-emerald-100 rounded-xl p-4 text-center hover:bg-emerald-50 transition-colors cursor-pointer group flex flex-col items-center justify-center h-48">
-                    <div className="p-3 bg-white rounded-full shadow-sm group-hover:scale-110 transition-transform">
-                      <Upload className="w-5 h-5 text-emerald-600" />
-                    </div>
-                    <span className="text-xs font-medium text-emerald-800 mt-2">Clique para alterar a imagem</span>
+                  <div className="flex items-center justify-between">
+                    <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Imagem de Destaque</Label>
+                    {headerConfig.highlightImage && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = { ...headerConfig, highlightImage: "" };
+                          setHeaderConfig(updated);
+                          updateMutation.mutate({ ...updated, ...ctaConfig, differentials });
+                        }}
+                        className="text-[10px] text-red-500 hover:text-red-700 hover:underline"
+                      >
+                        Remover
+                      </button>
+                    )}
+                  </div>
+                  <div 
+                    onClick={() => document.getElementById('highlight-image')?.click()}
+                    className="relative border-2 border-dashed border-emerald-100 rounded-xl p-4 text-center hover:bg-emerald-50 transition-colors cursor-pointer group flex flex-col items-center justify-center h-48 overflow-hidden"
+                  >
+                    {headerConfig.highlightImage ? (
+                      <div className="absolute inset-0">
+                        <Image 
+                          src={`${process.env.NEXT_PUBLIC_API_URL}/files/${headerConfig.highlightImage}`} 
+                          alt="Preview" 
+                          fill 
+                          className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-emerald-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
+                          <ImageIcon className="text-white w-6 h-6" />
+                          <span className="text-[10px] text-white font-medium bg-emerald-950/50 px-2 py-1 rounded-full">Trocar Imagem</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="p-3 bg-white rounded-full shadow-sm group-hover:scale-110 transition-transform">
+                          <Upload className="w-5 h-5 text-emerald-600" />
+                        </div>
+                        <span className="text-xs font-medium text-emerald-800 mt-2">Clique para alterar a imagem</span>
+                      </>
+                    )}
+                    <input 
+                      type="file" 
+                      id="highlight-image" 
+                      className="hidden" 
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                    />
                   </div>
                 </div>
 
@@ -196,14 +360,15 @@ export default function TransportConfig() {
                 <div className="xl:col-span-8 space-y-4">
                   <div className="space-y-2">
                     <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título Principal</Label>
-                    <Input maxLength={100} defaultValue="Estratégia e Crescimento para seu Negócio" className="border-emerald-100 font-bold" />
+                    <Input maxLength={100} value={headerConfig.highlightTitle} onChange={e => setHeaderConfig({...headerConfig, highlightTitle: e.target.value})} className="border-emerald-100 font-bold" />
                   </div>
                   
                   <div className="space-y-2">
                     <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Texto (Parte 1)</Label>
                     <Textarea 
                       maxLength={400} 
-                      defaultValue="Entendendo a necessidade de nossos clientes, implantamos constantemente serviços estrategicamente desenvolvidos para auxiliar no crescimento da sua empresa através da Avant." 
+                      value={headerConfig.highlightText1}
+                      onChange={e => setHeaderConfig({...headerConfig, highlightText1: e.target.value})}
                       className="min-h-[80px] border-emerald-100" 
                     />
                   </div>
@@ -212,7 +377,8 @@ export default function TransportConfig() {
                     <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Frase em Destaque (Citação)</Label>
                     <Textarea 
                       maxLength={300} 
-                      defaultValue="Ofereça soluções aos seus clientes totalmente personalizadas e diferenciadas de seus concorrentes no mercado interno." 
+                      value={headerConfig.highlightQuote}
+                      onChange={e => setHeaderConfig({...headerConfig, highlightQuote: e.target.value})}
                       className="min-h-[60px] border-emerald-200 bg-white italic" 
                     />
                   </div>
@@ -221,7 +387,8 @@ export default function TransportConfig() {
                     <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Texto (Parte 2)</Label>
                     <Textarea 
                       maxLength={400} 
-                      defaultValue="Serviços exclusivos aos Agentes de Cargas e Comissarias de Despacho Aduaneiro." 
+                      value={headerConfig.highlightText2}
+                      onChange={e => setHeaderConfig({...headerConfig, highlightText2: e.target.value})}
                       className="min-h-[60px] border-emerald-100" 
                     />
                   </div>
@@ -231,8 +398,8 @@ export default function TransportConfig() {
                       <MessageSquare className="w-3 h-3" /> Configuração do Botão WhatsApp
                     </Label>
                     <div className="grid grid-cols-2 gap-4">
-                      <Input maxLength={30} defaultValue="Saiba Mais" placeholder="Texto do botão" className="border-emerald-100" />
-                      <Input maxLength={100} defaultValue="https://wa.me/5511964503217" placeholder="Link do WhatsApp" className="border-emerald-100" />
+                      <Input maxLength={30} value={headerConfig.buttonText} onChange={e => setHeaderConfig({...headerConfig, buttonText: e.target.value})} placeholder="Texto do botão" className="border-emerald-100" />
+                      <Input maxLength={100} value={headerConfig.buttonLink} onChange={e => setHeaderConfig({...headerConfig, buttonLink: e.target.value})} placeholder="Link do WhatsApp" className="border-emerald-100" />
                     </div>
                   </div>
                 </div>
@@ -268,15 +435,15 @@ export default function TransportConfig() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-6 border-b border-emerald-50">
                 <div className="space-y-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título da Seção</Label>
-                  <Input maxLength={60} defaultValue="Diferenciais" className="border-emerald-100 font-bold" />
+                  <Input maxLength={60} value={headerConfig.diffsSectionTitle} onChange={e => setHeaderConfig({...headerConfig, diffsSectionTitle: e.target.value})} className="border-emerald-100 font-bold" />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Palavra em Destaque (Verde)</Label>
-                  <Input maxLength={60} defaultValue="Logísticos" className="border-emerald-100 text-emerald-600 font-bold" />
+                  <Input maxLength={60} value={headerConfig.diffsSectionHighlight} onChange={e => setHeaderConfig({...headerConfig, diffsSectionHighlight: e.target.value})} className="border-emerald-100 text-emerald-600 font-bold" />
                 </div>
                 <div className="space-y-2 md:col-span-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Descrição Abaixo do Título</Label>
-                  <Input maxLength={150} defaultValue="Soluções completas de transporte e pré-embarque para garantir o sucesso da sua operação." className="border-emerald-100" />
+                  <Input maxLength={150} value={headerConfig.diffsSectionDescription} onChange={e => setHeaderConfig({...headerConfig, diffsSectionDescription: e.target.value})} className="border-emerald-100" />
                 </div>
               </div>
 
@@ -340,14 +507,102 @@ export default function TransportConfig() {
           </Card>
 
         </TabsContent>
+
+        <TabsContent value="cta" className="space-y-8 focus-visible:outline-none focus-visible:ring-0 mt-0">
+          <Card className="border-none shadow-sm h-fit">
+            <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
+              <div className="flex items-center gap-2">
+                <MessageSquare className="w-5 h-5 text-emerald-600" />
+                <CardTitle className="text-lg font-bold text-emerald-950">Botões do Cabeçalho</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão WhatsApp - Texto</Label>
+                  <Input maxLength={40} placeholder="Ex: Falar com especialista" value={ctaConfig.heroWhatsappText} onChange={(e) => setCtaConfig({ ...ctaConfig, heroWhatsappText: e.target.value })} className="border-emerald-100" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão WhatsApp - Número</Label>
+                  <Input maxLength={15} placeholder="Ex: (11) 96450-3217" value={ctaConfig.heroWhatsappNumber} onChange={(e) => setCtaConfig({ ...ctaConfig, heroWhatsappNumber: formatPhoneNumber(e.target.value) })} className="border-emerald-100" />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão Secundário - Texto</Label>
+                  <Input maxLength={40} placeholder="Ex: Enviar mensagem" value={ctaConfig.heroMessageText} onChange={(e) => setCtaConfig({ ...ctaConfig, heroMessageText: e.target.value })} className="border-emerald-100" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão Secundário - Link</Label>
+                  <Input maxLength={100} placeholder="Ex: /contato" value={ctaConfig.heroMessageLink} onChange={(e) => setCtaConfig({ ...ctaConfig, heroMessageLink: e.target.value })} className="border-emerald-100" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-none shadow-sm h-fit">
+            <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
+              <div className="flex items-center gap-2">
+                <Layout className="w-5 h-5 text-emerald-600" />
+                <CardTitle className="text-lg font-bold text-emerald-950">Chamada para Ação (Rodapé)</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título (Parte Escura)</Label>
+                  <Input maxLength={60} placeholder="Ex: Operação Urgente?" value={ctaConfig.footerCtaTitleDark} onChange={(e) => setCtaConfig({ ...ctaConfig, footerCtaTitleDark: e.target.value })} className="border-emerald-100" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Palavra em Destaque (Laranja)</Label>
+                  <Input maxLength={40} placeholder="Ex: Nós cuidamos!" value={ctaConfig.footerCtaTitleHighlight} onChange={(e) => setCtaConfig({ ...ctaConfig, footerCtaTitleHighlight: e.target.value })} className="border-emerald-100" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Descrição</Label>
+                <Textarea maxLength={250} placeholder="Texto de apoio da chamada..." value={ctaConfig.footerCtaDescription} onChange={(e) => setCtaConfig({ ...ctaConfig, footerCtaDescription: e.target.value })} className="min-h-[80px] border-emerald-100" />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão WhatsApp - Texto</Label>
+                  <Input maxLength={40} placeholder="Ex: Falar no WhatsApp" value={ctaConfig.footerWhatsappText} onChange={(e) => setCtaConfig({ ...ctaConfig, footerWhatsappText: e.target.value })} className="border-emerald-100" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão WhatsApp - Número</Label>
+                  <Input maxLength={15} placeholder="Ex: (11) 96450-3217" value={ctaConfig.footerWhatsappNumber} onChange={(e) => setCtaConfig({ ...ctaConfig, footerWhatsappNumber: formatPhoneNumber(e.target.value) })} className="border-emerald-100" />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão Secundário - Texto</Label>
+                  <Input maxLength={40} placeholder="Ex: Enviar mensagem" value={ctaConfig.footerMessageText} onChange={(e) => setCtaConfig({ ...ctaConfig, footerMessageText: e.target.value })} className="border-emerald-100" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão Secundário - Link</Label>
+                  <Input maxLength={100} placeholder="Ex: /contato" value={ctaConfig.footerMessageLink} onChange={(e) => setCtaConfig({ ...ctaConfig, footerMessageLink: e.target.value })} className="border-emerald-100" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
 
       <div className="flex justify-end gap-4 border-t border-emerald-50 pt-8 mt-4">
-        <Button variant="outline" className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8">
+        <Button variant="outline" onClick={() => queryClient.invalidateQueries({ queryKey: ["transport-config"] })} className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8">
           Descartar
         </Button>
-        <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10">
-          <Save className="w-4 h-4 mr-2" />
+        <Button 
+          onClick={() => {
+            updateMutation.mutate({
+              ...headerConfig,
+              ...ctaConfig,
+              differentials
+            });
+          }}
+          disabled={updateMutation.isPending}
+          className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10"
+        >
+          {updateMutation.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
           Salvar Alterações
         </Button>
       </div>

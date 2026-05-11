@@ -9,7 +9,9 @@ export class GetAirRepresentationConfigUseCase {
         private repository: IAirRepresentationConfigRepository
     ) {}
 
-    async execute(): Promise<AirRepresentationConfig | null> {
-        return this.repository.find();
+    async execute(): Promise<AirRepresentationConfig> {
+        const existing = await this.repository.find();
+        if (existing) return existing;
+        return this.repository.save(new AirRepresentationConfig({}));
     }
 }

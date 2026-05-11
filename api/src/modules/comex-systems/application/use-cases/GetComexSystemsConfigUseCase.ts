@@ -9,7 +9,9 @@ export class GetComexSystemsConfigUseCase {
         private repository: IComexSystemsConfigRepository
     ) {}
 
-    async execute(): Promise<ComexSystemsConfig | null> {
-        return this.repository.find();
+    async execute(): Promise<ComexSystemsConfig> {
+        const existing = await this.repository.find();
+        if (existing) return existing;
+        return this.repository.save(new ComexSystemsConfig({}));
     }
 }

@@ -9,7 +9,9 @@ export class GetTransportConfigUseCase {
         private repository: ITransportConfigRepository
     ) {}
 
-    async execute(): Promise<TransportConfig | null> {
-        return this.repository.find();
+    async execute(): Promise<TransportConfig> {
+        const existing = await this.repository.find();
+        if (existing) return existing;
+        return this.repository.save(new TransportConfig({}));
     }
 }

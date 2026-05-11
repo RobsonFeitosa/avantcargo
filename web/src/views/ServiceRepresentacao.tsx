@@ -2,7 +2,8 @@
 
 import { LandingLayout } from "@/components/layout/LandingLayout";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CheckCircle2, Loader2, Mail } from "lucide-react";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { DynamicIcon } from "@/components/ui/DynamicIcon";
 
@@ -49,6 +50,27 @@ export default function ServiceRepresentacao() {
               <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
                 {config?.headerDescription || "Integramos operações de importação e exportação com foco em agilidade, segurança e conformidade total nos principais aeroportos do Brasil."}
               </p>
+              <div className="flex flex-wrap justify-center gap-4 mt-10">
+                <Button 
+                  asChild
+                  className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 h-14 rounded-full shadow-lg shadow-orange-500/20 transition-all hover:scale-105 text-lg cursor-pointer"
+                >
+                  <a href={config?.heroWhatsappNumber ? `https://wa.me/55${config.heroWhatsappNumber.replace(/\\D/g, '')}` : "https://wa.me/5511964503217"} target="_blank" rel="noopener noreferrer">
+                    <FaWhatsapp className="w-5 h-5 mr-2" />
+                    {config?.heroWhatsappText || "Falar com especialista"}
+                  </a>
+                </Button>
+                <Button 
+                  asChild
+                  variant="outline"
+                  className="border-emerald-900 text-emerald-900 hover:bg-emerald-50 font-bold px-8 h-14 rounded-full transition-all text-lg cursor-pointer"
+                >
+                  <a href={config?.heroMessageLink || "/contato"}>
+                    <Mail className="w-5 h-5 mr-2" />
+                    {config?.heroMessageText || "Enviar mensagem"}
+                  </a>
+                </Button>
+              </div>
             </ScrollReveal>
           </div>
         </section>
@@ -160,15 +182,19 @@ export default function ServiceRepresentacao() {
         {/* CTA Section */}
         <section className="py-24 bg-primary text-white relative overflow-hidden">
           <div className="container relative z-10 text-center space-y-8">
-            <h2 className="text-3xl md:text-5xl font-bold">Operação Urgente? <span className="text-emerald-950">Nós cuidamos!</span></h2>
-            <p className="text-emerald-50 max-w-2xl mx-auto text-lg font-medium">
-              Não perca prazos. Nossa equipe está pronta para agir agora.
+            <h2 className="text-3xl md:text-5xl font-bold">{config?.footerCtaTitleDark || "Operação Urgente?"} <span className="text-emerald-950">{config?.footerCtaTitleHighlight || "Nós cuidamos!"}</span></h2>
+            <p className="text-emerald-50 max-w-2xl mx-auto text-lg font-medium whitespace-pre-wrap">
+              {config?.footerCtaDescription || "Não perca prazos. Nossa equipe está pronta para agir agora."}
             </p>
             <div className="flex flex-wrap justify-center gap-6">
-              <button className="bg-emerald-950 text-white px-10 py-4 rounded-full font-bold hover:bg-emerald-900 transition-all shadow-xl flex items-center gap-3 text-xl group">
+              <a href={config?.footerWhatsappNumber ? `https://wa.me/55${config.footerWhatsappNumber.replace(/\\D/g, '')}` : "https://wa.me/5511964503217"} target="_blank" rel="noopener noreferrer" className="bg-emerald-950 text-white px-10 py-4 rounded-full font-bold hover:bg-emerald-900 transition-all shadow-xl flex items-center gap-3 text-xl group">
                 <FaWhatsapp className="h-6 w-6 text-primary group-hover:animate-bounce" />
-                Ligue Agora
-              </button>
+                {config?.footerWhatsappText || "Ligue Agora"}
+              </a>
+              <a href={config?.footerMessageLink || "/contato"} className="bg-white/10 text-white border border-white/20 px-10 py-4 rounded-full font-bold hover:bg-white/20 transition-all flex items-center gap-3 text-xl group">
+                <Mail className="h-6 w-6 text-white group-hover:animate-bounce" />
+                {config?.footerMessageText || "Enviar mensagem"}
+              </a>
             </div>
           </div>
         </section>

@@ -53,26 +53,6 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - api
-      - web
-
-  seed:
-    image: postgres:16-alpine
-    container_name: seed-avantcargo
-    env_file: 
-      - .env
-    volumes:
-      - ./init.sql:/init.sql
-    command: >
-      sh -c "
-      until PGPASSWORD=$${POSTGRES_PASSWORD} psql -h postgres -U $${POSTGRES_USER} -d $${POSTGRES_DB} -c 'SELECT 1 FROM migrations LIMIT 1;' > /dev/null 2>&1; do
-        echo 'Aguardando as migrations...';
-        sleep 2;
-      done;
-      PGPASSWORD=$${POSTGRES_PASSWORD} psql -h postgres -U $${POSTGRES_USER} -d $${POSTGRES_DB} -f /init.sql;
-      "
-    depends_on:
-      postgres:
-        condition: service_healthy
-
+      - web 
 volumes:
   postgres_data:

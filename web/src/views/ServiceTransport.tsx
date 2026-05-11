@@ -2,11 +2,14 @@
 
 import { LandingLayout } from "@/components/layout/LandingLayout";
 import { Badge } from "@/components/ui/badge";
-import { Truck, CheckCircle2, MapPin, Zap, ShieldCheck, ClipboardCheck, MessageCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Truck, CheckCircle2, MapPin, Zap, ShieldCheck, ClipboardCheck, Mail } from "lucide-react";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import Image from "next/image";
 import exempl1transport from "@/assets/exempl1transport.jpg";
 import { FaWhatsapp } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
+import { transportActions } from "@/admin/actions/transport.actions";
 
 export default function ServiceTransport() {
   const features = [
@@ -24,6 +27,13 @@ export default function ServiceTransport() {
     "Check-list completo de cargas especiais."
   ];
 
+  const { data: configData } = useQuery({
+    queryKey: ["transport-config"],
+    queryFn: () => transportActions.get(),
+  });
+
+  const config = configData?.result || {};
+
   return (
     <LandingLayout>
       <div className="bg-white min-h-screen">
@@ -36,11 +46,32 @@ export default function ServiceTransport() {
                 Logística Nacional e Internacional
               </Badge>
               <h1 className="text-4xl md:text-6xl font-bold leading-tight text-emerald-950 mb-6">
-                Transporte <span className="text-primary">Rodoviário</span>
+                {config.headerTitleDark || "Transporte"} <span className="text-primary">{config.headerTitleHighlight || "Rodoviário"}</span>
               </h1>
               <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
-                transporte nacional, cargas urgentes, transporte importação, transporte exportação. Soluções exclusivas para Agentes de Carga.
+                {config.headerDescription || "transporte nacional, cargas urgentes, transporte importação, transporte exportação. Soluções exclusivas para Agentes de Carga."}
               </p>
+              <div className="flex flex-wrap justify-center gap-4 mt-10">
+                <Button 
+                  asChild
+                  className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 h-14 rounded-full shadow-lg shadow-orange-500/20 transition-all hover:scale-105 text-lg cursor-pointer"
+                >
+                  <a href={config.heroWhatsappNumber ? `https://wa.me/55${config.heroWhatsappNumber.replace(/\\D/g, '')}` : "https://wa.me/5511964503217"} target="_blank" rel="noopener noreferrer">
+                    <FaWhatsapp className="w-5 h-5 mr-2" />
+                    {config.heroWhatsappText || "Falar com especialista"}
+                  </a>
+                </Button>
+                <Button 
+                  asChild
+                  variant="outline"
+                  className="border-emerald-900 text-emerald-900 hover:bg-emerald-50 font-bold px-8 h-14 rounded-full transition-all text-lg cursor-pointer"
+                >
+                  <a href={config.heroMessageLink || "/contato"}>
+                    <Mail className="w-5 h-5 mr-2" />
+                    {config.heroMessageText || "Enviar mensagem"}
+                  </a>
+                </Button>
+              </div>
             </ScrollReveal>
           </div>
         </section>
@@ -109,6 +140,40 @@ export default function ServiceTransport() {
                   </div>
                 </ScrollReveal>
               ))}
+            </div>
+          </div>
+        </section>
+        {/* Footer CTA */}
+        <section className="py-24 border-t border-slate-100">
+          <div className="container">
+            <div className="p-12 md:p-16 rounded-[48px] bg-gradient-to-br from-primary/5 to-orange-500/5 border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-12 text-center md:text-left">
+              <div className="space-y-4">
+                <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight leading-tight">
+                  {config.footerCtaTitleDark || "Sua carga em"} <span className="text-orange-500">{config.footerCtaTitleHighlight || "boas mãos?"}</span>
+                </h2>
+                <p className="text-slate-600 max-w-xl text-lg whitespace-pre-wrap">
+                  {config.footerCtaDescription || "Otimize seu transporte rodoviário com uma frota dedicada e agilidade total no pré-embarque internacional."}
+                </p>
+              </div>
+              <div className="flex flex-col gap-4 w-full md:w-auto">
+                <Button 
+                  asChild
+                  className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-14 px-10 rounded-full shadow-lg shadow-orange-500/20 text-lg gap-2"
+                >
+                  <a href={config.footerWhatsappNumber ? `https://wa.me/55${config.footerWhatsappNumber.replace(/\\D/g, '')}` : "https://wa.me/5511964503217"} target="_blank" rel="noopener noreferrer">
+                    <FaWhatsapp className="w-5 h-5" /> {config.footerWhatsappText || "Falar conosco"}
+                  </a>
+                </Button>
+                <Button 
+                  asChild
+                  variant="outline" 
+                  className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 h-14 px-10 rounded-full text-lg gap-2"
+                >
+                  <a href={config.footerMessageLink || "/contato"}>
+                    <Mail className="h-4 w-4 text-primary" /> {config.footerMessageText || "Enviar mensagem"}
+                  </a>
+                </Button>
+              </div>
             </div>
           </div>
         </section>

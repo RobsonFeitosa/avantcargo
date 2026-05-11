@@ -9,6 +9,17 @@ interface UpdateRequest {
     headerDescription?: string;
     importSections?: any[];
     exportSections?: any[];
+    heroWhatsappText?: string;
+    heroWhatsappNumber?: string;
+    heroMessageText?: string;
+    heroMessageLink?: string;
+    footerCtaTitleDark?: string;
+    footerCtaTitleHighlight?: string;
+    footerCtaDescription?: string;
+    footerWhatsappText?: string;
+    footerWhatsappNumber?: string;
+    footerMessageText?: string;
+    footerMessageLink?: string;
 }
 
 @Injectable()

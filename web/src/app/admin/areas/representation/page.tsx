@@ -18,8 +18,11 @@ import {
   PlaneLanding,
   PlaneTakeoff,
   Loader2,
-  Image as ImageIcon
+  Image as ImageIcon,
+  MessageSquare
 } from "lucide-react";
+
+import { formatPhoneNumber } from "@/admin/utils/formatMask";
 
 import {
   DndContext,
@@ -99,6 +102,20 @@ export default function RepresentationConfig() {
     headerDescription: ""
   });
 
+  const [ctaConfig, setCtaConfig] = useState({
+    heroWhatsappText: "",
+    heroWhatsappNumber: "",
+    heroMessageText: "",
+    heroMessageLink: "",
+    footerCtaTitleDark: "",
+    footerCtaTitleHighlight: "",
+    footerCtaDescription: "",
+    footerWhatsappText: "",
+    footerWhatsappNumber: "",
+    footerMessageText: "",
+    footerMessageLink: ""
+  });
+
   const [imports, setImports] = useState<any[]>([]);
   const [exports, setExports] = useState<any[]>([]);
 
@@ -116,6 +133,19 @@ export default function RepresentationConfig() {
         headerTitleDark: result.headerTitleDark || "",
         headerTitleHighlight: result.headerTitleHighlight || "",
         headerDescription: result.headerDescription || ""
+      });
+      setCtaConfig({
+        heroWhatsappText: result.heroWhatsappText || "",
+        heroWhatsappNumber: result.heroWhatsappNumber || "",
+        heroMessageText: result.heroMessageText || "",
+        heroMessageLink: result.heroMessageLink || "",
+        footerCtaTitleDark: result.footerCtaTitleDark || "",
+        footerCtaTitleHighlight: result.footerCtaTitleHighlight || "",
+        footerCtaDescription: result.footerCtaDescription || "",
+        footerWhatsappText: result.footerWhatsappText || "",
+        footerWhatsappNumber: result.footerWhatsappNumber || "",
+        footerMessageText: result.footerMessageText || "",
+        footerMessageLink: result.footerMessageLink || ""
       });
       setImports(result.importSections || []);
       setExports(result.exportSections || []);
@@ -153,6 +183,7 @@ export default function RepresentationConfig() {
       
       updateMutation.mutate({
         ...headerConfig,
+        ...ctaConfig,
         importSections: updatedImports,
         exportSections: updatedExports
       });
@@ -168,20 +199,12 @@ export default function RepresentationConfig() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 2 * 1024 * 1024) {
-      toast.error("A imagem não pode ultrapassar 2MB");
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("A imagem não pode ultrapassar 5MB");
       return;
     }
 
-    const img = new (window as any).Image();
-    img.src = URL.createObjectURL(file);
-    img.onload = () => {
-      if (img.width > 800 || img.height > 800) {
-        toast.error("A imagem deve ter no máximo 800x800 pixels.");
-        return;
-      }
-      uploadMutation.mutate({ file, section, id });
-    };
+    uploadMutation.mutate({ file, section, id });
   };
 
   const sensors = useSensors(
@@ -226,6 +249,7 @@ export default function RepresentationConfig() {
   const handleSave = () => {
     updateMutation.mutate({
       ...headerConfig,
+      ...ctaConfig,
       importSections: imports,
       exportSections: exports
     });
@@ -281,6 +305,7 @@ export default function RepresentationConfig() {
                             }
                             updateMutation.mutate({
                               ...headerConfig,
+                              ...ctaConfig,
                               importSections: updatedImports,
                               exportSections: updatedExports
                             });
@@ -432,10 +457,11 @@ export default function RepresentationConfig() {
       </div>
 
       <Tabs defaultValue="header" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 bg-emerald-50/50 border border-emerald-100 p-1 rounded-xl h-auto mb-8">
+        <TabsList className="grid w-full grid-cols-4 bg-emerald-50/50 border border-emerald-100 p-1 rounded-xl h-auto mb-8">
           <TabsTrigger value="header" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Cabeçalho</TabsTrigger>
           <TabsTrigger value="imports" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Importações Aéreas</TabsTrigger>
           <TabsTrigger value="exports" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Exportações Aéreas</TabsTrigger>
+          <TabsTrigger value="cta" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Botões e CTAs</TabsTrigger>
         </TabsList>
 
         <TabsContent value="header" className="space-y-8 focus-visible:outline-none focus-visible:ring-0 mt-0">
@@ -515,6 +541,84 @@ export default function RepresentationConfig() {
             "Blocos de Exportação",
             <PlaneTakeoff className="w-5 h-5 text-emerald-600" />
           )}
+        </TabsContent>
+
+        <TabsContent value="cta" className="space-y-8 focus-visible:outline-none focus-visible:ring-0 mt-0">
+          <Card className="border-none shadow-sm h-fit">
+            <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
+              <div className="flex items-center gap-2">
+                <MessageSquare className="w-5 h-5 text-emerald-600" />
+                <CardTitle className="text-lg font-bold text-emerald-950">Botões do Cabeçalho</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão WhatsApp - Texto</Label>
+                  <Input maxLength={40} placeholder="Ex: Falar com especialista" value={ctaConfig.heroWhatsappText} onChange={(e) => setCtaConfig({ ...ctaConfig, heroWhatsappText: e.target.value })} className="border-emerald-100" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão WhatsApp - Número</Label>
+                  <Input maxLength={15} placeholder="Ex: (11) 96450-3217" value={ctaConfig.heroWhatsappNumber} onChange={(e) => setCtaConfig({ ...ctaConfig, heroWhatsappNumber: formatPhoneNumber(e.target.value) })} className="border-emerald-100" />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão Secundário - Texto</Label>
+                  <Input maxLength={40} placeholder="Ex: Enviar mensagem" value={ctaConfig.heroMessageText} onChange={(e) => setCtaConfig({ ...ctaConfig, heroMessageText: e.target.value })} className="border-emerald-100" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão Secundário - Link</Label>
+                  <Input maxLength={100} placeholder="Ex: /contato" value={ctaConfig.heroMessageLink} onChange={(e) => setCtaConfig({ ...ctaConfig, heroMessageLink: e.target.value })} className="border-emerald-100" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-none shadow-sm h-fit">
+            <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
+              <div className="flex items-center gap-2">
+                <Layout className="w-5 h-5 text-emerald-600" />
+                <CardTitle className="text-lg font-bold text-emerald-950">Chamada para Ação (Rodapé)</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título (Parte Escura)</Label>
+                  <Input maxLength={60} placeholder="Ex: Operação Urgente?" value={ctaConfig.footerCtaTitleDark} onChange={(e) => setCtaConfig({ ...ctaConfig, footerCtaTitleDark: e.target.value })} className="border-emerald-100" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Palavra em Destaque (Laranja)</Label>
+                  <Input maxLength={40} placeholder="Ex: Nós cuidamos!" value={ctaConfig.footerCtaTitleHighlight} onChange={(e) => setCtaConfig({ ...ctaConfig, footerCtaTitleHighlight: e.target.value })} className="border-emerald-100" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Descrição</Label>
+                <Textarea maxLength={250} placeholder="Texto de apoio da chamada..." value={ctaConfig.footerCtaDescription} onChange={(e) => setCtaConfig({ ...ctaConfig, footerCtaDescription: e.target.value })} className="min-h-[80px] border-emerald-100" />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão WhatsApp - Texto</Label>
+                  <Input maxLength={40} placeholder="Ex: Falar no WhatsApp" value={ctaConfig.footerWhatsappText} onChange={(e) => setCtaConfig({ ...ctaConfig, footerWhatsappText: e.target.value })} className="border-emerald-100" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão WhatsApp - Número</Label>
+                  <Input maxLength={15} placeholder="Ex: (11) 96450-3217" value={ctaConfig.footerWhatsappNumber} onChange={(e) => setCtaConfig({ ...ctaConfig, footerWhatsappNumber: formatPhoneNumber(e.target.value) })} className="border-emerald-100" />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão Secundário - Texto</Label>
+                  <Input maxLength={40} placeholder="Ex: Enviar mensagem" value={ctaConfig.footerMessageText} onChange={(e) => setCtaConfig({ ...ctaConfig, footerMessageText: e.target.value })} className="border-emerald-100" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Botão Secundário - Link</Label>
+                  <Input maxLength={100} placeholder="Ex: /contato" value={ctaConfig.footerMessageLink} onChange={(e) => setCtaConfig({ ...ctaConfig, footerMessageLink: e.target.value })} className="border-emerald-100" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
 
