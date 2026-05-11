@@ -2,7 +2,7 @@ import path from 'path'
 import crypto from 'crypto'
 import multer, { StorageEngine } from 'multer'
 
-const tmpFolder = path.resolve(process.cwd(), 'tmp');
+const tmpFolder = `teste`;
 const uploadsFolder = path.resolve(tmpFolder, 'uploads');
 
 interface IUploadConfig {
