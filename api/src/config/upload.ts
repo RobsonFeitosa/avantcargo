@@ -4,7 +4,7 @@ import multer, { StorageEngine } from 'multer'
 
 
 
-const tmpFolder = path.resolve(__dirname, '..', '..', '..', 'tmp');
+const tmpFolder = path.resolve(__dirname, '..', 'tmp');
 
 interface IUploadConfig {
   driver: 's3' | 'disk'
