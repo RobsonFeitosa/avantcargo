@@ -25,7 +25,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, documentFactory);
 
   app.useStaticAssets(upload.uploadsFolder, {
-    prefix: '/files',
+    prefix: '/api/files',
   });
 
   app.useGlobalPipes(new ValidationPipe({
