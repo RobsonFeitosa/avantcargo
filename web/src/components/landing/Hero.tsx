@@ -9,6 +9,8 @@ import { FaBuilding } from "react-icons/fa6";
 import { FaCheckCircle, FaWhatsapp } from "react-icons/fa";
 import Link from "next/link";
 
+import { CountUp } from "@/components/animations/CountUp";
+
 interface HeroProps {
   data?: {
     heroBadge: string;
@@ -134,7 +136,9 @@ export const Hero = ({ data }: HeroProps) => {
                   ]).map((stat, idx) => (
                     <div key={idx} className="border border-slate-100 flex justify-center items-center py-4 rounded-lg bg-white shadow-sm">
                       <div>
-                        <p className="text-2xl font-bold text-primary text-center">{stat.value}</p>
+                        <p className="text-2xl font-bold text-primary text-center">
+                          <CountUp value={stat.value} />
+                        </p>
                         <p className="text-[10px] text-slate-400 uppercase text-center">{stat.label}</p>
                       </div>
                     </div>
