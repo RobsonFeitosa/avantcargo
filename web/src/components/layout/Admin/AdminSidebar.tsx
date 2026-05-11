@@ -67,6 +67,7 @@ const adminNavItems = [
       { title: "Valores", url: "/admin/about/values" },
       { title: "Diferenciais", url: "/admin/about/differentials" },
       { title: "Chamada para Ação", url: "/admin/about/cta" },
+      { title: "Carreira / Talentos", url: "/admin/about/careers" },
     ],
   },
   {

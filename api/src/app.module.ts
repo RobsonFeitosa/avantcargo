@@ -18,6 +18,7 @@ import { AirRepresentationModule } from './modules/air-representation/air-repres
 import { UploadModule } from './shared/infra/http/uploads.module';
 import { ComexSystemsModule } from './modules/comex-systems/comex-systems.module';
 import { TransportModule } from './modules/transport/transport.module';
+import { CareersModule } from './modules/careers/careers.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { TransportModule } from './modules/transport/transport.module';
     UploadModule,
     ComexSystemsModule,
     TransportModule,
+    CareersModule,
   ],
   providers: [
     {

@@ -1,15 +1,16 @@
+
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Save, 
-  Layout, 
+import {
+  Save,
+  Layout,
   GripVertical,
   Plus,
   Trash2,
@@ -71,9 +72,8 @@ function SortableItem({ id, children }: SortableItemProps) {
     <div
       ref={setNodeRef}
       style={style}
-      className={`group flex gap-4 p-4 rounded-xl border border-transparent transition-all w-full ${
-        isDragging ? "bg-emerald-50 border-emerald-200 shadow-lg scale-[1.02]" : "hover:border-emerald-50 hover:bg-emerald-50/30"
-      }`}
+      className={`group flex gap-4 p-4 rounded-xl border border-transparent transition-all w-full ${isDragging ? "bg-emerald-50 border-emerald-200 shadow-lg scale-[1.02]" : "hover:border-emerald-50 hover:bg-emerald-50/30"
+        }`}
     >
       <div
         {...attributes}
@@ -132,7 +132,6 @@ export default function TransportConfig() {
     enabled: !!user,
   });
 
-  import { useEffect } from "react";
 
   useEffect(() => {
     if (configData?.result) {
@@ -239,7 +238,7 @@ export default function TransportConfig() {
   const addDiff = () => {
     setDifferentials([...differentials, { id: `t-${Date.now()}`, icon: "CheckCircle2", text: "" }]);
   };
-  
+
   const removeDiff = (id: string) => {
     setDifferentials(differentials.filter(d => d.id !== id));
   };
@@ -261,7 +260,7 @@ export default function TransportConfig() {
         </TabsList>
 
         <TabsContent value="header" className="space-y-8 focus-visible:outline-none focus-visible:ring-0 mt-0">
-          
+
           {/* Banner Principal */}
           <Card className="border-none shadow-sm h-fit">
             <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
@@ -273,21 +272,21 @@ export default function TransportConfig() {
             <CardContent className="pt-6 space-y-4">
               <div className="space-y-2 max-w-xl">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Badge (Pílula)</Label>
-                <Input maxLength={40} value={headerConfig.headerBadge} onChange={e => setHeaderConfig({...headerConfig, headerBadge: e.target.value})} className="border-emerald-100" />
+                <Input maxLength={40} value={headerConfig.headerBadge} onChange={e => setHeaderConfig({ ...headerConfig, headerBadge: e.target.value })} className="border-emerald-100" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título (Parte Escura)</Label>
-                  <Input maxLength={60} value={headerConfig.headerTitleDark} onChange={e => setHeaderConfig({...headerConfig, headerTitleDark: e.target.value})} className="border-emerald-100" />
+                  <Input maxLength={60} value={headerConfig.headerTitleDark} onChange={e => setHeaderConfig({ ...headerConfig, headerTitleDark: e.target.value })} className="border-emerald-100" />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Palavra em Destaque (Parte Verde)</Label>
-                  <Input maxLength={40} value={headerConfig.headerTitleHighlight} onChange={e => setHeaderConfig({...headerConfig, headerTitleHighlight: e.target.value})} className="border-emerald-100 text-emerald-600 font-bold" />
+                  <Input maxLength={40} value={headerConfig.headerTitleHighlight} onChange={e => setHeaderConfig({ ...headerConfig, headerTitleHighlight: e.target.value })} className="border-emerald-100 text-emerald-600 font-bold" />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Descrição</Label>
-                <Textarea maxLength={250} value={headerConfig.headerDescription} onChange={e => setHeaderConfig({...headerConfig, headerDescription: e.target.value})} className="min-h-[80px] border-emerald-100" />
+                <Textarea maxLength={250} value={headerConfig.headerDescription} onChange={e => setHeaderConfig({ ...headerConfig, headerDescription: e.target.value })} className="min-h-[80px] border-emerald-100" />
               </div>
             </CardContent>
           </Card>
@@ -302,7 +301,7 @@ export default function TransportConfig() {
             </CardHeader>
             <CardContent className="pt-6">
               <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
-                
+
                 {/* Imagem (Esquerda) */}
                 <div className="xl:col-span-4 space-y-2 shrink-0">
                   <div className="flex items-center justify-between">
@@ -321,16 +320,16 @@ export default function TransportConfig() {
                       </button>
                     )}
                   </div>
-                  <div 
+                  <div
                     onClick={() => document.getElementById('highlight-image')?.click()}
                     className="relative border-2 border-dashed border-emerald-100 rounded-xl p-4 text-center hover:bg-emerald-50 transition-colors cursor-pointer group flex flex-col items-center justify-center h-48 overflow-hidden"
                   >
                     {headerConfig.highlightImage ? (
                       <div className="absolute inset-0">
-                        <Image 
-                          src={`${process.env.NEXT_PUBLIC_API_URL}/files/${headerConfig.highlightImage}`} 
-                          alt="Preview" 
-                          fill 
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_API_URL}/files/${headerConfig.highlightImage}`}
+                          alt="Preview"
+                          fill
                           className="object-cover"
                         />
                         <div className="absolute inset-0 bg-emerald-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
@@ -346,10 +345,10 @@ export default function TransportConfig() {
                         <span className="text-xs font-medium text-emerald-800 mt-2">Clique para alterar a imagem</span>
                       </>
                     )}
-                    <input 
-                      type="file" 
-                      id="highlight-image" 
-                      className="hidden" 
+                    <input
+                      type="file"
+                      id="highlight-image"
+                      className="hidden"
                       accept="image/*"
                       onChange={handleImageUpload}
                     />
@@ -360,36 +359,36 @@ export default function TransportConfig() {
                 <div className="xl:col-span-8 space-y-4">
                   <div className="space-y-2">
                     <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título Principal</Label>
-                    <Input maxLength={100} value={headerConfig.highlightTitle} onChange={e => setHeaderConfig({...headerConfig, highlightTitle: e.target.value})} className="border-emerald-100 font-bold" />
+                    <Input maxLength={100} value={headerConfig.highlightTitle} onChange={e => setHeaderConfig({ ...headerConfig, highlightTitle: e.target.value })} className="border-emerald-100 font-bold" />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Texto (Parte 1)</Label>
-                    <Textarea 
-                      maxLength={400} 
+                    <Textarea
+                      maxLength={400}
                       value={headerConfig.highlightText1}
-                      onChange={e => setHeaderConfig({...headerConfig, highlightText1: e.target.value})}
-                      className="min-h-[80px] border-emerald-100" 
+                      onChange={e => setHeaderConfig({ ...headerConfig, highlightText1: e.target.value })}
+                      className="min-h-[80px] border-emerald-100"
                     />
                   </div>
 
                   <div className="space-y-2 bg-emerald-50/50 p-4 border-l-4 border-emerald-500 rounded-r-lg">
                     <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Frase em Destaque (Citação)</Label>
-                    <Textarea 
-                      maxLength={300} 
+                    <Textarea
+                      maxLength={300}
                       value={headerConfig.highlightQuote}
-                      onChange={e => setHeaderConfig({...headerConfig, highlightQuote: e.target.value})}
-                      className="min-h-[60px] border-emerald-200 bg-white italic" 
+                      onChange={e => setHeaderConfig({ ...headerConfig, highlightQuote: e.target.value })}
+                      className="min-h-[60px] border-emerald-200 bg-white italic"
                     />
                   </div>
 
                   <div className="space-y-2">
                     <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Texto (Parte 2)</Label>
-                    <Textarea 
-                      maxLength={400} 
+                    <Textarea
+                      maxLength={400}
                       value={headerConfig.highlightText2}
-                      onChange={e => setHeaderConfig({...headerConfig, highlightText2: e.target.value})}
-                      className="min-h-[60px] border-emerald-100" 
+                      onChange={e => setHeaderConfig({ ...headerConfig, highlightText2: e.target.value })}
+                      className="min-h-[60px] border-emerald-100"
                     />
                   </div>
 
@@ -398,8 +397,8 @@ export default function TransportConfig() {
                       <MessageSquare className="w-3 h-3" /> Configuração do Botão WhatsApp
                     </Label>
                     <div className="grid grid-cols-2 gap-4">
-                      <Input maxLength={30} value={headerConfig.buttonText} onChange={e => setHeaderConfig({...headerConfig, buttonText: e.target.value})} placeholder="Texto do botão" className="border-emerald-100" />
-                      <Input maxLength={100} value={headerConfig.buttonLink} onChange={e => setHeaderConfig({...headerConfig, buttonLink: e.target.value})} placeholder="Link do WhatsApp" className="border-emerald-100" />
+                      <Input maxLength={30} value={headerConfig.buttonText} onChange={e => setHeaderConfig({ ...headerConfig, buttonText: e.target.value })} placeholder="Texto do botão" className="border-emerald-100" />
+                      <Input maxLength={100} value={headerConfig.buttonLink} onChange={e => setHeaderConfig({ ...headerConfig, buttonLink: e.target.value })} placeholder="Link do WhatsApp" className="border-emerald-100" />
                     </div>
                   </div>
                 </div>
@@ -411,7 +410,7 @@ export default function TransportConfig() {
         </TabsContent>
 
         <TabsContent value="differentials" className="space-y-8 focus-visible:outline-none focus-visible:ring-0 mt-0">
-          
+
           <Card className="border-none shadow-sm overflow-hidden h-full flex flex-col">
             <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -431,19 +430,19 @@ export default function TransportConfig() {
               </div>
             </CardHeader>
             <CardContent className="pt-6 space-y-6">
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-6 border-b border-emerald-50">
                 <div className="space-y-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título da Seção</Label>
-                  <Input maxLength={60} value={headerConfig.diffsSectionTitle} onChange={e => setHeaderConfig({...headerConfig, diffsSectionTitle: e.target.value})} className="border-emerald-100 font-bold" />
+                  <Input maxLength={60} value={headerConfig.diffsSectionTitle} onChange={e => setHeaderConfig({ ...headerConfig, diffsSectionTitle: e.target.value })} className="border-emerald-100 font-bold" />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Palavra em Destaque (Verde)</Label>
-                  <Input maxLength={60} value={headerConfig.diffsSectionHighlight} onChange={e => setHeaderConfig({...headerConfig, diffsSectionHighlight: e.target.value})} className="border-emerald-100 text-emerald-600 font-bold" />
+                  <Input maxLength={60} value={headerConfig.diffsSectionHighlight} onChange={e => setHeaderConfig({ ...headerConfig, diffsSectionHighlight: e.target.value })} className="border-emerald-100 text-emerald-600 font-bold" />
                 </div>
                 <div className="space-y-2 md:col-span-2">
                   <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Descrição Abaixo do Título</Label>
-                  <Input maxLength={150} value={headerConfig.diffsSectionDescription} onChange={e => setHeaderConfig({...headerConfig, diffsSectionDescription: e.target.value})} className="border-emerald-100" />
+                  <Input maxLength={150} value={headerConfig.diffsSectionDescription} onChange={e => setHeaderConfig({ ...headerConfig, diffsSectionDescription: e.target.value })} className="border-emerald-100" />
                 </div>
               </div>
 
@@ -461,36 +460,36 @@ export default function TransportConfig() {
                                   <Search size={10} /> Consultar
                                 </a>
                               </div>
-                              <Input 
+                              <Input
                                 maxLength={30}
-                                value={item.icon} 
+                                value={item.icon}
                                 onChange={(e) => {
                                   const newItems = [...differentials];
                                   const idx = newItems.findIndex(i => i.id === item.id);
                                   newItems[idx].icon = e.target.value;
                                   setDifferentials(newItems);
                                 }}
-                                className="border-emerald-100" 
+                                className="border-emerald-100"
                               />
                             </div>
                             <div className="flex-1 space-y-1">
                               <Label className="text-emerald-900/70 font-semibold text-[9px]">Texto do Diferencial</Label>
-                              <Textarea 
+                              <Textarea
                                 maxLength={100}
-                                value={item.text} 
+                                value={item.text}
                                 onChange={(e) => {
                                   const newItems = [...differentials];
                                   const idx = newItems.findIndex(i => i.id === item.id);
                                   newItems[idx].text = e.target.value;
                                   setDifferentials(newItems);
                                 }}
-                                className="min-h-[60px] text-sm font-medium border-emerald-100" 
+                                className="min-h-[60px] text-sm font-medium border-emerald-100"
                               />
                             </div>
-                            <Button 
+                            <Button
                               onClick={() => removeDiff(item.id)}
-                              variant="ghost" 
-                              size="icon" 
+                              variant="ghost"
+                              size="icon"
                               className="absolute -right-2 -top-2 text-red-400 hover:text-red-600 hover:bg-red-50 bg-white border border-red-100 shadow-sm opacity-0 group-hover/item:opacity-100 transition-opacity h-6 w-6 rounded-full"
                             >
                               <Trash2 size={12} />
@@ -591,7 +590,7 @@ export default function TransportConfig() {
         <Button variant="outline" onClick={() => queryClient.invalidateQueries({ queryKey: ["transport-config"] })} className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8">
           Descartar
         </Button>
-        <Button 
+        <Button
           onClick={() => {
             updateMutation.mutate({
               ...headerConfig,

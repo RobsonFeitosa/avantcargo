@@ -5,6 +5,7 @@ export interface SendMailOptions {
     to: string;
     subject: string;
     html: string;
+    attachments?: { filename: string; path: string }[];
 }
 
 @Injectable()
@@ -23,12 +24,13 @@ export class MailService {
         },
     });
 
-    async send({ to, subject, html }: SendMailOptions): Promise<void> {
+    async send({ to, subject, html, attachments }: SendMailOptions): Promise<void> {
         await this.transporter.sendMail({
             from: `"${process.env.MAIL_FROM_NAME || "Avant Cargo"}" <${process.env.MAIL_USER}>`,
             to,
             subject,
             html,
+            attachments,
         });
     }
 }

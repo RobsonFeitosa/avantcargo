@@ -19,6 +19,7 @@ export const Navbar = ({ footerData }: { footerData?: any }) => {
   const phone = footerData?.contact_info?.phone;
   const [scrolled, setScrolled] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -57,13 +58,50 @@ export const Navbar = ({ footerData }: { footerData?: any }) => {
             Início
           </Link>
 
-          {/* Quem Somos */}
-          <Link
-            href="/quem-somos"
-            className={`text-sm font-bold tracking-tight transition-all duration-300 relative group flex items-center px-4 py-2 rounded-full ${pathname === "/quem-somos" ? "text-primary bg-primary/10" : "text-slate-600 hover:text-primary hover:bg-slate-50"}`}
+          {/* Quem Somos (Dropdown on Hover) */}
+          <div
+            className="relative"
+            onMouseEnter={() => setIsAboutOpen(true)}
+            onMouseLeave={() => setIsAboutOpen(false)}
           >
-            Quem Somos
-          </Link>
+            <DropdownMenu open={isAboutOpen} onOpenChange={setIsAboutOpen} modal={false}>
+              <DropdownMenuTrigger asChild>
+                <button 
+                  className={`text-sm font-bold tracking-tight transition-all duration-300 relative group flex items-center gap-1.5 px-4 py-2 rounded-full cursor-pointer border-none bg-transparent ${pathname.startsWith("/quem-somos") ? "text-primary bg-primary/10" : "text-slate-600 hover:text-primary hover:bg-slate-50"}`}
+                >
+                  Quem Somos
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isAboutOpen ? "rotate-180" : ""}`} />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="center"
+                className="w-56 p-2 bg-white/95 backdrop-blur-lg border-slate-200 shadow-xl rounded-2xl animate-in fade-in zoom-in duration-200"
+                onMouseEnter={() => setIsAboutOpen(true)}
+                onMouseLeave={() => setIsAboutOpen(false)}
+              >
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/quem-somos"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 hover:bg-primary/5 group/item"
+                  >
+                    <span className="text-sm font-semibold text-slate-600 group-hover/item:text-primary transition-colors">
+                      A Empresa
+                    </span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/quem-somos/carreiras"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 hover:bg-primary/5 group/item"
+                  >
+                    <span className="text-sm font-semibold text-slate-600 group-hover/item:text-primary transition-colors">
+                      Carreiras / Talentos
+                    </span>
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
 
           {/* Áreas de Atuação (Dropdown on Hover) */}
           <div

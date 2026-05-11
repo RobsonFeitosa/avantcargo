@@ -27,7 +27,7 @@ export class CreateContactMessageUseCase {
         const saved = await this.contactMessageRepository.create(data);
 
         try {
-            const recipient = process.env.MAIL_TO || process.env.MAIL_USER;
+            const recipient = process.env.MAIL_TO || process.env.MAIL_USER || "";
             await this.mailService.send({
                 to: recipient,
                 subject: `Nova mensagem de ${data.name} — ${data.service || "Contato"}`,
