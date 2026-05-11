@@ -1,6 +1,8 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 import { IContactMessageRepository } from "../../domain/repositories/IContactMessageRepository";
 import { ContactMessage } from "../../domain/entities/ContactMessage";
+import { MailService } from "src/shared/infra/mail/mail.service";
+import { contactMessageTemplate } from "src/shared/infra/mail/templates/contact-message.template";
 
 interface IRequest {
     name: string;
@@ -13,12 +15,28 @@ interface IRequest {
 
 @Injectable()
 export class CreateContactMessageUseCase {
+    private readonly logger = new Logger(CreateContactMessageUseCase.name);
+
     constructor(
         @Inject('IContactMessageRepository')
-        private contactMessageRepository: IContactMessageRepository
+        private contactMessageRepository: IContactMessageRepository,
+        private mailService: MailService,
     ) {}
 
     async execute(data: IRequest): Promise<ContactMessage> {
-        return this.contactMessageRepository.create(data);
+        const saved = await this.contactMessageRepository.create(data);
+
+        try {
+            const recipient = process.env.MAIL_TO || process.env.MAIL_USER;
+            await this.mailService.send({
+                to: recipient,
+                subject: `Nova mensagem de ${data.name} — ${data.service || "Contato"}`,
+                html: contactMessageTemplate(data),
+            });
+        } catch (err) {
+            this.logger.error("Falha ao enviar email de contato", err);
+        }
+
+        return saved;
     }
 }

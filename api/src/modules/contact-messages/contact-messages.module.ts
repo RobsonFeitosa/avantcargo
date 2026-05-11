@@ -7,9 +7,13 @@ import { ListContactMessagesUseCase } from "./application/use-cases/ListContactM
 import { DeleteContactMessageUseCase } from "./application/use-cases/DeleteContactMessageUseCase";
 import { MarkContactMessageAsReadUseCase } from "./application/use-cases/MarkContactMessageAsReadUseCase";
 import { ContactMessageController } from "./infra/http/controllers/ContactMessageController";
+import { MailModule } from "src/shared/infra/mail/mail.module";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([ContactMessage])],
+    imports: [
+        TypeOrmModule.forFeature([ContactMessage]),
+        MailModule,
+    ],
     providers: [
         {
             provide: 'IContactMessageRepository',
