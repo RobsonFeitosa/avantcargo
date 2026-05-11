@@ -7,6 +7,7 @@ import { FaBuilding } from "react-icons/fa6";
 
 
 import { FaCheckCircle, FaWhatsapp } from "react-icons/fa";
+import Link from "next/link";
 
 interface HeroProps {
   data?: {
@@ -63,13 +64,17 @@ export const Hero = ({ data }: HeroProps) => {
 
             <ScrollReveal direction="right" delay={0.4}>
               <div className="flex flex-wrap gap-4">
-                <Button size="lg" className="bg-primary hover:bg-emerald-700 rounded-full text-white font-semibold px-8 h-12 shadow-xl shadow-primary/10">
-                  <FaWhatsapp className="mr-1" />
-                  {data?.heroPrimaryButtonText || "Falar conosco"}
+                <Button asChild size="lg" className="bg-primary hover:bg-emerald-700 rounded-full text-white font-semibold px-8 h-12 shadow-xl shadow-primary/10">
+                  <Link href="/contato">
+                    <FaWhatsapp className="mr-1" />
+                    {data?.heroPrimaryButtonText || "Falar conosco"}
+                  </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-slate-300 rounded-full hover:bg-slate-50 h-12 px-8 font-semibold text-slate-700">
-                  <FaBuilding />
-                  {data?.heroSecondaryButtonText || "Quem somos"}
+                <Button asChild size="lg" variant="outline" className="border-slate-300 rounded-full hover:bg-slate-50 h-12 px-8 font-semibold text-slate-700">
+                  <Link href="/quem-somos">
+                    <FaBuilding />
+                    {data?.heroSecondaryButtonText || "Quem somos"}
+                  </Link>
                 </Button>
               </div>
             </ScrollReveal>

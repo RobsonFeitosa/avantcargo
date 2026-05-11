@@ -134,15 +134,44 @@ export default function CareersAdmin() {
             </CardHeader>
             <CardContent className="pt-6">
               <div 
-                onClick={() => document.getElementById('careers-image')?.click()}
-                className="relative border-2 border-dashed border-emerald-200 rounded-xl p-4 text-center hover:bg-emerald-50 transition-colors cursor-pointer group flex flex-col items-center justify-center h-64 overflow-hidden"
+                className={`relative border-2 border-dashed ${formData.image ? 'border-emerald-200' : 'border-emerald-200 hover:bg-emerald-50 cursor-pointer'} rounded-xl p-4 text-center transition-colors group flex flex-col items-center justify-center h-64 overflow-hidden`}
+                onClick={() => !formData.image && document.getElementById('careers-image')?.click()}
               >
                 {formData.image ? (
-                  <div className="absolute inset-0">
-                    <Image src={`${process.env.NEXT_PUBLIC_API_URL}/files/${formData.image}`} alt="Preview" fill className="object-cover" />
-                    <div className="absolute inset-0 bg-emerald-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
-                      <ImageIcon className="text-white w-8 h-8" />
-                      <span className="text-sm text-white font-medium bg-emerald-950/50 px-3 py-1.5 rounded-full">Trocar Imagem</span>
+                  <div className="absolute inset-0 w-full h-full group">
+                    <Image 
+                      src={`${process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '')}/files/${formData.image}`} 
+                      alt="Preview" 
+                      fill 
+                      className="object-cover" 
+                    />
+                    <div className="absolute inset-0 bg-emerald-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-4">
+                      <Button 
+                        type="button"
+                        variant="secondary" 
+                        size="sm"
+                        className="w-40 flex items-center justify-center gap-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          document.getElementById('careers-image')?.click();
+                        }}
+                      >
+                        <ImageIcon className="w-4 h-4" />
+                        Trocar Imagem
+                      </Button>
+                      <Button 
+                        type="button"
+                        variant="destructive" 
+                        size="sm"
+                        className="w-40 flex items-center justify-center gap-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setFormData(prev => ({ ...prev, image: "" }));
+                          updateMutation.mutate({ ...formData, image: "" });
+                        }}
+                      >
+                        Remover Imagem
+                      </Button>
                     </div>
                   </div>
                 ) : (
