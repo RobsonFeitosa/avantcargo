@@ -100,8 +100,8 @@ export default function Contact() {
     {
       icon: FaWhatsapp,
       title: "WhatsApp",
-      value: config?.whatsappNumber 
-        ? config.whatsappNumber.length === 11 
+      value: config?.whatsappNumber
+        ? config.whatsappNumber.length === 11
           ? `(${config.whatsappNumber.slice(0, 2)}) ${config.whatsappNumber.slice(2, 7)}-${config.whatsappNumber.slice(7)}`
           : `(${config.whatsappNumber.slice(0, 2)}) ${config.whatsappNumber.slice(2, 6)}-${config.whatsappNumber.slice(6)}`
         : "(11) 96450-3217",
@@ -278,10 +278,12 @@ export default function Contact() {
                             <SelectValue placeholder="Selecione um serviço..." />
                           </SelectTrigger>
                           <SelectContent className="bg-white border-slate-200 text-emerald-950">
-                            <SelectItem value="ex">Ex-Tarifário</SelectItem>
-                            <SelectItem value="import">Importação / Exportação</SelectItem>
-                            <SelectItem value="radar">Habilitação Radar</SelectItem>
-                            <SelectItem value="consult">Consultoria Técnica</SelectItem>
+                            <SelectItem value="representacao">Representação</SelectItem>
+                            <SelectItem value="cct-importacao">CCT Importação</SelectItem>
+                            <SelectItem value="e-awb">E-awb</SelectItem>
+                            <SelectItem value="ce-mercante">CE Mercante</SelectItem>
+                            <SelectItem value="transporte">Transporte</SelectItem>
+                            <SelectItem value="suporte-imediato">Suporte Imediato</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -300,7 +302,7 @@ export default function Contact() {
                         />
                       </div>
 
-                      <Button 
+                      <Button
                         type="submit"
                         disabled={mutation.isPending}
                         className="w-full h-14 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold text-lg rounded-xl shadow-lg shadow-blue-500/20 group"
@@ -381,13 +383,13 @@ export default function Contact() {
                           </DialogTitle>
                         </DialogHeader>
                         <div className="w-full h-[450px] bg-slate-100">
-                          <iframe 
-                            src={config?.addressMapsUrl || "https://www.google.com/maps?q=R.+Tupi+Paulista,+71+-+Cidade+Industrial+Satélite+de+São+Paulo,+Guarulhos+-+SP,+07222-070,+Brasil&output=embed"} 
-                            width="100%" 
-                            height="100%" 
-                            style={{ border: 0 }} 
-                            allowFullScreen 
-                            loading="lazy" 
+                          <iframe
+                            src={config?.addressMapsUrl || "https://www.google.com/maps?q=R.+Tupi+Paulista,+71+-+Cidade+Industrial+Satélite+de+São+Paulo,+Guarulhos+-+SP,+07222-070,+Brasil&output=embed"}
+                            width="100%"
+                            height="100%"
+                            style={{ border: 0 }}
+                            allowFullScreen
+                            loading="lazy"
                             referrerPolicy="no-referrer-when-downgrade"
                           ></iframe>
                         </div>
