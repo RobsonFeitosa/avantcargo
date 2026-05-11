@@ -67,6 +67,7 @@ export const Navbar = ({ footerData }: { footerData?: any }) => {
             <DropdownMenu open={isAboutOpen} onOpenChange={setIsAboutOpen} modal={false}>
               <DropdownMenuTrigger asChild>
                 <button 
+                  suppressHydrationWarning
                   className={`text-sm font-bold tracking-tight transition-all duration-300 relative group flex items-center gap-1.5 px-4 py-2 rounded-full cursor-pointer border-none bg-transparent ${pathname.startsWith("/quem-somos") ? "text-primary bg-primary/10" : "text-slate-600 hover:text-primary hover:bg-slate-50"}`}
                 >
                   Quem Somos
@@ -113,6 +114,7 @@ export const Navbar = ({ footerData }: { footerData?: any }) => {
               <DropdownMenuTrigger asChild>
                 <button 
                   id="services-dropdown-trigger"
+                  suppressHydrationWarning
                   className={`text-sm font-bold tracking-tight transition-all duration-300 relative group flex items-center gap-1.5 px-4 py-2 rounded-full cursor-pointer border-none bg-transparent ${pathname.startsWith("/servicos") ? "text-primary bg-primary/10" : "text-slate-600 hover:text-primary hover:bg-slate-50"}`}
                 >
                   Áreas de Atuação

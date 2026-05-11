@@ -1,0 +1,13 @@
+.eapps-widget-toolbar {
+    display: none !important;
+}
+
+/* No seu globals.css */
+[class*="elfsight-app"] [class*="WidgetName__Container"] a,
+[id^="eapps-instagram-feed"]>a {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    pointer-events: none !important;
+}
