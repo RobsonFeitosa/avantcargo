@@ -5,6 +5,7 @@ import upload from '../../../constants/upload'
 
 export class DiskStorageProvider implements IStorageProvider {
   public async saveFile(file: string): Promise<string> {
+    console.log(`sdf`, upload.tmpFolder)
     await fs.promises.rename(
       path.resolve(upload.tmpFolder, file),
       path.resolve(upload.uploadsFolder, file),
