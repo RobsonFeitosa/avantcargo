@@ -14,6 +14,8 @@ RUN npm install --legacy-peer-deps
 # Copia o restante do código
 COPY . .
 
+RUN npm run build
+
 # Expõe a porta que a API usa
 EXPOSE 3333
 
