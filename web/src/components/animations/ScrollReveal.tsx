@@ -16,7 +16,7 @@ export const ScrollReveal = ({
   children,
   direction = "up",
   delay = 0,
-  duration = 0.6,
+  duration = 1.1,
   distance = 50,
   className = "",
 }: ScrollRevealProps) => {

@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa6";
 import { motion } from "framer-motion";
+import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import Link from "next/link";
 import {
   Breadcrumb,
@@ -163,27 +164,33 @@ export default function About() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(14,72,76,0.05),transparent_70%)] pointer-events-none" />
           <div className="container relative z-10">
             <div className="space-y-6">
-              <Breadcrumb className="text-slate-400">
-                <BreadcrumbList>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink asChild>
-                      <Link href="/" className="hover:text-primary transition-colors">Home</Link>
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <BreadcrumbPage className="text-slate-600">Quem Somos</BreadcrumbPage>
-                  </BreadcrumbItem>
-                </BreadcrumbList>
-              </Breadcrumb>
+              <ScrollReveal direction="up" delay={0.1}>
+                <Breadcrumb className="text-slate-400">
+                  <BreadcrumbList>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink asChild>
+                        <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage className="text-slate-600">Quem Somos</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+              </ScrollReveal>
 
               <div className="space-y-4 max-w-3xl">
-                <h1 className="text-4xl md:text-6xl font-bold text-emerald-950 tracking-tight leading-tight">
-                  {config?.historyHeroTitleDark || "Conheça a"} <span className="text-orange-500 uppercase">{config?.historyHeroTitleOrange || "AvantCargo"}</span>
-                </h1>
-                <p className="text-lg text-slate-600 leading-relaxed">
-                  {config?.historyHeroDescription || "Mais de 20 anos de expertise em comércio exterior, ajudando empresas brasileiras a crescer de forma inteligente e competitiva no mercado global."}
-                </p>
+                <ScrollReveal direction="up" delay={0.2}>
+                  <h1 className="text-4xl md:text-6xl font-bold text-emerald-950 tracking-tight leading-tight">
+                    {config?.historyHeroTitleDark || "Conheça a"} <span className="text-orange-500 uppercase">{config?.historyHeroTitleOrange || "AvantCargo"}</span>
+                  </h1>
+                </ScrollReveal>
+                <ScrollReveal direction="up" delay={0.3}>
+                  <p className="text-lg text-slate-600 leading-relaxed">
+                    {config?.historyHeroDescription || "Mais de 20 anos de expertise em comércio exterior, ajudando empresas brasileiras a crescer de forma inteligente e competitiva no mercado global."}
+                  </p>
+                </ScrollReveal>
               </div>
             </div>
           </div>
@@ -194,30 +201,38 @@ export default function About() {
           <div className="container">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
               <div className="space-y-8">
-                <Badge variant="outline" className="text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-4 py-1 rounded-full text-[10px] font-bold">
-                  Nossa História
-                </Badge>
-                <h2 className="text-4xl font-bold text-emerald-950 leading-tight">
-                  {config?.historyTitle || "Duas décadas de excelência em Comércio Exterior"}
-                </h2>
-                <div className="space-y-6 text-slate-600 leading-relaxed whitespace-pre-wrap">
-                  {config?.historyText || `A AVANTCARGO nasceu em Curitiba, no Paraná, com uma missão clara: tornar o comércio exterior mais acessível, inteligente e rentável para as empresas brasileiras. Desde 2003, nossa assessoria vem construindo um histórico de resultados sólidos e relacionamentos de longo prazo com nossos clientes.
+                <ScrollReveal direction="up" delay={0.1}>
+                  <Badge variant="outline" className="text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-4 py-1 rounded-full text-[10px] font-bold">
+                    Nossa História
+                  </Badge>
+                </ScrollReveal>
+                <ScrollReveal direction="up" delay={0.2}>
+                  <h2 className="text-4xl font-bold text-emerald-950 leading-tight">
+                    {config?.historyTitle || "Duas décadas de excelência em Comércio Exterior"}
+                  </h2>
+                </ScrollReveal>
+                <ScrollReveal direction="up" delay={0.3}>
+                  <div className="space-y-6 text-slate-600 leading-relaxed whitespace-pre-wrap">
+                    {config?.historyText || `A AVANTCARGO nasceu em Curitiba, no Paraná, com uma missão clara: tornar o comércio exterior mais acessível, inteligente e rentável para as empresas brasileiras. Desde 2003, nossa assessoria vem construindo um histórico de resultados sólidos e relacionamentos de longo prazo com nossos clientes.
 
 Especializamo-nos nos mecanismos mais estratégicos do comércio exterior brasileiro — em especial no Ex-Tarifário, ferramenta que permite a redução de até 100% no imposto de importação para máquinas e equipamentos sem similar nacional.
 
 Nossa equipe tem formação técnica multidisciplinar — direito, economia, engenharia, comércio exterior — cada um trazendo conhecimento da legislação aduaneira brasileira e das exigências dos órgãos reguladores.`}
-                </div>
+                  </div>
+                </ScrollReveal>
               </div>
 
               <div className="p-8 md:p-12 rounded-[40px] bg-slate-50 border border-slate-200 relative overflow-hidden">
                 <div className="space-y-10 relative z-10">
                   {timeline.map((item: any, idx: number) => (
-                    <div key={idx} className="flex gap-6 group">
-                      <div className="shrink-0 pt-1">
-                        <span className="text-sm font-black text-slate-400 group-hover:text-orange-500 transition-colors">{item.year}</span>
+                    <ScrollReveal key={idx} direction="up" delay={0.2 + (idx * 0.15)}>
+                      <div className="flex gap-6 group">
+                        <div className="shrink-0 pt-1">
+                          <span className="text-sm font-black text-slate-400 group-hover:text-orange-500 transition-colors">{item.year}</span>
+                        </div>
+                        <p className="text-sm text-slate-600 group-hover:text-emerald-950 transition-colors">{item.text}</p>
                       </div>
-                      <p className="text-sm text-slate-600 group-hover:text-emerald-950 transition-colors">{item.text}</p>
-                    </div>
+                    </ScrollReveal>
                   ))}
                 </div>
               </div>
@@ -342,23 +357,29 @@ Nossa equipe tem formação técnica multidisciplinar — direito, economia, eng
         <section className="py-10">
           <div className="container text-center space-y-20">
             <div className="space-y-6">
-              <Badge variant="outline" className="text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-4 py-1 rounded-full text-[10px] font-bold">
-                {config?.valuesBadge || "Nossos Valores"}
-              </Badge>
-              <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight">
-                {config?.valuesTitle1 || "O que nos"} <span className="text-primary">{config?.valuesTitleHighlight || "guia"}</span>
-              </h2>
+              <ScrollReveal direction="up" delay={0.1}>
+                <Badge variant="outline" className="text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-4 py-1 rounded-full text-[10px] font-bold">
+                  {config?.valuesBadge || "Nossos Valores"}
+                </Badge>
+              </ScrollReveal>
+              <ScrollReveal direction="up" delay={0.2}>
+                <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight">
+                  {config?.valuesTitle1 || "O que nos"} <span className="text-primary">{config?.valuesTitleHighlight || "guia"}</span>
+                </h2>
+              </ScrollReveal>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {values.map((v: any, idx: number) => (
-                <div key={idx} className="p-10 rounded-[32px] bg-white border border-slate-200 hover:border-primary/30 shadow-sm hover:shadow-md transition-all group text-center space-y-6">
-                  <div className="h-14 w-14 rounded-2xl bg-slate-50 flex items-center justify-center mx-auto text-primary group-hover:scale-110 transition-transform">
-                    <v.icon className="h-7 w-7" />
+                <ScrollReveal key={idx} direction="up" delay={0.1 * (idx + 1)}>
+                  <div className="p-10 rounded-[32px] bg-white border border-slate-200 hover:border-primary/30 shadow-sm hover:shadow-md transition-all group text-center space-y-6 h-full">
+                    <div className="h-14 w-14 rounded-2xl bg-slate-50 flex items-center justify-center mx-auto text-primary group-hover:scale-110 transition-transform">
+                      <v.icon className="h-7 w-7" />
+                    </div>
+                    <h4 className="text-xl font-bold text-emerald-900">{v.title}</h4>
+                    <p className="text-slate-500 text-sm leading-relaxed">{v.desc}</p>
                   </div>
-                  <h4 className="text-xl font-bold text-emerald-900">{v.title}</h4>
-                  <p className="text-slate-500 text-sm leading-relaxed">{v.desc}</p>
-                </div>
+                </ScrollReveal>
               ))}
             </div>
           </div>
@@ -368,32 +389,38 @@ Nossa equipe tem formação técnica multidisciplinar — direito, economia, eng
         <section className="py-32 bg-slate-50/50">
           <div className="container text-center space-y-20">
             <div className="space-y-6">
-              <Badge variant="outline" className="text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-4 py-1 rounded-full text-[10px] font-bold">
-                {config?.differentialsBadge || "Por que a AVANTCARGO?"}
-              </Badge>
-              <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight">
-                {config?.differentialsTitle1 || "Nossos"} <span className="text-primary">{config?.differentialsTitleHighlight || "diferenciais"}</span>
-              </h2>
+              <ScrollReveal direction="up" delay={0.1}>
+                <Badge variant="outline" className="text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-4 py-1 rounded-full text-[10px] font-bold">
+                  {config?.differentialsBadge || "Por que a AVANTCARGO?"}
+                </Badge>
+              </ScrollReveal>
+              <ScrollReveal direction="up" delay={0.2}>
+                <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight">
+                  {config?.differentialsTitle1 || "Nossos"} <span className="text-primary">{config?.differentialsTitleHighlight || "diferenciais"}</span>
+                </h2>
+              </ScrollReveal>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {differentials.map((d: any, idx: number) => (
-                <div key={idx} className="p-8 rounded-3xl bg-white border border-slate-200 hover:bg-slate-50 transition-all group text-left relative overflow-hidden shadow-sm">
-                  <div className="flex items-start gap-6 relative z-10">
-                    <div className="text-4xl font-black text-slate-100 group-hover:text-primary/10 transition-colors">
-                      {d.num}
-                    </div>
-                    <div className="space-y-4">
-                      <div className="flex items-start gap-2 text-orange-600">
-                        <div className="flex  justify-center mt-1 w-8">
-                          <d.icon className="h-6 w-6" />
-                        </div>
-                        <h4 className="font-bold text-2xl text-emerald-900">{d.title}</h4>
+                <ScrollReveal key={idx} direction="up" delay={0.1 * (idx + 1)}>
+                  <div className="p-8 rounded-3xl bg-white border border-slate-200 hover:bg-slate-50 transition-all group text-left relative overflow-hidden shadow-sm h-full">
+                    <div className="flex items-start gap-6 relative z-10">
+                      <div className="text-4xl font-black text-slate-100 group-hover:text-primary/10 transition-colors">
+                        {d.num}
                       </div>
-                      <p className="text-slate-500 text-lg leading-relaxed">{d.desc}</p>
+                      <div className="space-y-4">
+                        <div className="flex items-start gap-2 text-orange-600">
+                          <div className="flex  justify-center mt-1 w-8">
+                            <d.icon className="h-6 w-6" />
+                          </div>
+                          <h4 className="font-bold text-2xl text-emerald-900">{d.title}</h4>
+                        </div>
+                        <p className="text-slate-500 text-lg leading-relaxed">{d.desc}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </ScrollReveal>
               ))}
             </div>
           </div>
@@ -404,38 +431,46 @@ Nossa equipe tem formação técnica multidisciplinar — direito, economia, eng
           <div className="container">
             <div className="p-12 md:p-16 rounded-[48px] bg-gradient-to-br from-primary/5 to-orange-500/5 border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-12">
               <div className="space-y-4 text-center md:text-left">
-                <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight leading-tight">
-                  {config?.ctaTitleDark || "Vamos trabalhar"} <span className="text-orange-500">{config?.ctaTitleHighlight || "juntos?"}</span>
-                </h2>
-                <p className="text-slate-600 max-w-xl text-lg">
-                  {config?.ctaDescription || "Descubra como a AVANTCARGO pode ajudar sua empresa a reduzir custos de importação e operar com mais eficiência no comércio exterior."}
-                </p>
+                <ScrollReveal direction="left" delay={0.1}>
+                  <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight leading-tight">
+                    {config?.ctaTitleDark || "Vamos trabalhar"} <span className="text-orange-500">{config?.ctaTitleHighlight || "juntos?"}</span>
+                  </h2>
+                </ScrollReveal>
+                <ScrollReveal direction="left" delay={0.2}>
+                  <p className="text-slate-600 max-w-xl text-lg">
+                    {config?.ctaDescription || "Descubra como a AVANTCARGO pode ajudar sua empresa a reduzir custos de importação e operar com mais eficiência no comércio exterior."}
+                  </p>
+                </ScrollReveal>
               </div>
               <div className="flex flex-col gap-4 w-full md:w-auto">
-                {config?.ctaPrimaryButtonLink && (
-                  <Button
-                    asChild
-                    className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-14 px-10 rounded-full shadow-lg shadow-orange-500/20 text-lg gap-2"
-                  >
-                    <Link
-                      href={`https://wa.me/55${config.ctaPrimaryButtonLink.replace(/\D/g, "")}`}
-                      target="_blank"
+                <ScrollReveal direction="right" delay={0.3}>
+                  {config?.ctaPrimaryButtonLink && (
+                    <Button
+                      asChild
+                      className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-14 px-10 rounded-full shadow-lg shadow-orange-500/20 text-lg gap-2 w-full"
                     >
-                      <FaWhatsapp /> {config?.ctaPrimaryButtonText || "Falar conosco"}
-                    </Link>
-                  </Button>
-                )}
-                {config?.ctaSecondaryButtonLink && (
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 h-14 px-10 rounded-full text-lg gap-2"
-                  >
-                    <Link href={config?.ctaSecondaryButtonLink || "/contato"}>
-                      <MessageSquare className="h-4 w-4 text-primary" /> {config?.ctaSecondaryButtonText || "Enviar mensagem"}
-                    </Link>
-                  </Button>
-                )}
+                      <Link
+                        href={`https://wa.me/55${config.ctaPrimaryButtonLink.replace(/\D/g, "")}`}
+                        target="_blank"
+                      >
+                        <FaWhatsapp /> {config?.ctaPrimaryButtonText || "Falar conosco"}
+                      </Link>
+                    </Button>
+                  )}
+                </ScrollReveal>
+                <ScrollReveal direction="right" delay={0.4}>
+                  {config?.ctaSecondaryButtonLink && (
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 h-14 px-10 rounded-full text-lg gap-2 w-full"
+                    >
+                      <Link href={config?.ctaSecondaryButtonLink || "/contato"}>
+                        <MessageSquare className="h-4 w-4 text-primary" /> {config?.ctaSecondaryButtonText || "Enviar mensagem"}
+                      </Link>
+                    </Button>
+                  )}
+                </ScrollReveal>
               </div>
             </div>
           </div>

@@ -3,6 +3,7 @@ import { Phone, CheckCircle2 } from "lucide-react";
 import { FaWhatsapp, FaArrowRightLong } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { ScrollReveal } from "@/components/animations/ScrollReveal";
 
 interface ContactCTAProps {
   data?: {
@@ -31,12 +32,7 @@ export const ContactCTA = ({ data }: ContactCTAProps) => {
         <div className="p-12 md:p-16 rounded-[48px] bg-gradient-to-br from-primary/5 to-orange-500/5 border border-slate-200">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-16 items-center">
             <div className="space-y-10">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="space-y-4"
-              >
+              <ScrollReveal direction="up" delay={0.1} className="space-y-4">
                 <h2 className="text-4xl font-bold leading-tight text-emerald-950 tracking-tight text-center md:text-left">
                   {data?.headerTitle ? (
                     data.headerTitle.split(" ").map((word, i) => {
@@ -55,33 +51,23 @@ export const ContactCTA = ({ data }: ContactCTAProps) => {
                 <p className="text-lg text-slate-600 max-w-xl text-center md:text-left mx-auto md:mx-0">
                   {data?.headerDescription || "Fale agora com um especialista AVANTCARGO. Atendemos empresas de todo o Brasil com agilidade, competência e mais de 20 anos de experiência."}
                 </p>
-              </motion.div>
+              </ScrollReveal>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-4"
-              >
+              <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-4">
                 {currentFeatures.map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-3 group">
-                    <div className="h-5 w-5 rounded-full bg-orange-500/10 flex items-center justify-center shrink-0">
-                      <CheckCircle2 className="text-orange-600 h-3.5 w-3.5" />
+                  <ScrollReveal key={idx} direction="up" delay={0.2 + (idx * 0.1)}>
+                    <div className="flex items-center gap-3 group">
+                      <div className="h-5 w-5 rounded-full bg-orange-500/10 flex items-center justify-center shrink-0">
+                        <CheckCircle2 className="text-orange-600 h-3.5 w-3.5" />
+                      </div>
+                      <span className="text-slate-700 font-medium">{item}</span>
                     </div>
-                    <span className="text-slate-700 font-medium">{item}</span>
-                  </div>
+                  </ScrollReveal>
                 ))}
-              </motion.div>
+              </div>
             </div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="flex flex-col items-center lg:items-end gap-6 w-full lg:w-auto"
-            >
+            <ScrollReveal direction="left" delay={0.3} className="flex flex-col items-center lg:items-end gap-6 w-full lg:w-auto">
               <div className="flex flex-col items-center lg:items-end gap-4 w-full">
                 <Button
                   asChild
@@ -110,7 +96,7 @@ export const ContactCTA = ({ data }: ContactCTAProps) => {
               <Link href={data?.textLink?.link || "/contato"} className="text-slate-400 hover:text-primary transition-colors text-sm flex items-center gap-2 underline underline-offset-4 decoration-slate-200">
                 {data?.textLink?.text || "Ou envie uma mensagem"} <FaArrowRightLong className="h-3 w-3" />
               </Link>
-            </motion.div>
+            </ScrollReveal>
           </div>
         </div>
       </div>

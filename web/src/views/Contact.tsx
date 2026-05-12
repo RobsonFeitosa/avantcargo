@@ -36,6 +36,7 @@ import {
 import { MapPin, Phone, Mail, Clock, Send, Instagram, ChevronRight, Loader2 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa6";
 import { motion } from "framer-motion";
+import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import Link from "next/link";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { generalContactActions } from "@/admin/actions/general-contact.actions";
@@ -170,27 +171,33 @@ export default function Contact() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(14,72,76,0.05),transparent_70%)] pointer-events-none" />
           <div className="container relative z-10">
             <div className="space-y-6">
-              <Breadcrumb className="text-slate-400">
-                <BreadcrumbList>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink asChild>
-                      <Link href="/" className="hover:text-primary transition-colors">Home</Link>
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <BreadcrumbPage className="text-slate-600">Contato</BreadcrumbPage>
-                  </BreadcrumbItem>
-                </BreadcrumbList>
-              </Breadcrumb>
+              <ScrollReveal direction="up" delay={0.1}>
+                <Breadcrumb className="text-slate-400">
+                  <BreadcrumbList>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink asChild>
+                        <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage className="text-slate-600">Contato</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+              </ScrollReveal>
 
               <div className="space-y-4 max-w-3xl">
-                <h1 className="text-4xl md:text-6xl font-bold text-emerald-950 tracking-tight leading-tight">
-                  {config?.headerTitleDark || "Fale com a"} <span className="text-orange-500 uppercase">{config?.headerTitleHighlight || "AvantCargo"}</span>
-                </h1>
-                <p className="text-lg text-slate-600 leading-relaxed">
-                  {config?.headerDescription || "Tire suas dúvidas, solicite uma análise gratuita de Ex-Tarifário ou entre em contato para iniciar seu processo de comércio exterior."}
-                </p>
+                <ScrollReveal direction="up" delay={0.2}>
+                  <h1 className="text-4xl md:text-6xl font-bold text-emerald-950 tracking-tight leading-tight">
+                    {config?.headerTitleDark || "Fale com a"} <span className="text-orange-500 uppercase">{config?.headerTitleHighlight || "AvantCargo"}</span>
+                  </h1>
+                </ScrollReveal>
+                <ScrollReveal direction="up" delay={0.3}>
+                  <p className="text-lg text-slate-600 leading-relaxed">
+                    {config?.headerDescription || "Tire suas dúvidas, solicite uma análise gratuita de Ex-Tarifário ou entre em contato para iniciar seu processo de comércio exterior."}
+                  </p>
+                </ScrollReveal>
               </div>
             </div>
           </div>
@@ -202,12 +209,8 @@ export default function Contact() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
               {/* Form Column */}
               <div className="lg:col-span-7">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="p-8 md:p-10 rounded-[32px] bg-white border border-slate-200 relative overflow-hidden shadow-sm"
-                >
+                <ScrollReveal direction="up" delay={0.1} className="h-full">
+                  <div className="p-8 md:p-10 rounded-[32px] bg-white border border-slate-200 relative overflow-hidden shadow-sm h-full">
                   <div className="space-y-8 relative z-10">
                     <div className="space-y-2">
                       <h3 className="text-2xl font-bold text-emerald-950">{config?.formTitle || "Enviar mensagem"}</h3>
@@ -324,100 +327,106 @@ export default function Contact() {
                       </div>
                     </form>
                   </div>
-                </motion.div>
+                  </div>
+                </ScrollReveal>
               </div>
 
               {/* Contacts Column */}
               <div className="lg:col-span-5 space-y-10">
                 <div className="space-y-6">
-                  <h3 className="text-2xl font-bold text-emerald-950">Nossos contatos</h3>
+                  <ScrollReveal direction="up" delay={0.2}>
+                    <h3 className="text-2xl font-bold text-emerald-950">Nossos contatos</h3>
+                  </ScrollReveal>
                   <div className="space-y-4">
                     {contacts.map((contact, idx) => (
-                      <motion.a
-                        key={idx}
-                        href={contact.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        initial={{ opacity: 0, x: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: idx * 0.1 }}
-                        className="p-6 rounded-2xl bg-slate-50 border border-slate-200 hover:border-primary/20 hover:bg-white hover:shadow-md transition-all group flex items-center gap-6 cursor-pointer"
-                      >
-                        <div className={`h-12 w-12 rounded-xl ${contact.bg} flex items-center justify-center ${contact.color} shrink-0`}>
-                          <contact.icon className="h-6 w-6" />
-                        </div>
-                        <div className="flex-grow">
-                          <div className="flex items-center justify-between">
-                            <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest">{contact.title}</h4>
-                            <ChevronRight className="h-4 w-4 text-slate-300 group-hover:translate-x-1 transition-transform" />
+                      <ScrollReveal key={idx} direction="left" delay={0.3 + (idx * 0.1)}>
+                        <a
+                          href={contact.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-6 rounded-2xl bg-slate-50 border border-slate-200 hover:border-primary/20 hover:bg-white hover:shadow-md transition-all group flex items-center gap-6 cursor-pointer"
+                        >
+                          <div className={`h-12 w-12 rounded-xl ${contact.bg} flex items-center justify-center ${contact.color} shrink-0`}>
+                            <contact.icon className="h-6 w-6" />
                           </div>
-                          <p className="text-lg font-bold text-emerald-900">{contact.value}</p>
-                          <p className="text-xs text-slate-500">{contact.desc}</p>
-                        </div>
-                      </motion.a>
+                          <div className="flex-grow">
+                            <div className="flex items-center justify-between">
+                              <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest">{contact.title}</h4>
+                              <ChevronRight className="h-4 w-4 text-slate-300 group-hover:translate-x-1 transition-transform" />
+                            </div>
+                            <p className="text-lg font-bold text-emerald-900">{contact.value}</p>
+                            <p className="text-xs text-slate-500">{contact.desc}</p>
+                          </div>
+                        </a>
+                      </ScrollReveal>
                     ))}
                   </div>
                 </div>
 
                 <div className="space-y-6">
-                  <h3 className="text-2xl font-bold text-emerald-950 flex items-center gap-2">
-                    <MapPin className="h-6 w-6 text-orange-500" />
-                    Nosso endereço
-                  </h3>
-                  <div className="p-8 rounded-[32px] bg-slate-50 border border-slate-200 space-y-6">
-                    <div className="space-y-2">
-                      <p className="text-emerald-900 font-medium whitespace-pre-line">{config?.address || "R. Tupi Paulista, 71 - Cidade Industrial Satélite\nGuarulhos, SP — CEP 07222-070"}</p>
-                      <p className="text-[10px] text-slate-300 font-mono mt-4">{config?.addressCnpj || "CNPJ: 22.837.582/0001-05"}</p>
+                  <ScrollReveal direction="up" delay={0.4}>
+                    <h3 className="text-2xl font-bold text-emerald-950 flex items-center gap-2">
+                      <MapPin className="h-6 w-6 text-orange-500" />
+                      Nosso endereço
+                    </h3>
+                  </ScrollReveal>
+                  <ScrollReveal direction="up" delay={0.5}>
+                    <div className="p-8 rounded-[32px] bg-slate-50 border border-slate-200 space-y-6">
+                      <div className="space-y-2">
+                        <p className="text-emerald-900 font-medium whitespace-pre-line">{config?.address || "R. Tupi Paulista, 71 - Cidade Industrial Satélite\nGuarulhos, SP — CEP 07222-070"}</p>
+                        <p className="text-[10px] text-slate-300 font-mono mt-4">{config?.addressCnpj || "CNPJ: 22.837.582/0001-05"}</p>
+                      </div>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="outline" className="w-full h-12 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-emerald-500/30 hover:text-emerald-700 rounded-xl gap-2 font-bold shadow-sm transition-all">
+                            <MapPin className="h-4 w-4 text-primary" /> Ver no mapa
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[700px] p-0 overflow-hidden border-none rounded-2xl">
+                          <DialogHeader className="p-6 pb-2 bg-white">
+                            <DialogTitle className="text-emerald-950 font-bold flex items-center gap-2 text-xl">
+                              <MapPin className="h-6 w-6 text-orange-500" />
+                              Nossa Localização
+                            </DialogTitle>
+                          </DialogHeader>
+                          <div className="w-full h-[450px] bg-slate-100">
+                            <iframe
+                              src={config?.addressMapsUrl || "https://www.google.com/maps?q=R.+Tupi+Paulista,+71+-+Cidade+Industrial+Satélite+de+São+Paulo,+Guarulhos+-+SP,+07222-070,+Brasil&output=embed"}
+                              width="100%"
+                              height="100%"
+                              style={{ border: 0 }}
+                              allowFullScreen
+                              loading="lazy"
+                              referrerPolicy="no-referrer-when-downgrade"
+                            ></iframe>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
                     </div>
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button variant="outline" className="w-full h-12 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-emerald-500/30 hover:text-emerald-700 rounded-xl gap-2 font-bold shadow-sm transition-all">
-                          <MapPin className="h-4 w-4 text-primary" /> Ver no mapa
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-[700px] p-0 overflow-hidden border-none rounded-2xl">
-                        <DialogHeader className="p-6 pb-2 bg-white">
-                          <DialogTitle className="text-emerald-950 font-bold flex items-center gap-2 text-xl">
-                            <MapPin className="h-6 w-6 text-orange-500" />
-                            Nossa Localização
-                          </DialogTitle>
-                        </DialogHeader>
-                        <div className="w-full h-[450px] bg-slate-100">
-                          <iframe
-                            src={config?.addressMapsUrl || "https://www.google.com/maps?q=R.+Tupi+Paulista,+71+-+Cidade+Industrial+Satélite+de+São+Paulo,+Guarulhos+-+SP,+07222-070,+Brasil&output=embed"}
-                            width="100%"
-                            height="100%"
-                            style={{ border: 0 }}
-                            allowFullScreen
-                            loading="lazy"
-                            referrerPolicy="no-referrer-when-downgrade"
-                          ></iframe>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
-                  </div>
+                  </ScrollReveal>
                 </div>
 
                 <div className="space-y-6">
-                  <div className="p-8 rounded-[32px] bg-slate-50 border border-slate-200 space-y-6">
-                    <div className="flex items-center gap-2 text-slate-400 mb-4">
-                      <Clock className="h-4 w-4" />
-                      <h4 className="text-xs font-bold uppercase tracking-widest">Horário de atendimento</h4>
+                  <ScrollReveal direction="up" delay={0.6}>
+                    <div className="p-8 rounded-[32px] bg-slate-50 border border-slate-200 space-y-6">
+                      <div className="flex items-center gap-2 text-slate-400 mb-4">
+                        <Clock className="h-4 w-4" />
+                        <h4 className="text-xs font-bold uppercase tracking-widest">Horário de atendimento</h4>
+                      </div>
+                      <div className="space-y-3">
+                        {[
+                          { day: "Segunda — Sexta", hour: config?.hoursMonFri || "8h às 18h" },
+                          { day: "Sábado", hour: config?.hoursSat || "Fechado", inactive: (config?.hoursSat === "Fechado" || !config?.hoursSat) },
+                          { day: "Domingo", hour: config?.hoursSun || "Fechado", inactive: (config?.hoursSun === "Fechado" || !config?.hoursSun) },
+                        ].map((item, idx) => (
+                          <div key={idx} className="flex justify-between items-center text-sm">
+                            <span className="text-slate-600">{item.day}</span>
+                            <span className={item.inactive ? "text-red-500/60" : "text-primary font-bold"}>{item.hour}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <div className="space-y-3">
-                      {[
-                        { day: "Segunda — Sexta", hour: config?.hoursMonFri || "8h às 18h" },
-                        { day: "Sábado", hour: config?.hoursSat || "Fechado", inactive: (config?.hoursSat === "Fechado" || !config?.hoursSat) },
-                        { day: "Domingo", hour: config?.hoursSun || "Fechado", inactive: (config?.hoursSun === "Fechado" || !config?.hoursSun) },
-                      ].map((item, idx) => (
-                        <div key={idx} className="flex justify-between items-center text-sm">
-                          <span className="text-slate-600">{item.day}</span>
-                          <span className={item.inactive ? "text-red-500/60" : "text-primary font-bold"}>{item.hour}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  </ScrollReveal>
                 </div>
               </div>
             </div>
@@ -428,31 +437,36 @@ export default function Contact() {
         <section className="py-32 border-t border-slate-100">
           <div className="container">
             <div className="text-center space-y-4 mb-20">
-              <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight">
-                {config?.faqTitle?.split(" ")[0] || "Perguntas"} <span className="text-primary">{config?.faqTitle?.split(" ").slice(1).join(" ") || "frequentes"}</span>
-              </h2>
+              <ScrollReveal direction="up" delay={0.1}>
+                <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight">
+                  {config?.faqTitle?.split(" ")[0] || "Perguntas"} <span className="text-primary">{config?.faqTitle?.split(" ").slice(1).join(" ") || "frequentes"}</span>
+                </h2>
+              </ScrollReveal>
               {config?.faqBadge && (
-                <p className="text-slate-600 max-w-2xl mx-auto text-lg">
-                  {config.faqBadge}
-                </p>
+                <ScrollReveal direction="up" delay={0.2}>
+                  <p className="text-slate-600 max-w-2xl mx-auto text-lg">
+                    {config.faqBadge}
+                  </p>
+                </ScrollReveal>
               )}
             </div>
 
             <div className="max-w-3xl mx-auto">
               <Accordion type="single" collapsible className="space-y-4">
                 {faqs.map((faq, idx) => (
-                  <AccordionItem
-                    key={idx}
-                    value={`item-${idx}`}
-                    className="border border-slate-200 bg-slate-50/50 rounded-2xl px-6 overflow-hidden"
-                  >
-                    <AccordionTrigger className="text-emerald-900 hover:text-orange-600 text-left py-6 font-bold hover:no-underline">
-                      {faq.q}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-slate-600 pb-6 leading-relaxed">
-                      {faq.a}
-                    </AccordionContent>
-                  </AccordionItem>
+                  <ScrollReveal key={idx} direction="up" delay={0.1 * (idx + 1)}>
+                    <AccordionItem
+                      value={`item-${idx}`}
+                      className="border border-slate-200 bg-slate-50/50 rounded-2xl px-6 overflow-hidden"
+                    >
+                      <AccordionTrigger className="text-emerald-900 hover:text-orange-600 text-left py-6 font-bold hover:no-underline">
+                        {faq.q}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-slate-600 pb-6 leading-relaxed">
+                        {faq.a}
+                      </AccordionContent>
+                    </AccordionItem>
+                  </ScrollReveal>
                 ))}
               </Accordion>
             </div>

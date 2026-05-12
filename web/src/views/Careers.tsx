@@ -11,6 +11,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Loader2, Paperclip } from "lucide-react";
 import { motion } from "framer-motion";
+import { ScrollReveal } from "@/components/animations/ScrollReveal";
 
 export default function Careers() {
   const [formData, setFormData] = useState({
@@ -65,9 +66,11 @@ export default function Careers() {
         <section className="pt-32 pb-16 md:pt-48 md:pb-24 relative overflow-hidden border-b-[#009485] border-b-2">
           <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.05),transparent_70%)] pointer-events-none" />
           <div className="container relative z-10 text-center max-w-4xl">
-            <h1 className="text-4xl md:text-5xl font-bold text-emerald-900 tracking-tight leading-tight">
-              {config.title || "Programa de Novos Talentos"}
-            </h1>
+            <ScrollReveal direction="up" delay={0.1}>
+              <h1 className="text-4xl md:text-5xl font-bold text-emerald-900 tracking-tight leading-tight">
+                {config.title || "Programa de Novos Talentos"}
+              </h1>
+            </ScrollReveal>
           </div>
         </section>
 
@@ -75,30 +78,42 @@ export default function Careers() {
           <div className="container max-w-6xl">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
               <div className="space-y-8 text-slate-600 text-lg leading-relaxed">
-                <h2 className="text-2xl font-bold text-emerald-950 mb-6">
-                  {config.subtitle || "O nosso jeito de formar profissionais que movem o mundo."}
-                </h2>
+                <ScrollReveal direction="up" delay={0.1}>
+                  <h2 className="text-2xl font-bold text-emerald-950 mb-6">
+                    {config.subtitle || "O nosso jeito de formar profissionais que movem o mundo."}
+                  </h2>
+                </ScrollReveal>
 
-                {config.description1 && <p>{config.description1}</p>}
-                {config.description2 && <p>{config.description2}</p>}
-                {config.description3 && <p>{config.description3}</p>}
-                {config.description4 && <p>{config.description4}</p>}
+                <ScrollReveal direction="up" delay={0.2}>
+                  {config.description1 && <p>{config.description1}</p>}
+                </ScrollReveal>
+                <ScrollReveal direction="up" delay={0.3}>
+                  {config.description2 && <p>{config.description2}</p>}
+                </ScrollReveal>
+                <ScrollReveal direction="up" delay={0.4}>
+                  {config.description3 && <p>{config.description3}</p>}
+                </ScrollReveal>
+                <ScrollReveal direction="up" delay={0.5}>
+                  {config.description4 && <p>{config.description4}</p>}
+                </ScrollReveal>
               </div>
 
-              {config.image ? (
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3]">
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_API_URL}/files/${config.image}`}
-                    alt="Equipe AvantCargo"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              ) : (
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] bg-emerald-100 flex items-center justify-center">
-                  <p className="text-emerald-800/50 font-medium">Imagem não configurada</p>
-                </div>
-              )}
+              <ScrollReveal direction="left" delay={0.3}>
+                {config.image ? (
+                  <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3]">
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_API_URL}/files/${config.image}`}
+                      alt="Equipe AvantCargo"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] bg-emerald-100 flex items-center justify-center">
+                    <p className="text-emerald-800/50 font-medium">Imagem não configurada</p>
+                  </div>
+                )}
+              </ScrollReveal>
             </div>
           </div>
         </section>
@@ -106,22 +121,28 @@ export default function Careers() {
         <section className="py-20 md:py-32 bg-slate-50 border-t border-slate-200">
           <div className="container max-w-6xl">
             <div className="mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-emerald-950 tracking-tight">
-                {config.formTitle || "Faça parte da nossa equipe!"}
-              </h2>
+              <ScrollReveal direction="up" delay={0.1}>
+                <h2 className="text-3xl md:text-4xl font-bold text-emerald-950 tracking-tight">
+                  {config.formTitle || "Faça parte da nossa equipe!"}
+                </h2>
+              </ScrollReveal>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
               <div className="space-y-6 text-slate-600 text-lg leading-relaxed">
-                <p className="whitespace-pre-line">
-                  {config.formSubtitle || "Você é apaixonado por inovação, colaboração e busca constante por crescimento? Então o seu lugar é com a gente!\n\nNa Avant, valorizamos talentos que querem fazer a diferença e contribuir para um ambiente de trabalho dinâmico, acolhedor e cheio de oportunidades."}
-                </p>
-                <p className="font-bold text-emerald-950 mt-8">
-                  venha construir o futuro com a gente!
-                </p>
+                <ScrollReveal direction="up" delay={0.2}>
+                  <p className="whitespace-pre-line">
+                    {config.formSubtitle || "Você é apaixonado por inovação, colaboração e busca constante por crescimento? Então o seu lugar é com a gente!\n\nNa Avant, valorizamos talentos que querem fazer a diferença e contribuir para um ambiente de trabalho dinâmico, acolhedor e cheio de oportunidades."}
+                  </p>
+                </ScrollReveal>
+                <ScrollReveal direction="up" delay={0.3}>
+                  <p className="font-bold text-emerald-950 mt-8">
+                    venha construir o futuro com a gente!
+                  </p>
+                </ScrollReveal>
               </div>
 
-              <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-sm border border-slate-200 relative">
+              <ScrollReveal direction="left" delay={0.4} className="bg-white p-8 md:p-10 rounded-[2rem] shadow-sm border border-slate-200 relative">
                 <h3 className="text-xl font-bold text-emerald-950 mb-8">Candidatar-se agora</h3>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -192,7 +213,7 @@ export default function Careers() {
                     </p>
                   </div>
                 </form>
-              </div>
+              </ScrollReveal>
             </div>
           </div>
         </section>

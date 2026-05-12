@@ -65,14 +65,14 @@ export const Testimonials = ({ data }: TestimonialsProps) => {
       opacity: 1,
       x: 0,
       transition: {
-        staggerChildren: 0.1,
-        duration: 0.5
+        staggerChildren: 0.15,
+        duration: 0.7
       },
     },
     exit: {
       opacity: 0,
       x: -20,
-      transition: { duration: 0.3 }
+      transition: { duration: 0.4 }
     }
   };
 
