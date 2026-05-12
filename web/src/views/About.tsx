@@ -159,7 +159,7 @@ export default function About() {
     <LandingLayout>
       <div className="bg-white min-h-screen">
         {/* Hero Section */}
-        <section className="pt-32 pb-20 md:pt-40 md:pb-24 relative overflow-hidden bg-slate-50">
+        <section className="pt-32 pb-20 md:pt-40 md:pb-24 relative overflow-hidden border-b-[#009485] border-b-2">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(14,72,76,0.05),transparent_70%)] pointer-events-none" />
           <div className="container relative z-10">
             <div className="space-y-6">
@@ -241,10 +241,10 @@ Nossa equipe tem formação técnica multidisciplinar — direito, economia, eng
                 <div className="relative aspect-video lg:aspect-[4/3] rounded-[40px] overflow-hidden border border-slate-200 bg-white">
                   <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/40 to-transparent z-10" />
                   {config?.founder1Image ? (
-                    <Image 
-                      src={config.founder1Image} 
-                      alt={config.founder1Name || "Matheus Diniz"} 
-                      fill 
+                    <Image
+                      src={config.founder1Image}
+                      alt={config.founder1Name || "Matheus Diniz"}
+                      fill
                       className="object-cover"
                     />
                   ) : (
@@ -269,12 +269,12 @@ Nossa equipe tem formação técnica multidisciplinar — direito, economia, eng
 
                   <div className="flex flex-col sm:flex-row gap-4 pt-6 mt-auto">
                     {config?.founder1ButtonLink && (
-                      <Button 
+                      <Button
                         asChild
                         className="bg-primary hover:bg-emerald-700 text-white rounded-xl h-12 px-6 font-bold gap-2 w-full sm:w-auto"
                       >
-                        <Link 
-                          href={`https://wa.me/55${config.founder1ButtonLink.replace(/\D/g, "")}`} 
+                        <Link
+                          href={`https://wa.me/55${config.founder1ButtonLink.replace(/\D/g, "")}`}
                           target="_blank"
                         >
                           <FaWhatsapp /> {config?.founder1ButtonText || "Fale com Matheus"}
@@ -290,10 +290,10 @@ Nossa equipe tem formação técnica multidisciplinar — direito, economia, eng
                 <div className="relative aspect-video lg:aspect-[4/3] rounded-[40px] overflow-hidden border border-slate-200 bg-white">
                   <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/40 to-transparent z-10" />
                   {config?.founder2Image ? (
-                    <Image 
-                      src={config.founder2Image} 
-                      alt={config.founder2Name || "Nome do Sócio"} 
-                      fill 
+                    <Image
+                      src={config.founder2Image}
+                      alt={config.founder2Name || "Nome do Sócio"}
+                      fill
                       className="object-cover"
                     />
                   ) : (
@@ -318,12 +318,12 @@ Nossa equipe tem formação técnica multidisciplinar — direito, economia, eng
 
                   <div className="flex flex-col sm:flex-row gap-4 pt-6 mt-auto">
                     {config?.founder2ButtonLink && (
-                      <Button 
+                      <Button
                         asChild
                         className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl h-12 px-6 font-bold gap-2 w-full sm:w-auto"
                       >
-                        <Link 
-                          href={`https://wa.me/55${config.founder2ButtonLink.replace(/\D/g, "")}`} 
+                        <Link
+                          href={`https://wa.me/55${config.founder2ButtonLink.replace(/\D/g, "")}`}
                           target="_blank"
                         >
                           <FaWhatsapp /> {config?.founder2ButtonText || "Falar com o Sócio"}
@@ -411,12 +411,12 @@ Nossa equipe tem formação técnica multidisciplinar — direito, economia, eng
               </div>
               <div className="flex flex-col gap-4 w-full md:w-auto">
                 {config?.ctaPrimaryButtonLink && (
-                  <Button 
+                  <Button
                     asChild
                     className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-14 px-10 rounded-full shadow-lg shadow-orange-500/20 text-lg gap-2"
                   >
-                    <Link 
-                      href={`https://wa.me/55${config.ctaPrimaryButtonLink.replace(/\D/g, "")}`} 
+                    <Link
+                      href={`https://wa.me/55${config.ctaPrimaryButtonLink.replace(/\D/g, "")}`}
                       target="_blank"
                     >
                       <FaWhatsapp /> {config?.ctaPrimaryButtonText || "Falar conosco"}
@@ -424,9 +424,9 @@ Nossa equipe tem formação técnica multidisciplinar — direito, economia, eng
                   </Button>
                 )}
                 {config?.ctaSecondaryButtonLink && (
-                  <Button 
+                  <Button
                     asChild
-                    variant="outline" 
+                    variant="outline"
                     className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 h-14 px-10 rounded-full text-lg gap-2"
                   >
                     <Link href={config?.ctaSecondaryButtonLink || "/contato"}>

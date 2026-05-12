@@ -62,7 +62,7 @@ export default function Careers() {
   return (
     <LandingLayout>
       <div className="bg-white min-h-screen">
-        <section className="pt-32 pb-16 md:pt-48 md:pb-24 relative overflow-hidden bg-slate-50 border-b border-slate-200">
+        <section className="pt-32 pb-16 md:pt-48 md:pb-24 relative overflow-hidden border-b-[#009485] border-b-2">
           <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.05),transparent_70%)] pointer-events-none" />
           <div className="container relative z-10 text-center max-w-4xl">
             <h1 className="text-4xl md:text-5xl font-bold text-emerald-900 tracking-tight leading-tight">
@@ -78,7 +78,7 @@ export default function Careers() {
                 <h2 className="text-2xl font-bold text-emerald-950 mb-6">
                   {config.subtitle || "O nosso jeito de formar profissionais que movem o mundo."}
                 </h2>
-                
+
                 {config.description1 && <p>{config.description1}</p>}
                 {config.description2 && <p>{config.description2}</p>}
                 {config.description3 && <p>{config.description3}</p>}
@@ -87,8 +87,8 @@ export default function Careers() {
 
               {config.image ? (
                 <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3]">
-                  <Image 
-                    src={`${process.env.NEXT_PUBLIC_API_URL}/files/${config.image}`} 
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/files/${config.image}`}
                     alt="Equipe AvantCargo"
                     fill
                     className="object-cover"
@@ -96,7 +96,7 @@ export default function Careers() {
                 </div>
               ) : (
                 <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] bg-emerald-100 flex items-center justify-center">
-                   <p className="text-emerald-800/50 font-medium">Imagem não configurada</p>
+                  <p className="text-emerald-800/50 font-medium">Imagem não configurada</p>
                 </div>
               )}
             </div>
@@ -123,41 +123,41 @@ export default function Careers() {
 
               <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-sm border border-slate-200 relative">
                 <h3 className="text-xl font-bold text-emerald-950 mb-8">Candidatar-se agora</h3>
-                
+
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
-                    <Input 
-                      placeholder="Nome" 
+                    <Input
+                      placeholder="Nome"
                       value={formData.name}
-                      onChange={e => setFormData({...formData, name: e.target.value})}
+                      onChange={e => setFormData({ ...formData, name: e.target.value })}
                       className="border-0 border-b-2 border-slate-200 rounded-none px-0 py-6 h-auto focus-visible:ring-0 focus-visible:border-emerald-600 bg-transparent text-lg"
                       required
                     />
                   </div>
                   <div>
-                    <Input 
-                      placeholder="Telefone" 
+                    <Input
+                      placeholder="Telefone"
                       value={formData.phone}
-                      onChange={e => setFormData({...formData, phone: e.target.value})}
+                      onChange={e => setFormData({ ...formData, phone: e.target.value })}
                       className="border-0 border-b-2 border-slate-200 rounded-none px-0 py-6 h-auto focus-visible:ring-0 focus-visible:border-emerald-600 bg-transparent text-lg"
                       required
                     />
                   </div>
                   <div>
-                    <Input 
-                      placeholder="Email*" 
+                    <Input
+                      placeholder="Email*"
                       type="email"
                       value={formData.email}
-                      onChange={e => setFormData({...formData, email: e.target.value})}
+                      onChange={e => setFormData({ ...formData, email: e.target.value })}
                       className="border-0 border-b-2 border-slate-200 rounded-none px-0 py-6 h-auto focus-visible:ring-0 focus-visible:border-emerald-600 bg-transparent text-lg"
                       required
                     />
                   </div>
                   <div>
-                    <Textarea 
-                      placeholder="Mensagem" 
+                    <Textarea
+                      placeholder="Mensagem"
                       value={formData.message}
-                      onChange={e => setFormData({...formData, message: e.target.value})}
+                      onChange={e => setFormData({ ...formData, message: e.target.value })}
                       className="border-0 border-b-2 border-slate-200 rounded-none px-0 py-6 min-h-[100px] resize-none focus-visible:ring-0 focus-visible:border-emerald-600 bg-transparent text-lg"
                     />
                   </div>
@@ -166,9 +166,9 @@ export default function Careers() {
                     <label className="flex items-center gap-2 cursor-pointer text-emerald-700 hover:text-emerald-800 transition-colors font-medium">
                       <Paperclip className="w-5 h-5" />
                       {file ? file.name : "Anexar currículo"}
-                      <input 
-                        type="file" 
-                        className="hidden" 
+                      <input
+                        type="file"
+                        className="hidden"
                         accept=".pdf,.doc,.docx"
                         onChange={(e) => setFile(e.target.files?.[0] || null)}
                       />
@@ -179,8 +179,8 @@ export default function Careers() {
                   </div>
 
                   <div className="pt-8">
-                    <Button 
-                      type="submit" 
+                    <Button
+                      type="submit"
                       disabled={mutation.isPending}
                       className="w-full h-14 bg-[#1e4a46] hover:bg-[#153431] text-white rounded-full font-medium text-lg"
                     >

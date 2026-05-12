@@ -7,7 +7,7 @@ export class GetTransportConfigUseCase {
     constructor(
         @Inject('ITransportConfigRepository')
         private repository: ITransportConfigRepository
-    ) {}
+    ) { }
 
     async execute(): Promise<TransportConfig> {
         const existing = await this.repository.find();

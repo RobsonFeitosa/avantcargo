@@ -19,7 +19,8 @@ import {
   Search,
   Upload,
   MessageSquare,
-  Loader2
+  Loader2,
+  ImageIcon
 } from "lucide-react";
 
 import { formatPhoneNumber } from "@/admin/utils/formatMask";
@@ -147,7 +148,7 @@ export default function TransportConfig() {
         highlightQuote: result.highlightQuote || "Ofereça soluções aos seus clientes...",
         highlightText2: result.highlightText2 || "Serviços exclusivos aos Agentes de Cargas...",
         buttonText: result.buttonText || "Saiba Mais",
-        buttonLink: result.buttonLink || "https://wa.me/5511964503217",
+        buttonLink: result.buttonLink || "",
         diffsSectionTitle: result.diffsSectionTitle || "Diferenciais",
         diffsSectionHighlight: result.diffsSectionHighlight || "Logísticos",
         diffsSectionDescription: result.diffsSectionDescription || "Soluções completas de transporte e pré-embarque para garantir o sucesso da sua operação."
@@ -398,7 +399,7 @@ export default function TransportConfig() {
                     </Label>
                     <div className="grid grid-cols-2 gap-4">
                       <Input maxLength={30} value={headerConfig.buttonText} onChange={e => setHeaderConfig({ ...headerConfig, buttonText: e.target.value })} placeholder="Texto do botão" className="border-emerald-100" />
-                      <Input maxLength={100} value={headerConfig.buttonLink} onChange={e => setHeaderConfig({ ...headerConfig, buttonLink: e.target.value })} placeholder="Link do WhatsApp" className="border-emerald-100" />
+                      <Input maxLength={100} value={headerConfig.buttonLink} onChange={e => setHeaderConfig({ ...headerConfig, buttonLink: formatPhoneNumber(e.target.value) })} placeholder="Numero do WhatsApp" className="border-emerald-100" />
                     </div>
                   </div>
                 </div>
@@ -464,9 +465,15 @@ export default function TransportConfig() {
                                 maxLength={30}
                                 value={item.icon}
                                 onChange={(e) => {
+                                  const rawValue = e.target.value;
+
+                                  // Transforma align-horizontal-space-around -> AlignHorizontalSpaceAround
+                                  const formattedValue = rawValue
+                                    .replace(/(^\w|-\w)/g, (match) => match.replace(/-/, "").toUpperCase());
+
                                   const newItems = [...differentials];
                                   const idx = newItems.findIndex(i => i.id === item.id);
-                                  newItems[idx].icon = e.target.value;
+                                  newItems[idx].icon = formattedValue;
                                   setDifferentials(newItems);
                                 }}
                                 className="border-emerald-100"

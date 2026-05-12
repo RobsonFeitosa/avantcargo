@@ -40,8 +40,7 @@ export default function ServiceComex() {
   return (
     <LandingLayout>
       <div className="bg-white min-h-screen">
-        <section className="pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden relative bg-slate-50 border-b border-slate-200">
-          <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.05),transparent_70%)] pointer-events-none" />
+        <section className="pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden relative border-b-[#009485] border-b-2">          <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.05),transparent_70%)] pointer-events-none" />
           <div className="container relative z-10 text-center">
             <ScrollReveal>
               <Badge variant="outline" className="px-4 py-1.5 border-primary/30 bg-primary/5 text-primary text-xs font-semibold tracking-wider uppercase mb-6">
@@ -125,18 +124,18 @@ export default function ServiceComex() {
 
         {sections.length > 0 && (
           <>
-            <section className="pt-24 pb-8 bg-slate-50 border-t border-slate-100">
+            <section className="pt-16 pb-0 bg-slate-50 border-t border-slate-100">
               <div className="container text-center">
                 <ScrollReveal>
                   <h2 className="text-3xl md:text-5xl font-bold text-emerald-950">
-                    Conteúdo <span className="text-primary">Especializado</span>
+                    Terceirização <span className="text-primary">Especializada</span>
                   </h2>
                 </ScrollReveal>
               </div>
             </section>
 
             {sections.map((section: any, idx: number) => (
-              <section key={section.id || idx} className={`py-20 ${idx % 2 === 1 ? "bg-white" : "bg-slate-50"}`}>
+              <section key={section.id || idx} className={`py-14 ${idx % 2 === 1 ? "bg-white" : "bg-slate-50"}`}>
                 <div className="container">
                   <div className={`flex flex-col lg:flex-row items-center gap-16 ${idx % 2 === 1 ? "lg:flex-row-reverse" : ""}`}>
                     <div className="flex-1 space-y-8">
