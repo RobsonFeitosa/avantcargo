@@ -226,7 +226,7 @@ Nossa equipe tem formação técnica multidisciplinar — direito, economia, eng
         </section>
 
         {/* Founders Section */}
-        <section className="py-32 bg-slate-50/50 border-y border-slate-100">
+        <section className="py-32 bg-slate-50/50 border-y border-slate-100 hidden">
           <div className="container">
             <div className="text-center space-y-4 mb-20">
               <Badge variant="outline" className="text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-4 py-1 rounded-full text-[10px] font-bold">
@@ -339,7 +339,7 @@ Nossa equipe tem formação técnica multidisciplinar — direito, economia, eng
         </section>
 
         {/* Values Section */}
-        <section className="py-32">
+        <section className="py-10">
           <div className="container text-center space-y-20">
             <div className="space-y-6">
               <Badge variant="outline" className="text-orange-600 border-orange-500/20 bg-orange-500/5 uppercase tracking-widest px-4 py-1 rounded-full text-[10px] font-bold">
@@ -384,11 +384,13 @@ Nossa equipe tem formação técnica multidisciplinar — direito, economia, eng
                       {d.num}
                     </div>
                     <div className="space-y-4">
-                      <div className="flex items-center gap-2 text-orange-600">
-                        <d.icon className="h-4 w-4" />
-                        <h4 className="font-bold text-emerald-900">{d.title}</h4>
+                      <div className="flex items-start gap-2 text-orange-600">
+                        <div className="flex  justify-center mt-1 w-8">
+                          <d.icon className="h-6 w-6" />
+                        </div>
+                        <h4 className="font-bold text-2xl text-emerald-900">{d.title}</h4>
                       </div>
-                      <p className="text-slate-500 text-xs leading-relaxed">{d.desc}</p>
+                      <p className="text-slate-500 text-lg leading-relaxed">{d.desc}</p>
                     </div>
                   </div>
                 </div>

@@ -63,7 +63,6 @@ const adminNavItems = [
     icon: Users,
     items: [
       { title: "Introdução & História", url: "/admin/about/history" },
-      { title: "Fundadores", url: "/admin/about/founders" },
       { title: "Valores", url: "/admin/about/values" },
       { title: "Diferenciais", url: "/admin/about/differentials" },
       { title: "Chamada para Ação", url: "/admin/about/cta" },

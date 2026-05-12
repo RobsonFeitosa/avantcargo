@@ -6,9 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { 
-  Save, 
-  Layout, 
+import {
+  Save,
+  Layout,
   History,
   GripVertical,
   Plus,
@@ -64,9 +64,8 @@ function SortableItem({ id, children }: SortableItemProps) {
     <div
       ref={setNodeRef}
       style={style}
-      className={`group flex gap-3 p-4 rounded-xl border border-transparent transition-all ${
-        isDragging ? "bg-emerald-50 border-emerald-200 shadow-lg scale-[1.02]" : "hover:border-emerald-50 hover:bg-emerald-50/30"
-      }`}
+      className={`group flex gap-3 p-4 rounded-xl border border-transparent transition-all ${isDragging ? "bg-emerald-50 border-emerald-200 shadow-lg scale-[1.02]" : "hover:border-emerald-50 hover:bg-emerald-50/30"
+        }`}
     >
       <div
         {...attributes}
@@ -91,7 +90,7 @@ export default function AboutHistoryConfig() {
   const [historyHeroDescription, setHistoryHeroDescription] = useState("");
   const [historyTitle, setHistoryTitle] = useState("");
   const [historyText, setHistoryText] = useState("");
-  
+
   const [timeline, setTimeline] = useState<{ id: string; year: string; text: string }[]>([]);
 
   const { data: configData, isLoading } = useQuery({
@@ -180,7 +179,7 @@ export default function AboutHistoryConfig() {
 
       <div className="grid gap-8 lg:grid-cols-2">
         <div className="space-y-8 flex flex-col">
-          
+
           {/* Cabeçalho Hero */}
           <Card className="border-none shadow-sm overflow-hidden h-fit">
             <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
@@ -195,30 +194,30 @@ export default function AboutHistoryConfig() {
             <CardContent className="pt-6 space-y-4">
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título (Parte Escura)</Label>
-                <Input 
-                  maxLength={60} 
-                  value={historyHeroTitleDark} 
+                <Input
+                  maxLength={60}
+                  value={historyHeroTitleDark}
                   onChange={(e) => setHistoryHeroTitleDark(e.target.value)}
-                  className="border-emerald-100 focus-visible:ring-emerald-500 font-semibold" 
+                  className="border-emerald-100 focus-visible:ring-emerald-500 font-semibold"
                 />
               </div>
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título (Parte Laranja)</Label>
-                <Input 
-                  maxLength={60} 
-                  value={historyHeroTitleOrange} 
+                <Input
+                  maxLength={60}
+                  value={historyHeroTitleOrange}
                   onChange={(e) => setHistoryHeroTitleOrange(e.target.value)}
-                  className="border-emerald-100 focus-visible:ring-emerald-500 font-semibold text-orange-600" 
+                  className="border-emerald-100 focus-visible:ring-emerald-500 font-semibold text-orange-600"
                 />
               </div>
 
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Descrição Abaixo do Título</Label>
-                <Textarea 
-                  maxLength={300} 
-                  value={historyHeroDescription} 
+                <Textarea
+                  maxLength={600}
+                  value={historyHeroDescription}
                   onChange={(e) => setHistoryHeroDescription(e.target.value)}
-                  className="min-h-[100px] border-emerald-100 focus-visible:ring-emerald-500" 
+                  className="min-h-[100px] border-emerald-100 focus-visible:ring-emerald-500"
                 />
               </div>
 
@@ -226,33 +225,33 @@ export default function AboutHistoryConfig() {
 
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider text-orange-600">Título: Nossa História</Label>
-                <Input 
-                  maxLength={120} 
-                  value={historyTitle} 
+                <Input
+                  maxLength={120}
+                  value={historyTitle}
                   onChange={(e) => setHistoryTitle(e.target.value)}
-                  className="border-emerald-100 focus-visible:ring-emerald-500" 
+                  className="border-emerald-100 focus-visible:ring-emerald-500"
                 />
               </div>
 
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Textos sobre a história (Parágrafos)</Label>
-                <Textarea 
-                  maxLength={800} 
-                  value={historyText} 
+                <Textarea
+                  maxLength={2000}
+                  value={historyText}
                   onChange={(e) => setHistoryText(e.target.value)}
-                  className="min-h-[200px] border-emerald-100 focus-visible:ring-emerald-500" 
+                  className="min-h-[200px] border-emerald-100 focus-visible:ring-emerald-500"
                 />
               </div>
 
               <div className="flex justify-end gap-4 pt-4 mt-2 border-t border-emerald-50">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8"
                   onClick={() => queryClient.invalidateQueries({ queryKey: ["about-us-history"] })}
                 >
                   Descartar
                 </Button>
-                <Button 
+                <Button
                   className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10"
                   onClick={handleSave}
                   disabled={mutation.isPending}
@@ -297,10 +296,10 @@ export default function AboutHistoryConfig() {
                       <div className="flex gap-4 bg-white p-4 border border-emerald-50 rounded-lg shadow-sm relative group/item">
                         <div className="w-32 space-y-1 shrink-0">
                           <Label className="text-emerald-900/70 font-semibold text-[10px]">Ano / Título</Label>
-                          <Input 
+                          <Input
                             maxLength={20}
                             hideCounter={true}
-                            value={item.year} 
+                            value={item.year}
                             onChange={(e) => {
                               const newItems = [...timeline];
                               const idx = newItems.findIndex(i => i.id === item.id);
@@ -308,14 +307,14 @@ export default function AboutHistoryConfig() {
                               setTimeline(newItems);
                             }}
                             placeholder="Ex: 2003"
-                            className="border-emerald-100 focus-visible:ring-emerald-500 font-bold" 
+                            className="border-emerald-100 focus-visible:ring-emerald-500 font-bold"
                           />
                         </div>
                         <div className="flex-1 space-y-1">
                           <Label className="text-emerald-900/70 font-semibold text-[10px]">Descrição do Marco</Label>
-                          <Textarea 
+                          <Textarea
                             maxLength={150}
-                            value={item.text} 
+                            value={item.text}
                             onChange={(e) => {
                               const newItems = [...timeline];
                               const idx = newItems.findIndex(i => i.id === item.id);
@@ -323,13 +322,13 @@ export default function AboutHistoryConfig() {
                               setTimeline(newItems);
                             }}
                             placeholder="Descreva o que aconteceu..."
-                            className="min-h-[60px] border-emerald-100 focus-visible:ring-emerald-500" 
+                            className="min-h-[60px] border-emerald-100 focus-visible:ring-emerald-500"
                           />
                         </div>
-                        <Button 
+                        <Button
                           onClick={() => removeTimelineItem(item.id)}
-                          variant="ghost" 
-                          size="icon" 
+                          variant="ghost"
+                          size="icon"
                           className="absolute -right-2 -top-2 text-red-400 hover:text-red-600 hover:bg-red-50 bg-white border border-red-100 shadow-sm opacity-0 group-hover/item:opacity-100 transition-opacity h-8 w-8 rounded-full"
                         >
                           <Trash2 size={14} />
