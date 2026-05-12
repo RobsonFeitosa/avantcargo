@@ -7,10 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import * as LucideIcons from "lucide-react";
-import { 
-  Save, 
-  Layout, 
-  Component, 
+import {
+  Save,
+  Layout,
+  Component,
   GripVertical,
   ExternalLink,
   Loader2,
@@ -87,9 +87,8 @@ function SortableItem({ id, children }: SortableItemProps) {
     <div
       ref={setNodeRef}
       style={style}
-      className={`group flex items-center gap-3 p-3 rounded-xl border border-transparent transition-all ${
-        isDragging ? "bg-emerald-50 border-emerald-200 shadow-lg scale-[1.02]" : "hover:border-emerald-50 hover:bg-emerald-50/30"
-      }`}
+      className={`group flex items-center gap-3 p-3 rounded-xl border border-transparent transition-all ${isDragging ? "bg-emerald-50 border-emerald-200 shadow-lg scale-[1.02]" : "hover:border-emerald-50 hover:bg-emerald-50/30"
+        }`}
     >
       <div
         {...attributes}
@@ -153,14 +152,14 @@ export default function SectorsConfig() {
 
   const addSector = () => {
     // Usando crypto.randomUUID() ou um timestamp mais preciso para o ID
-    const newId = crypto.randomUUID();
-    setSectors([...sectors, { 
-      id: newId, 
-      title: "NOVO SETOR", 
+    const newId = Date.now().toString(36) + Math.random().toString(36).substring(2);
+    setSectors([...sectors, {
+      id: newId,
+      title: "NOVO SETOR",
       iconName: "Box",
-      desc: "" 
+      desc: ""
     }]);
-    
+
     toast.info("Novo setor adicionado ao final da lista");
   };
 
@@ -169,14 +168,14 @@ export default function SectorsConfig() {
   };
 
   const availableIcons = [
-    "Users", "Shield", "Globe", "Zap", "Clock", "Box", "Building", "Truck", 
-    "Target", "Hammer", "RefreshCw", "Pill", "ShieldCheck", "Anchor", 
+    "Users", "Shield", "Globe", "Zap", "Clock", "Box", "Building", "Truck",
+    "Target", "Hammer", "RefreshCw", "Pill", "ShieldCheck", "Anchor",
     "Rocket", "Lightbulb", "Heart", "Star", "TrendingUp", "Award", "User"
   ];
 
   const IconPicker = ({ currentIcon, onSelect }: { currentIcon: string, onSelect: (icon: string) => void }) => {
     const IconComponent = (LucideIcons as any)[currentIcon] || HelpCircle;
-    
+
     return (
       <Popover>
         <PopoverTrigger asChild>
@@ -258,31 +257,31 @@ export default function SectorsConfig() {
             <CardContent className="pt-6 space-y-4">
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Badge Superior</Label>
-                <Input 
-                  maxLength={80} 
-                  value={headerBadge} 
+                <Input
+                  maxLength={80}
+                  value={headerBadge}
                   onChange={(e) => setHeaderBadge(e.target.value)}
-                  className="border-emerald-100 focus-visible:ring-emerald-500" 
+                  className="border-emerald-100 focus-visible:ring-emerald-500"
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título Principal</Label>
-                <Input 
-                  maxLength={80} 
-                  value={headerTitle} 
+                <Input
+                  maxLength={80}
+                  value={headerTitle}
                   onChange={(e) => setHeaderTitle(e.target.value)}
-                  className="border-emerald-100 focus-visible:ring-emerald-500 text-lg font-semibold" 
+                  className="border-emerald-100 focus-visible:ring-emerald-500 text-lg font-semibold"
                 />
               </div>
 
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Subtítulo / Descrição</Label>
-                <Textarea 
-                  maxLength={250} 
-                  value={headerDescription} 
+                <Textarea
+                  maxLength={250}
+                  value={headerDescription}
                   onChange={(e) => setHeaderDescription(e.target.value)}
-                  className="min-h-[100px] border-emerald-100 focus-visible:ring-emerald-500" 
+                  className="min-h-[100px] border-emerald-100 focus-visible:ring-emerald-500"
                 />
               </div>
             </CardContent>
@@ -298,17 +297,17 @@ export default function SectorsConfig() {
                   <CardTitle className="text-lg font-bold text-emerald-950">Grid de Setores</CardTitle>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button 
+                  <Button
                     onClick={addSector}
-                    size="sm" 
-                    variant="outline" 
+                    size="sm"
+                    variant="outline"
                     className="h-8 border-emerald-200 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700"
                   >
                     <Plus size={14} className="mr-1" /> Adicionar
                   </Button>
-                  <a 
-                    href="https://lucide.dev/icons" 
-                    target="_blank" 
+                  <a
+                    href="https://lucide.dev/icons"
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-1 text-[11px] font-medium text-emerald-600 hover:text-emerald-700 hover:underline bg-emerald-100/50 px-2 py-1 rounded-md transition-colors"
                   >
@@ -327,8 +326,8 @@ export default function SectorsConfig() {
                   {sectors.map((sector) => (
                     <SortableItem key={sector.id} id={sector.id}>
                       <div className="flex gap-3 bg-white p-2 border border-emerald-50 rounded-lg shadow-sm items-center">
-                        <IconPicker 
-                          currentIcon={sector.iconName} 
+                        <IconPicker
+                          currentIcon={sector.iconName}
                           onSelect={(newIcon) => {
                             const newSectors = [...sectors];
                             const idx = newSectors.findIndex(s => s.id === sector.id);
@@ -336,7 +335,7 @@ export default function SectorsConfig() {
                             setSectors(newSectors);
                           }}
                         />
-                        <Input maxLength={80} value={sector.title} 
+                        <Input maxLength={80} value={sector.title}
                           onChange={(e) => {
                             const newSectors = [...sectors];
                             const idx = newSectors.findIndex(s => s.id === sector.id);
@@ -344,11 +343,11 @@ export default function SectorsConfig() {
                             setSectors(newSectors);
                           }}
                           placeholder="Nome do Setor"
-                          className="border-emerald-100 focus-visible:ring-emerald-500 font-bold flex-1" 
+                          className="border-emerald-100 focus-visible:ring-emerald-500 font-bold flex-1"
                         />
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
+                        <Button
+                          variant="ghost"
+                          size="icon"
                           className="h-8 w-8 text-slate-300 hover:text-red-500 hover:bg-red-50"
                           onClick={() => removeSector(sector.id)}
                         >
@@ -365,14 +364,14 @@ export default function SectorsConfig() {
       </div>
 
       <div className="flex justify-end gap-4 border-t border-emerald-50 pt-8 mt-4">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           className="border-emerald-100 text-emerald-700 hover:bg-emerald-50 px-8"
           onClick={() => queryClient.invalidateQueries({ queryKey: ["sectors"] })}
         >
           Descartar
         </Button>
-        <Button 
+        <Button
           className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10"
           onClick={handleSave}
           disabled={mutation.isPending}

@@ -40,6 +40,7 @@ export const Sectors = ({ data }: SectorsProps) => {
   // Garantindo que use os dados do banco se o objeto data existir
   const currentSectors = data?.sectors || defaultSectors;
 
+
   return (
     <section className="py-32 bg-emerald-50/10 relative overflow-hidden">
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
@@ -55,7 +56,7 @@ export const Sectors = ({ data }: SectorsProps) => {
           </div>
           <h2 className="text-4xl md:text-6xl font-bold text-emerald-950 tracking-tight">
             {data?.headerTitle ? (
-               data.headerTitle.split(" ").map((word, i) => (
+              data.headerTitle.split(" ").map((word, i) => (
                 <span key={i}>
                   {i > 0 && " "}
                   {word.toLowerCase() === "atendemos" ? <span className="text-primary">{word}</span> : word}
