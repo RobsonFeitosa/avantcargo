@@ -86,9 +86,13 @@ export default function Landing() {
       <Testimonials data={testimonialsData?.result} />
 
 
-      <div className="container mx-auto py-12">
+      <div className="container mx-auto max-w-[1000px] py-12">
         <Script src="https://elfsightcdn.com/platform.js" strategy="lazyOnload" />
         <div className="elfsight-app-67490d69-c0a9-4eb0-b94e-09402442bffe" data-elfsight-app-lazy></div>
+
+        <div className="text-center mt-6">
+          <h2 className="text-xl font-bold">Nos acompanhe no instagram</h2>
+        </div>
       </div>
       <ContactCTA data={homeContactData?.result} />
     </LandingLayout>
