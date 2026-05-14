@@ -170,7 +170,7 @@ export default function SectorsConfig() {
   const availableIcons = [
     "Users", "Shield", "Globe", "Zap", "Clock", "Box", "Building", "Truck",
     "Target", "Hammer", "RefreshCw", "Pill", "ShieldCheck", "Anchor",
-    "Rocket", "Lightbulb", "Heart", "Star", "TrendingUp", "Award", "User"
+    "Rocket", "Lightbulb", "Heart", "Star", "TrendingUp", "Award", "User", "SatelliteDish", "FlaskConical"
   ];
 
   const IconPicker = ({ currentIcon, onSelect }: { currentIcon: string, onSelect: (icon: string) => void }) => {
