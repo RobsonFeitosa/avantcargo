@@ -38,7 +38,8 @@ export default function ServiceExport() {
       <div className="bg-white min-h-screen">
         {/* Hero Section */}
         <section className="pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden relative bg-slate-50 border-b border-slate-200">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(249,115,22,0.05),transparent_70%)] pointer-events-none" />
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] pointer-events-none" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_top_right,hsl(var(--primary)/0.2),transparent_100%)] pointer-events-none" />
           <div className="container relative z-10 text-center">
             <ScrollReveal>
               <Badge variant="outline" className="px-4 py-1.5 border-orange-500/30 bg-orange-500/5 text-orange-600 text-xs font-semibold tracking-wider uppercase mb-6">

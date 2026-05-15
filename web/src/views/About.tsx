@@ -161,7 +161,8 @@ export default function About() {
       <div className="bg-white min-h-screen">
         {/* Hero Section */}
         <section className="pt-32 pb-20 md:pt-40 md:pb-24 relative overflow-hidden border-b-[#009485] border-b-2">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(14,72,76,0.05),transparent_70%)] pointer-events-none" />
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] pointer-events-none" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_top_right,hsl(var(--primary)/0.2),transparent_100%)] pointer-events-none" />
           <div className="container relative z-10">
             <div className="space-y-6">
               <ScrollReveal direction="up" delay={0.1}>

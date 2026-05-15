@@ -50,7 +50,8 @@ export default function AreasOfAction() {
     <LandingLayout>
       <div className="bg-white min-h-screen">
         <section className="pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden relative bg-slate-50">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(14,72,76,0.05),transparent_70%)] pointer-events-none" />
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] pointer-events-none" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_top_right,hsl(var(--primary)/0.2),transparent_100%)] pointer-events-none" />
           <div className="container relative z-10">
             <div className="max-w-3xl mx-auto text-center space-y-8">
               <ScrollReveal direction="up" delay={0.1}>
