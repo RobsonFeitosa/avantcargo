@@ -7,6 +7,7 @@ import { MainServicesModule } from './modules/main-services/main-services.module
 import { WorkStepsModule } from './modules/work-steps/work-steps.module';
 import { AboutUsModule } from './modules/about-us/about-us.module';
 import { SectorsModule } from './modules/sectors/sectors.module';
+import { RegionsModule } from './modules/regions/regions.module';
 import { TestimonialsModule } from './modules/testimonials/testimonials.module';
 import { HomeContactModule } from './modules/home-contact/home-contact.module';
 import { FooterModule } from './modules/footer/footer.module';
@@ -32,6 +33,7 @@ import { CareersModule } from './modules/careers/careers.module';
     WorkStepsModule,
     AboutUsModule,
     SectorsModule,
+    RegionsModule,
     TestimonialsModule,
     HomeContactModule,
     FooterModule,

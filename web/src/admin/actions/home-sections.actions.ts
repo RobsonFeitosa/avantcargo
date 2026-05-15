@@ -43,3 +43,14 @@ export const footerActions = {
         return response.data;
     },
 };
+
+export const regionsActions = {
+    async get() {
+        const response = await api.get("/regions");
+        return response.data;
+    },
+    async update(data: any) {
+        const response = await api.post("/regions", data);
+        return response.data;
+    },
+};

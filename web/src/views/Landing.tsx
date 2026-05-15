@@ -14,12 +14,14 @@ import { mainBannerActions } from "@/admin/actions/main-banner.actions";
 import { mainServicesActions } from "@/admin/actions/main-services.actions";
 import { workStepsActions } from "@/admin/actions/work-steps.actions";
 import { aboutUsActions } from "@/admin/actions/about-us.actions";
-import { sectorsActions, testimonialsActions, homeContactActions } from "@/admin/actions/home-sections.actions";
+import { regionsActions, sectorsActions, testimonialsActions, homeContactActions } from "@/admin/actions/home-sections.actions";
 import Script from "next/script";
 import "@/views/landing.css";
 import { useEffect } from "react";
 import { Instagram } from "lucide-react";
 import { FaInstagram } from "react-icons/fa6";
+
+import { Regions } from "@/components/landing/Regions";
 
 export default function Landing() {
   const { data: bannerData } = useQuery({
@@ -50,6 +52,11 @@ export default function Landing() {
   const { data: testimonialsData } = useQuery({
     queryKey: ["testimonials"],
     queryFn: () => testimonialsActions.get(),
+  });
+
+  const { data: regionsData } = useQuery({
+    queryKey: ["regions"],
+    queryFn: () => regionsActions.get(),
   });
 
   const { data: homeContactData } = useQuery({
@@ -85,6 +92,7 @@ export default function Landing() {
       <Process data={workStepsData?.result} />
       <Expertise data={aboutUsData?.result} />
       <Sectors data={sectorsData?.result} />
+      <Regions data={regionsData?.result} />
       <Testimonials data={testimonialsData?.result} />
 
 

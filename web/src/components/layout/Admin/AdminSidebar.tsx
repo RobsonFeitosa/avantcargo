@@ -53,6 +53,7 @@ const adminNavItems = [
       { title: "Etapas de trabalho", url: "/admin/home/work-steps" },
       { title: "Quem somos (Resumo)", url: "/admin/home/about-us" },
       { title: "Setores", url: "/admin/home/sectors" },
+      { title: "Regiões", url: "/admin/home/regions" },
       { title: "Depoimentos", url: "/admin/home/testimonials" },
       { title: "Contato", url: "/admin/home/contact" },
     ],

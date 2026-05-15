@@ -32,11 +32,29 @@ export class TransportConfig {
     @Column({ name: 'highlight_text1', nullable: true })
     highlightText1: string;
 
+    @Column({ name: 'priority_title', nullable: true })
+    priorityTitle: string;
+
+    @Column({ name: 'priority_text', nullable: true })
+    priorityText: string;
+
+    @Column({ name: 'card_title', nullable: true })
+    cardTitle: string;
+
+    @Column({ name: 'card_topics', nullable: true })
+    cardTopics: string;
+
     @Column({ name: 'highlight_quote', nullable: true })
     highlightQuote: string;
 
     @Column({ name: 'highlight_text2', nullable: true })
     highlightText2: string;
+
+    @Column({ name: 'priority_button_text', nullable: true })
+    priorityButtonText: string;
+
+    @Column({ name: 'priority_button_link', nullable: true })
+    priorityButtonLink: string;
 
     @Column({ name: 'button_text', nullable: true })
     buttonText: string;
@@ -88,6 +106,24 @@ export class TransportConfig {
 
     @Column({ name: 'footer_message_link', nullable: true })
     footerMessageLink: string;
+
+    @Column({ name: 'work_steps_badge', nullable: true })
+    workStepsBadge: string;
+
+    @Column({ name: 'work_steps_title', nullable: true })
+    workStepsTitle: string;
+
+    @Column({ name: 'work_steps_description', nullable: true })
+    workStepsDescription: string;
+
+    @Column({ name: 'work_steps_cta_text', nullable: true })
+    workStepsCtaText: string;
+
+    @Column({ name: 'work_steps_cta_link', nullable: true })
+    workStepsCtaLink: string;
+
+    @Column({ type: 'jsonb', name: 'work_steps', nullable: true })
+    workSteps: { id: string; title: string; desc: string }[];
 
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;

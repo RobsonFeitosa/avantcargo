@@ -20,7 +20,9 @@ import {
   Upload,
   MessageSquare,
   Loader2,
-  ImageIcon
+  ImageIcon,
+  MonitorSmartphone,
+  ListOrdered
 } from "lucide-react";
 
 import { formatPhoneNumber } from "@/admin/utils/formatMask";
@@ -100,10 +102,15 @@ export default function TransportConfig() {
     headerTitleHighlight: "",
     headerDescription: "",
     highlightImage: "",
+    priorityTitle: "",
+    priorityText: "",
+    cardTitle: "",
+    cardTopics: "",
+    priorityButtonText: "",
+    priorityButtonLink: "",
     highlightTitle: "",
     highlightText1: "",
     highlightQuote: "",
-    highlightText2: "",
     buttonText: "",
     buttonLink: "",
     diffsSectionTitle: "",
@@ -122,10 +129,16 @@ export default function TransportConfig() {
     footerWhatsappText: "",
     footerWhatsappNumber: "",
     footerMessageText: "",
-    footerMessageLink: ""
+    footerMessageLink: "",
+    workStepsBadge: "",
+    workStepsTitle: "",
+    workStepsDescription: "",
+    workStepsCtaText: "",
+    workStepsCtaLink: ""
   });
 
   const [differentials, setDifferentials] = useState<any[]>([]);
+  const [workSteps, setWorkSteps] = useState<any[]>([]);
 
   const { data: configData, isLoading } = useQuery({
     queryKey: ["transport-config"],
@@ -143,10 +156,15 @@ export default function TransportConfig() {
         headerTitleHighlight: result.headerTitleHighlight || "Rodoviário",
         headerDescription: result.headerDescription || "transporte nacional, cargas urgentes, transporte importação, transporte exportação.\nSoluções exclusivas para Agentes de Carga.",
         highlightImage: result.highlightImage || "",
+        priorityTitle: result.priorityTitle || "Prioridade Máxima em Lançamentos",
+        priorityText: result.priorityText || "Quando o assunto é impulsionar seu negócio através dos nossos serviços, tratamos com prioridade máxima.",
+        cardTitle: result.cardTitle || "Por que Avant?",
+        cardTopics: result.cardTopics || "Atendimento direto - sem burocracia\nPrecisão técnica em cada lançamento\nEscalabilidade com segurança operacional",
+        priorityButtonText: result.priorityButtonText || "Saiba Mais",
+        priorityButtonLink: result.priorityButtonLink || "",
         highlightTitle: result.highlightTitle || "Estratégia e Crescimento para seu Negócio",
         highlightText1: result.highlightText1 || "Entendendo a necessidade de nossos clientes...",
         highlightQuote: result.highlightQuote || "Ofereça soluções aos seus clientes...",
-        highlightText2: result.highlightText2 || "Serviços exclusivos aos Agentes de Cargas...",
         buttonText: result.buttonText || "Saiba Mais",
         buttonLink: result.buttonLink || "",
         diffsSectionTitle: result.diffsSectionTitle || "Diferenciais",
@@ -164,7 +182,12 @@ export default function TransportConfig() {
         footerWhatsappText: result.footerWhatsappText || "",
         footerWhatsappNumber: result.footerWhatsappNumber || "",
         footerMessageText: result.footerMessageText || "",
-        footerMessageLink: result.footerMessageLink || ""
+        footerMessageLink: result.footerMessageLink || "",
+        workStepsBadge: result.workStepsBadge || "Como Trabalhamos",
+        workStepsTitle: result.workStepsTitle || "Nossa abordagem em etapas",
+        workStepsDescription: result.workStepsDescription || "Um fluxo de trabalho transparente e eficiente...",
+        workStepsCtaText: result.workStepsCtaText || "Falar com um especialista",
+        workStepsCtaLink: result.workStepsCtaLink || ""
       });
       if (result.differentials && result.differentials.length > 0) {
         setDifferentials(result.differentials);
@@ -174,6 +197,10 @@ export default function TransportConfig() {
           { id: "t-2", icon: "CheckCircle2", text: "Veículo dedicado à sua operação." },
         ]);
       }
+      setWorkSteps(result.workSteps || [
+        { id: "ws-1", title: "Coleta e Recebimento", desc: "Coletamos sua carga com agilidade..." },
+        { id: "ws-2", title: "Preparação e Conferência", desc: "Verificamos cada detalhe..." }
+      ]);
     }
   }, [configData]);
 
@@ -244,6 +271,25 @@ export default function TransportConfig() {
     setDifferentials(differentials.filter(d => d.id !== id));
   };
 
+  const handleDragEndWorkSteps = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      setWorkSteps((items) => {
+        const oldIndex = items.findIndex((i) => i.id === active.id);
+        const newIndex = items.findIndex((i) => i.id === over.id);
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+  };
+
+  const addWorkStep = () => {
+    setWorkSteps([...workSteps, { id: `ws-${Date.now()}`, title: "", desc: "" }]);
+  };
+
+  const removeWorkStep = (id: string) => {
+    setWorkSteps(workSteps.filter(ws => ws.id !== id));
+  };
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
       <div className="flex flex-col gap-2">
@@ -254,9 +300,10 @@ export default function TransportConfig() {
       </div>
 
       <Tabs defaultValue="header" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 bg-emerald-50/50 border border-emerald-100 p-1 rounded-xl h-auto mb-8">
+        <TabsList className="grid w-full grid-cols-4 bg-emerald-50/50 border border-emerald-100 p-1 rounded-xl h-auto mb-8">
           <TabsTrigger value="header" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Cabeçalho & Destaque</TabsTrigger>
           <TabsTrigger value="differentials" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Grid de Capacidades</TabsTrigger>
+          <TabsTrigger value="work-steps" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Etapas de Trabalho</TabsTrigger>
           <TabsTrigger value="cta" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Botões e CTAs</TabsTrigger>
         </TabsList>
 
@@ -288,6 +335,64 @@ export default function TransportConfig() {
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Descrição</Label>
                 <Textarea maxLength={250} value={headerConfig.headerDescription} onChange={e => setHeaderConfig({ ...headerConfig, headerDescription: e.target.value })} className="min-h-[80px] border-emerald-100" />
+              </div>
+            </CardContent>
+          </Card>
+          
+          {/* Prioridade Máxima */}
+          <Card className="border-none shadow-sm h-fit">
+            <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
+              <div className="flex items-center gap-2">
+                <MonitorSmartphone className="w-5 h-5 text-emerald-600" />
+                <CardTitle className="text-lg font-bold text-emerald-950">Seção de Destaque (Prioridade Máxima)</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Coluna Esquerda */}
+                <div className="space-y-4">
+                  <h3 className="font-bold text-emerald-950 border-b border-emerald-50 pb-2">Coluna de Texto (Esquerda)</h3>
+                  <div className="space-y-2">
+                    <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título Principal</Label>
+                    <Input maxLength={100} value={headerConfig.priorityTitle} onChange={e => setHeaderConfig({ ...headerConfig, priorityTitle: e.target.value })} className="border-emerald-100 font-bold" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Texto Longo</Label>
+                    <Textarea
+                      maxLength={800}
+                      value={headerConfig.priorityText}
+                      onChange={e => setHeaderConfig({ ...headerConfig, priorityText: e.target.value })}
+                      className="min-h-[200px] border-emerald-100"
+                    />
+                  </div>
+                  <div className="space-y-2 pt-2">
+                    <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider flex items-center gap-1">
+                      <MessageSquare className="w-3 h-3" /> Configuração do Botão WhatsApp
+                    </Label>
+                    <div className="grid grid-cols-2 gap-4">
+                      <Input maxLength={30} value={headerConfig.priorityButtonText} onChange={e => setHeaderConfig({ ...headerConfig, priorityButtonText: e.target.value })} placeholder="Texto do botão" className="border-emerald-100" />
+                      <Input maxLength={100} value={headerConfig.priorityButtonLink} onChange={e => setHeaderConfig({ ...headerConfig, priorityButtonLink: formatPhoneNumber(e.target.value) })} placeholder="Numero do WhatsApp" className="border-emerald-100" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Coluna Direita */}
+                <div className="space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-100">
+                  <h3 className="font-bold text-emerald-950 border-b border-slate-200 pb-2">Card Escuro (Direita)</h3>
+                  <div className="space-y-2">
+                    <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título do Card</Label>
+                    <Input maxLength={50} value={headerConfig.cardTitle} onChange={e => setHeaderConfig({ ...headerConfig, cardTitle: e.target.value })} className="border-slate-200 bg-white" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Tópicos com Check (1 por linha)</Label>
+                    <Textarea
+                      maxLength={400}
+                      value={headerConfig.cardTopics}
+                      onChange={e => setHeaderConfig({ ...headerConfig, cardTopics: e.target.value })}
+                      className="min-h-[120px] border-slate-200 bg-white font-mono text-sm leading-relaxed"
+                    />
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -380,16 +485,6 @@ export default function TransportConfig() {
                       value={headerConfig.highlightQuote}
                       onChange={e => setHeaderConfig({ ...headerConfig, highlightQuote: e.target.value })}
                       className="min-h-[60px] border-emerald-200 bg-white italic"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Texto (Parte 2)</Label>
-                    <Textarea
-                      maxLength={400}
-                      value={headerConfig.highlightText2}
-                      onChange={e => setHeaderConfig({ ...headerConfig, highlightText2: e.target.value })}
-                      className="min-h-[60px] border-emerald-100"
                     />
                   </div>
 
@@ -514,6 +609,107 @@ export default function TransportConfig() {
 
         </TabsContent>
 
+        <TabsContent value="work-steps" className="space-y-8 focus-visible:outline-none focus-visible:ring-0 mt-0">
+          <div className="grid gap-8 lg:grid-cols-2">
+            <div className="space-y-8">
+              <Card className="border-none shadow-sm overflow-hidden h-fit">
+                <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
+                  <div className="flex items-center gap-2">
+                    <Layout className="w-5 h-5 text-emerald-600" />
+                    <CardTitle className="text-lg font-bold text-emerald-950">Cabeçalho da Seção</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-6 space-y-4">
+                  <div className="space-y-2">
+                    <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Badge Superior</Label>
+                    <Input maxLength={80} value={ctaConfig.workStepsBadge} onChange={(e) => setCtaConfig({ ...ctaConfig, workStepsBadge: e.target.value })} className="border-emerald-100" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Título Principal</Label>
+                    <Input maxLength={80} value={ctaConfig.workStepsTitle} onChange={(e) => setCtaConfig({ ...ctaConfig, workStepsTitle: e.target.value })} className="border-emerald-100 text-lg font-semibold" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Subtítulo / Descrição</Label>
+                    <Textarea maxLength={250} value={ctaConfig.workStepsDescription} onChange={(e) => setCtaConfig({ ...ctaConfig, workStepsDescription: e.target.value })} className="min-h-[80px] border-emerald-100" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4 pt-2">
+                    <div className="space-y-2">
+                      <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Texto do Botão</Label>
+                      <Input maxLength={40} value={ctaConfig.workStepsCtaText} onChange={(e) => setCtaConfig({ ...ctaConfig, workStepsCtaText: e.target.value })} className="border-emerald-100" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">WhatsApp Link</Label>
+                      <Input maxLength={15} value={ctaConfig.workStepsCtaLink} onChange={(e) => setCtaConfig({ ...ctaConfig, workStepsCtaLink: formatPhoneNumber(e.target.value) })} className="border-emerald-100" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="space-y-8">
+              <Card className="border-none shadow-sm overflow-hidden">
+                <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-center gap-2">
+                      <ListOrdered className="w-5 h-5 text-emerald-600" />
+                      <CardTitle className="text-lg font-bold text-emerald-950">Passo a Passo</CardTitle>
+                    </div>
+                    <Button onClick={addWorkStep} size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20 shrink-0">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Novo Passo
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-6 space-y-1">
+                  <DndContext id="dnd-work-steps" sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEndWorkSteps}>
+                    <SortableContext items={workSteps} strategy={verticalListSortingStrategy}>
+                      {workSteps.map((step, index) => (
+                        <SortableItem key={step.id} id={step.id}>
+                          <div className="flex flex-col gap-3 bg-white p-4 border border-emerald-50 rounded-lg shadow-sm relative group/step">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
+                                {String(index + 1).padStart(2, '0')}
+                              </div>
+                              <Input maxLength={80} value={step.title}
+                                onChange={(e) => {
+                                  const newSteps = [...workSteps];
+                                  const idx = newSteps.findIndex(s => s.id === step.id);
+                                  newSteps[idx].title = e.target.value;
+                                  setWorkSteps(newSteps);
+                                }}
+                                className="border-emerald-100 focus-visible:ring-emerald-500 font-bold flex-1"
+                              />
+                            </div>
+                            <div className="space-y-2 pl-11">
+                              <Textarea maxLength={300} value={step.desc}
+                                onChange={(e) => {
+                                  const newSteps = [...workSteps];
+                                  const idx = newSteps.findIndex(s => s.id === step.id);
+                                  newSteps[idx].desc = e.target.value;
+                                  setWorkSteps(newSteps);
+                                }}
+                                className="min-h-[80px] border-emerald-100 text-sm resize-none"
+                              />
+                            </div>
+                            <Button
+                              onClick={() => removeWorkStep(step.id)}
+                              variant="ghost"
+                              size="icon"
+                              className="absolute -right-2 -top-2 text-red-400 hover:text-red-600 hover:bg-red-50 bg-white border border-red-100 shadow-sm opacity-0 group-hover/step:opacity-100 transition-opacity h-6 w-6 rounded-full"
+                            >
+                              <Trash2 size={12} />
+                            </Button>
+                          </div>
+                        </SortableItem>
+                      ))}
+                    </SortableContext>
+                  </DndContext>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </TabsContent>
+
         <TabsContent value="cta" className="space-y-8 focus-visible:outline-none focus-visible:ring-0 mt-0">
           <Card className="border-none shadow-sm h-fit">
             <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
@@ -602,7 +798,8 @@ export default function TransportConfig() {
             updateMutation.mutate({
               ...headerConfig,
               ...ctaConfig,
-              differentials
+              differentials,
+              workSteps
             });
           }}
           disabled={updateMutation.isPending}

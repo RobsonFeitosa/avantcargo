@@ -23,7 +23,7 @@ export class UploadController {
         
         return {
             fileName,
-            url: `${process.env.APP_API_URL}/files/${fileName}`
+            url: `${process.env.APP_API_URL}/api/files/${fileName}`
         };
     }
 }
