@@ -168,9 +168,32 @@ export default function SectorsConfig() {
   };
 
   const availableIcons = [
-    "Users", "Shield", "Globe", "Zap", "Clock", "Box", "Building", "Truck",
-    "Target", "Hammer", "RefreshCw", "Pill", "ShieldCheck", "Anchor",
-    "Rocket", "Lightbulb", "Heart", "Star", "TrendingUp", "Award", "User", "SatelliteDish", "FlaskConical"
+    "Activity", "Airplay", "AlarmClock", "AlertCircle", "AlertTriangle", "AlignCenter", 
+    "AlignJustify", "AlignLeft", "AlignRight", "Anchor", "Aperture", "Archive", "ArrowDown", 
+    "ArrowLeft", "ArrowRight", "ArrowUp", "Award", "Axe", "Banknote", "BarChart", "Battery", 
+    "Bell", "Bluetooth", "Bold", "Book", "Bookmark", "Box", "Briefcase", "Brush", "Bug", 
+    "Building", "Calculator", "Calendar", "Camera", "Cast", "Check", "CheckCircle", 
+    "ChevronDown", "ChevronLeft", "ChevronRight", "ChevronUp", "Clipboard", "Clock", 
+    "Cloud", "CloudRain", "Code", "Coffee", "Columns", "Command", "Compass", "Computer", 
+    "Copy", "CreditCard", "Crop", "Crosshair", "Database", "Delete", "Disc", "DollarSign", 
+    "Download", "Droplet", "Edit", "Eye", "EyeOff", "FastForward", "Feather", "File", 
+    "FileText", "Film", "Filter", "Flag", "Folder", "Frown", "Gift", "Globe", "Grid", 
+    "HardDrive", "Hash", "Headphones", "Heart", "HelpCircle", "Hexagon", "Home", "Image", 
+    "Inbox", "Info", "Italic", "Key", "Layers", "Layout", "LifeBuoy", "Link", "List", 
+    "Lock", "LogIn", "LogOut", "Mail", "Map", "MapPin", "Maximize", "Menu", "MessageCircle", 
+    "MessageSquare", "Mic", "MicOff", "Minimize", "Minus", "Monitor", "Moon", "MoreHorizontal", 
+    "MoreVertical", "MousePointer", "Move", "Music", "Navigation", "Octagon", "Package", 
+    "Paperclip", "Pause", "Percent", "Phone", "PieChart", "Play", "Plus", "Power", "Printer", 
+    "Radio", "RefreshCw", "Repeat", "Rewind", "RotateCcw", "RotateCw", "Rss", "Save", 
+    "Scissors", "Search", "Send", "Server", "Settings", "Share", "Share2", "Shield", 
+    "ShoppingBag", "ShoppingCart", "Shuffle", "Sidebar", "SkipBack", "SkipForward", "Slack", 
+    "Slash", "Sliders", "Smartphone", "Smile", "Speaker", "Square", "Star", "StopCircle", 
+    "Sun", "Tablet", "Tag", "Target", "Terminal", "Thermometer", "ThumbsDown", "ThumbsUp", 
+    "ToggleLeft", "ToggleRight", "Tool", "Trash", "Trash2", "TrendingDown", "TrendingUp", 
+    "Triangle", "Truck", "Tv", "Type", "Umbrella", "Underline", "Unlock", "Upload", "User", 
+    "UserCheck", "UserMinus", "UserPlus", "UserX", "Users", "Video", "Voicemail", "Volume", 
+    "Volume2", "VolumeX", "Watch", "Wifi", "Wind", "X", "XCircle", "Zap", "ZoomIn", "ZoomOut",
+    "FlaskConical", "SatelliteDish", "ShieldCheck", "Pill", "Hammer", "Rocket", "Lightbulb"
   ];
 
   const IconPicker = ({ currentIcon, onSelect }: { currentIcon: string, onSelect: (icon: string) => void }) => {
@@ -183,25 +206,24 @@ export default function SectorsConfig() {
             <IconComponent size={20} />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-64 p-2">
-          <ScrollArea className="h-48">
-            <div className="grid grid-cols-4 gap-2">
-              {availableIcons.map((iconName) => {
-                const Icon = (LucideIcons as any)[iconName];
-                return (
-                  <Button
-                    key={iconName}
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => onSelect(iconName)}
-                    className={currentIcon === iconName ? "bg-emerald-50 text-emerald-600" : ""}
-                  >
-                    <Icon size={18} />
-                  </Button>
-                );
-              })}
-            </div>
-          </ScrollArea>
+        <PopoverContent className="w-72 p-2 max-h-80 overflow-y-auto">
+          <div className="grid grid-cols-6 gap-2">
+            {availableIcons.map((iconName) => {
+              const Icon = (LucideIcons as any)[iconName];
+              if (!Icon) return null;
+              return (
+                <Button
+                  key={iconName}
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onSelect(iconName)}
+                  className={currentIcon === iconName ? "bg-emerald-50 text-emerald-600" : ""}
+                >
+                  <Icon size={18} />
+                </Button>
+              );
+            })}
+          </div>
         </PopoverContent>
       </Popover>
     );

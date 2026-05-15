@@ -227,11 +227,10 @@ Nossa equipe tem formação técnica multidisciplinar — direito, economia, eng
                 <div className="space-y-10 relative z-10">
                   {timeline.map((item: any, idx: number) => (
                     <ScrollReveal key={idx} direction="up" delay={0.2 + (idx * 0.15)}>
-                      <div className="flex gap-6 group">
-                        <div className="shrink-0 pt-1">
-                          <span className="text-sm font-black text-slate-400 group-hover:text-orange-500 transition-colors">{item.year}</span>
-                        </div>
-                        <p className="text-sm text-slate-600 group-hover:text-emerald-950 transition-colors">{item.text}</p>
+                      <div className="flex gap-6 group items-start">
+                        <span className="text-sm font-black text-slate-400 group-hover:text-orange-500 transition-colors">{item.year}</span>
+
+                        <p className="text-sm mb-0 text-slate-600 group-hover:text-emerald-950 transition-colors">{item.text}</p>
                       </div>
                     </ScrollReveal>
                   ))}
