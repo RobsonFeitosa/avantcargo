@@ -165,37 +165,22 @@ export default function AboutValuesConfig() {
     setValues(values.filter(v => v.id !== idToRemove));
   };
 
-  const availableIcons = [
-    "Activity", "Airplay", "AlarmClock", "AlertCircle", "AlertTriangle", "AlignCenter", 
-    "AlignJustify", "AlignLeft", "AlignRight", "Anchor", "Aperture", "Archive", "ArrowDown", 
-    "ArrowLeft", "ArrowRight", "ArrowUp", "Award", "Axe", "Banknote", "BarChart", "Battery", 
-    "Bell", "Bluetooth", "Bold", "Book", "Bookmark", "Box", "Briefcase", "Brush", "Bug", 
-    "Building", "Calculator", "Calendar", "Camera", "Cast", "Check", "CheckCircle", 
-    "ChevronDown", "ChevronLeft", "ChevronRight", "ChevronUp", "Clipboard", "Clock", 
-    "Cloud", "CloudRain", "Code", "Coffee", "Columns", "Command", "Compass", "Computer", 
-    "Copy", "CreditCard", "Crop", "Crosshair", "Database", "Delete", "Disc", "DollarSign", 
-    "Download", "Droplet", "Edit", "Eye", "EyeOff", "FastForward", "Feather", "File", 
-    "FileText", "Film", "Filter", "Flag", "Folder", "Frown", "Gift", "Globe", "Grid", 
-    "HardDrive", "Hash", "Headphones", "Heart", "HelpCircle", "Hexagon", "Home", "Image", 
-    "Inbox", "Info", "Italic", "Key", "Layers", "Layout", "LifeBuoy", "Link", "List", 
-    "Lock", "LogIn", "LogOut", "Mail", "Map", "MapPin", "Maximize", "Menu", "MessageCircle", 
-    "MessageSquare", "Mic", "MicOff", "Minimize", "Minus", "Monitor", "Moon", "MoreHorizontal", 
-    "MoreVertical", "MousePointer", "Move", "Music", "Navigation", "Octagon", "Package", 
-    "Paperclip", "Pause", "Percent", "Phone", "PieChart", "Play", "Plus", "Power", "Printer", 
-    "Radio", "RefreshCw", "Repeat", "Rewind", "RotateCcw", "RotateCw", "Rss", "Save", 
-    "Scissors", "Search", "Send", "Server", "Settings", "Share", "Share2", "Shield", 
-    "ShoppingBag", "ShoppingCart", "Shuffle", "Sidebar", "SkipBack", "SkipForward", "Slack", 
-    "Slash", "Sliders", "Smartphone", "Smile", "Speaker", "Square", "Star", "StopCircle", 
-    "Sun", "Tablet", "Tag", "Target", "Terminal", "Thermometer", "ThumbsDown", "ThumbsUp", 
-    "ToggleLeft", "ToggleRight", "Tool", "Trash", "Trash2", "TrendingDown", "TrendingUp", 
-    "Triangle", "Truck", "Tv", "Type", "Umbrella", "Underline", "Unlock", "Upload", "User", 
-    "UserCheck", "UserMinus", "UserPlus", "UserX", "Users", "Video", "Voicemail", "Volume", 
-    "Volume2", "VolumeX", "Watch", "Wifi", "Wind", "X", "XCircle", "Zap", "ZoomIn", "ZoomOut",
-    "FlaskConical", "SatelliteDish", "ShieldCheck", "Pill", "Hammer", "Rocket", "Lightbulb"
-  ];
+  const availableIcons = Object.keys(LucideIcons).filter(key => 
+    /^[A-Z][a-zA-Z0-9]+$/.test(key) && 
+    key !== "LucideProps" && 
+    key !== "Icon" && 
+    key !== "Icons" &&
+    key !== "createLucideIcon" &&
+    key !== "default" &&
+    !key.endsWith("Icon")
+  );
 
   const IconPicker = ({ currentIcon, onSelect }: { currentIcon: string, onSelect: (icon: string) => void }) => {
     const IconComponent = (LucideIcons as any)[currentIcon] || HelpCircle;
+    const [search, setSearch] = useState("");
+
+    const filteredIcons = availableIcons.filter(icon => icon.toLowerCase().includes(search.toLowerCase()));
+    const displayIcons = filteredIcons.slice(0, 100);
 
     return (
       <Popover>
@@ -204,23 +189,42 @@ export default function AboutValuesConfig() {
             <IconComponent size={20} />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-72 p-2 max-h-80 overflow-y-auto">
-          <div className="grid grid-cols-6 gap-2">
-            {availableIcons.map((iconName) => {
-              const Icon = (LucideIcons as any)[iconName];
-              if (!Icon) return null;
-              return (
-                <Button
-                  key={iconName}
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => onSelect(iconName)}
-                  className={currentIcon === iconName ? "bg-emerald-50 text-emerald-600" : ""}
-                >
-                  <Icon size={18} />
-                </Button>
-              );
-            })}
+        <PopoverContent className="w-72 p-2 flex flex-col gap-2">
+          <Input 
+            placeholder="Pesquisar ícone..." 
+            value={search} 
+            onChange={(e) => setSearch(e.target.value)} 
+            className="h-8 text-xs border-emerald-100"
+          />
+          <div className="max-h-64 overflow-y-auto pr-1">
+            <div className="grid grid-cols-6 gap-2">
+              {displayIcons.map((iconName) => {
+                const Icon = (LucideIcons as any)[iconName];
+                if (!Icon) return null;
+                return (
+                  <Button
+                    key={iconName}
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => { onSelect(iconName); setSearch(""); }}
+                    className={currentIcon === iconName ? "bg-emerald-50 text-emerald-600" : ""}
+                    title={iconName}
+                  >
+                    <Icon size={18} />
+                  </Button>
+                );
+              })}
+            </div>
+            {filteredIcons.length > 100 && (
+              <p className="text-[10px] text-center text-emerald-600/60 mt-3 pb-1">
+                +{filteredIcons.length - 100} ícones. Continue digitando...
+              </p>
+            )}
+            {filteredIcons.length === 0 && (
+              <p className="text-[10px] text-center text-emerald-600/60 mt-3 pb-1">
+                Nenhum ícone encontrado.
+              </p>
+            )}
           </div>
         </PopoverContent>
       </Popover>
