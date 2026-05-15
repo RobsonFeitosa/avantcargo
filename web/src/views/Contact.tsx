@@ -204,275 +204,277 @@ export default function Contact() {
           </div>
         </section>
 
-        {/* Main Contact Section */}
-        <section className="pb-32 pt-16">
-          <div className="container">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-              {/* Form Column */}
-              <div className="lg:col-span-7">
-                <ScrollReveal direction="up" delay={0.1} className="h-full">
-                  <div className="p-8 md:p-10 rounded-[32px] bg-white border border-slate-200 relative overflow-hidden shadow-sm h-full">
-                  <div className="space-y-8 relative z-10">
-                    <div className="space-y-2">
-                      <h3 className="text-2xl font-bold text-emerald-950">{config?.formTitle || "Enviar mensagem"}</h3>
-                      <p className="text-slate-500 text-sm">{config?.formDescription || "Preencha o formulário e nossa equipe entrará em contato em até 24 horas úteis."}</p>
-                    </div>
-
-                    <form className="space-y-6" onSubmit={handleFormSubmit}>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                          <label className="h-5 text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-1">
-                            Nome <span className="text-red-500">*</span>
-                          </label>
-                          <Input
-                            id="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            placeholder="Seu nome completo"
-                            className="h-12 bg-slate-50 border-slate-200 text-emerald-950 placeholder:text-slate-400 rounded-xl focus:border-orange-500/50 transition-all"
-                            required
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <label className="h-5 text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center">
-                            Empresa
-                          </label>
-                          <Input
-                            id="company"
-                            value={formData.company}
-                            onChange={handleChange}
-                            placeholder="Nome da empresa"
-                            className="h-12 bg-slate-50 border-slate-200 text-emerald-950 placeholder:text-slate-400 rounded-xl focus:border-orange-500/50 transition-all"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <label className="h-5 text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-1">
-                            E-mail <span className="text-red-500">*</span>
-                          </label>
-                          <Input
-                            id="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            placeholder="seu@email.com.br"
-                            type="email"
-                            className="h-12 bg-slate-50 border-slate-200 text-emerald-950 placeholder:text-slate-400 rounded-xl focus:border-orange-500/50 transition-all"
-                            required
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <label className="h-5 text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-1">
-                            Telefone <span className="text-red-500">*</span>
-                          </label>
-                          <Input
-                            id="phone"
-                            value={formData.phone}
-                            onChange={handleChange}
-                            placeholder="(41) 9 9999-9999"
-                            className="h-12 bg-slate-50 border-slate-200 text-emerald-950 placeholder:text-slate-400 rounded-xl focus:border-orange-500/50 transition-all"
-                            required
-                          />
-                        </div>
-                      </div>
-
+        <div className="bg-[radial-gradient(circle_at_top_right,hsl(var(--primary)/0.05),transparent_100%)]">
+          {/* Main Contact Section */}
+          <section className="pb-32 pt-16 bg-transparent">
+            <div className="container">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                {/* Form Column */}
+                <div className="lg:col-span-7">
+                  <ScrollReveal direction="up" delay={0.1} className="h-full">
+                    <div className="p-8 md:p-10 rounded-[32px] bg-white border border-slate-200 relative overflow-hidden shadow-sm h-full">
+                    <div className="space-y-8 relative z-10">
                       <div className="space-y-2">
-                        <label className="text-xs font-bold text-slate-600 uppercase tracking-widest">
-                          Serviço de interesse
-                        </label>
-                        <Select value={formData.service} onValueChange={handleServiceChange}>
-                          <SelectTrigger className="h-12 bg-slate-50 border-slate-200 text-emerald-950 rounded-xl focus:border-orange-500/50 transition-all">
-                            <SelectValue placeholder="Selecione um serviço..." />
-                          </SelectTrigger>
-                          <SelectContent className="bg-white border-slate-200 text-emerald-950">
-                            <SelectItem value="representacao">Representação</SelectItem>
-                            <SelectItem value="cct-importacao">CCT Importação</SelectItem>
-                            <SelectItem value="e-awb">E-awb</SelectItem>
-                            <SelectItem value="ce-mercante">CE Mercante</SelectItem>
-                            <SelectItem value="transporte">Transporte</SelectItem>
-                            <SelectItem value="suporte-imediato">Suporte Imediato</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <h3 className="text-2xl font-bold text-emerald-950">{config?.formTitle || "Enviar mensagem"}</h3>
+                        <p className="text-slate-500 text-sm">{config?.formDescription || "Preencha o formulário e nossa equipe entrará em contato em até 24 horas úteis."}</p>
                       </div>
 
-                      <div className="space-y-2">
-                        <label className="text-xs font-bold text-slate-600 uppercase tracking-widest">
-                          Mensagem
-                        </label>
-                        <Textarea
-                          id="message"
-                          value={formData.message}
-                          onChange={handleChange}
-                          placeholder="Descreva brevemente sua necessidade..."
-                          className="min-h-[120px] bg-slate-50 border-slate-200 text-emerald-950 placeholder:text-slate-400 rounded-xl focus:border-orange-500/50 transition-all resize-none"
-                          required
-                        />
-                      </div>
+                      <form className="space-y-6" onSubmit={handleFormSubmit}>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <label className="h-5 text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-1">
+                              Nome <span className="text-red-500">*</span>
+                            </label>
+                            <Input
+                              id="name"
+                              value={formData.name}
+                              onChange={handleChange}
+                              placeholder="Seu nome completo"
+                              className="h-12 bg-slate-50 border-slate-200 text-emerald-950 placeholder:text-slate-400 rounded-xl focus:border-orange-500/50 transition-all"
+                              required
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="h-5 text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center">
+                              Empresa
+                            </label>
+                            <Input
+                              id="company"
+                              value={formData.company}
+                              onChange={handleChange}
+                              placeholder="Nome da empresa"
+                              className="h-12 bg-slate-50 border-slate-200 text-emerald-950 placeholder:text-slate-400 rounded-xl focus:border-orange-500/50 transition-all"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="h-5 text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-1">
+                              E-mail <span className="text-red-500">*</span>
+                            </label>
+                            <Input
+                              id="email"
+                              value={formData.email}
+                              onChange={handleChange}
+                              placeholder="seu@email.com.br"
+                              type="email"
+                              className="h-12 bg-slate-50 border-slate-200 text-emerald-950 placeholder:text-slate-400 rounded-xl focus:border-orange-500/50 transition-all"
+                              required
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="h-5 text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-1">
+                              Telefone <span className="text-red-500">*</span>
+                            </label>
+                            <Input
+                              id="phone"
+                              value={formData.phone}
+                              onChange={handleChange}
+                              placeholder="(41) 9 9999-9999"
+                              className="h-12 bg-slate-50 border-slate-200 text-emerald-950 placeholder:text-slate-400 rounded-xl focus:border-orange-500/50 transition-all"
+                              required
+                            />
+                          </div>
+                        </div>
 
-                      <Button
-                        type="submit"
-                        disabled={mutation.isPending}
-                        className="w-full h-14 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold text-lg rounded-xl shadow-lg shadow-blue-500/20 group"
-                      >
-                        {mutation.isPending ? (
-                          <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                        ) : (
-                          <Send className="mr-2 h-5 w-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                        )}
-                        {mutation.isPending ? "Enviando..." : "Enviar mensagem"}
-                      </Button>
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-slate-600 uppercase tracking-widest">
+                            Serviço de interesse
+                          </label>
+                          <Select value={formData.service} onValueChange={handleServiceChange}>
+                            <SelectTrigger className="h-12 bg-slate-50 border-slate-200 text-emerald-950 rounded-xl focus:border-orange-500/50 transition-all">
+                              <SelectValue placeholder="Selecione um serviço..." />
+                            </SelectTrigger>
+                            <SelectContent className="bg-white border-slate-200 text-emerald-950">
+                              <SelectItem value="representacao">Representação</SelectItem>
+                              <SelectItem value="cct-importacao">CCT Importação</SelectItem>
+                              <SelectItem value="e-awb">E-awb</SelectItem>
+                              <SelectItem value="ce-mercante">CE Mercante</SelectItem>
+                              <SelectItem value="transporte">Transporte</SelectItem>
+                              <SelectItem value="suporte-imediato">Suporte Imediato</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
 
-                      <div className="text-center">
-                        <p className="text-[10px] text-slate-400 flex items-center justify-center gap-2">
-                          <Clock className="h-3 w-3" />
-                          Seus dados estão protegidos e não serão compartilhados.
-                        </p>
-                      </div>
-                    </form>
-                  </div>
-                  </div>
-                </ScrollReveal>
-              </div>
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-slate-600 uppercase tracking-widest">
+                            Mensagem
+                          </label>
+                          <Textarea
+                            id="message"
+                            value={formData.message}
+                            onChange={handleChange}
+                            placeholder="Descreva brevemente sua necessidade..."
+                            className="min-h-[120px] bg-slate-50 border-slate-200 text-emerald-950 placeholder:text-slate-400 rounded-xl focus:border-orange-500/50 transition-all resize-none"
+                            required
+                          />
+                        </div>
 
-              {/* Contacts Column */}
-              <div className="lg:col-span-5 space-y-10">
-                <div className="space-y-6">
-                  <ScrollReveal direction="up" delay={0.2}>
-                    <h3 className="text-2xl font-bold text-emerald-950">Nossos contatos</h3>
-                  </ScrollReveal>
-                  <div className="space-y-4">
-                    {contacts.map((contact, idx) => (
-                      <ScrollReveal key={idx} direction="left" delay={0.3 + (idx * 0.1)}>
-                        <a
-                          href={contact.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-6 rounded-2xl bg-slate-50 border border-slate-200 hover:border-primary/20 hover:bg-white hover:shadow-md transition-all group flex items-center gap-6 cursor-pointer"
+                        <Button
+                          type="submit"
+                          disabled={mutation.isPending}
+                          className="w-full h-14 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold text-lg rounded-xl shadow-lg shadow-blue-500/20 group"
                         >
-                          <div className={`h-12 w-12 rounded-xl ${contact.bg} flex items-center justify-center ${contact.color} shrink-0`}>
-                            <contact.icon className="h-6 w-6" />
-                          </div>
-                          <div className="flex-grow">
-                            <div className="flex items-center justify-between">
-                              <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest">{contact.title}</h4>
-                              <ChevronRight className="h-4 w-4 text-slate-300 group-hover:translate-x-1 transition-transform" />
+                          {mutation.isPending ? (
+                            <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                          ) : (
+                            <Send className="mr-2 h-5 w-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                          )}
+                          {mutation.isPending ? "Enviando..." : "Enviar mensagem"}
+                        </Button>
+
+                        <div className="text-center">
+                          <p className="text-[10px] text-slate-400 flex items-center justify-center gap-2">
+                            <Clock className="h-3 w-3" />
+                            Seus dados estão protegidos e não serão compartilhados.
+                          </p>
+                        </div>
+                      </form>
+                    </div>
+                    </div>
+                  </ScrollReveal>
+                </div>
+
+                {/* Contacts Column */}
+                <div className="lg:col-span-5 space-y-10">
+                  <div className="space-y-6">
+                    <ScrollReveal direction="up" delay={0.2}>
+                      <h3 className="text-2xl font-bold text-emerald-950">Nossos contatos</h3>
+                    </ScrollReveal>
+                    <div className="space-y-4">
+                      {contacts.map((contact, idx) => (
+                        <ScrollReveal key={idx} direction="left" delay={0.3 + (idx * 0.1)}>
+                          <a
+                            href={contact.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-6 rounded-2xl bg-slate-50 border border-slate-200 hover:border-primary/20 hover:bg-white hover:shadow-md transition-all group flex items-center gap-6 cursor-pointer"
+                          >
+                            <div className={`h-12 w-12 rounded-xl ${contact.bg} flex items-center justify-center ${contact.color} shrink-0`}>
+                              <contact.icon className="h-6 w-6" />
                             </div>
-                            <p className="text-lg font-bold text-emerald-900">{contact.value}</p>
-                            <p className="text-xs text-slate-500">{contact.desc}</p>
-                          </div>
-                        </a>
-                      </ScrollReveal>
-                    ))}
+                            <div className="flex-grow">
+                              <div className="flex items-center justify-between">
+                                <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest">{contact.title}</h4>
+                                <ChevronRight className="h-4 w-4 text-slate-300 group-hover:translate-x-1 transition-transform" />
+                              </div>
+                              <p className="text-lg font-bold text-emerald-900">{contact.value}</p>
+                              <p className="text-xs text-slate-500">{contact.desc}</p>
+                            </div>
+                          </a>
+                        </ScrollReveal>
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                <div className="space-y-6">
-                  <ScrollReveal direction="up" delay={0.4}>
-                    <h3 className="text-2xl font-bold text-emerald-950 flex items-center gap-2">
-                      <MapPin className="h-6 w-6 text-orange-500" />
-                      Nosso endereço
-                    </h3>
-                  </ScrollReveal>
-                  <ScrollReveal direction="up" delay={0.5}>
-                    <div className="p-8 rounded-[32px] bg-slate-50 border border-slate-200 space-y-6">
-                      <div className="space-y-2">
-                        <p className="text-emerald-900 font-medium whitespace-pre-line">{config?.address || "R. Tupi Paulista, 71 - Cidade Industrial Satélite\nGuarulhos, SP — CEP 07222-070"}</p>
-                        <p className="text-[10px] text-slate-300 font-mono mt-4">{config?.addressCnpj || "CNPJ: 22.837.582/0001-05"}</p>
+                  <div className="space-y-6">
+                    <ScrollReveal direction="up" delay={0.4}>
+                      <h3 className="text-2xl font-bold text-emerald-950 flex items-center gap-2">
+                        <MapPin className="h-6 w-6 text-orange-500" />
+                        Nosso endereço
+                      </h3>
+                    </ScrollReveal>
+                    <ScrollReveal direction="up" delay={0.5}>
+                      <div className="p-8 rounded-[32px] bg-slate-50 border border-slate-200 space-y-6">
+                        <div className="space-y-2">
+                          <p className="text-emerald-900 font-medium whitespace-pre-line">{config?.address || "R. Tupi Paulista, 71 - Cidade Industrial Satélite\nGuarulhos, SP — CEP 07222-070"}</p>
+                          <p className="text-[10px] text-slate-300 font-mono mt-4">{config?.addressCnpj || "CNPJ: 22.837.582/0001-05"}</p>
+                        </div>
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" className="w-full h-12 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-emerald-500/30 hover:text-emerald-700 rounded-xl gap-2 font-bold shadow-sm transition-all">
+                              <MapPin className="h-4 w-4 text-primary" /> Ver no mapa
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[700px] p-0 overflow-hidden border-none rounded-2xl">
+                            <DialogHeader className="p-6 pb-2 bg-white">
+                              <DialogTitle className="text-emerald-950 font-bold flex items-center gap-2 text-xl">
+                                <MapPin className="h-6 w-6 text-orange-500" />
+                                Nossa Localização
+                              </DialogTitle>
+                            </DialogHeader>
+                            <div className="w-full h-[450px] bg-slate-100">
+                              <iframe
+                                src={config?.addressMapsUrl || "https://www.google.com/maps?q=R.+Tupi+Paulista,+71+-+Cidade+Industrial+Satélite+de+São+Paulo,+Guarulhos+-+SP,+07222-070,+Brasil&output=embed"}
+                                width="100%"
+                                height="100%"
+                                style={{ border: 0 }}
+                                allowFullScreen
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                              ></iframe>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
                       </div>
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="outline" className="w-full h-12 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-emerald-500/30 hover:text-emerald-700 rounded-xl gap-2 font-bold shadow-sm transition-all">
-                            <MapPin className="h-4 w-4 text-primary" /> Ver no mapa
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="sm:max-w-[700px] p-0 overflow-hidden border-none rounded-2xl">
-                          <DialogHeader className="p-6 pb-2 bg-white">
-                            <DialogTitle className="text-emerald-950 font-bold flex items-center gap-2 text-xl">
-                              <MapPin className="h-6 w-6 text-orange-500" />
-                              Nossa Localização
-                            </DialogTitle>
-                          </DialogHeader>
-                          <div className="w-full h-[450px] bg-slate-100">
-                            <iframe
-                              src={config?.addressMapsUrl || "https://www.google.com/maps?q=R.+Tupi+Paulista,+71+-+Cidade+Industrial+Satélite+de+São+Paulo,+Guarulhos+-+SP,+07222-070,+Brasil&output=embed"}
-                              width="100%"
-                              height="100%"
-                              style={{ border: 0 }}
-                              allowFullScreen
-                              loading="lazy"
-                              referrerPolicy="no-referrer-when-downgrade"
-                            ></iframe>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    </div>
-                  </ScrollReveal>
-                </div>
+                    </ScrollReveal>
+                  </div>
 
-                <div className="space-y-6">
-                  <ScrollReveal direction="up" delay={0.6}>
-                    <div className="p-8 rounded-[32px] bg-slate-50 border border-slate-200 space-y-6">
-                      <div className="flex items-center gap-2 text-slate-400 mb-4">
-                        <Clock className="h-4 w-4" />
-                        <h4 className="text-xs font-bold uppercase tracking-widest">Horário de atendimento</h4>
+                  <div className="space-y-6">
+                    <ScrollReveal direction="up" delay={0.6}>
+                      <div className="p-8 rounded-[32px] bg-slate-50 border border-slate-200 space-y-6">
+                        <div className="flex items-center gap-2 text-slate-400 mb-4">
+                          <Clock className="h-4 w-4" />
+                          <h4 className="text-xs font-bold uppercase tracking-widest">Horário de atendimento</h4>
+                        </div>
+                        <div className="space-y-3">
+                          {[
+                            { day: "Segunda — Sexta", hour: config?.hoursMonFri || "8h às 18h" },
+                            { day: "Sábado", hour: config?.hoursSat || "Fechado", inactive: (config?.hoursSat === "Fechado" || !config?.hoursSat) },
+                            { day: "Domingo", hour: config?.hoursSun || "Fechado", inactive: (config?.hoursSun === "Fechado" || !config?.hoursSun) },
+                          ].map((item, idx) => (
+                            <div key={idx} className="flex justify-between items-center text-sm">
+                              <span className="text-slate-600">{item.day}</span>
+                              <span className={item.inactive ? "text-red-500/60" : "text-primary font-bold"}>{item.hour}</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                      <div className="space-y-3">
-                        {[
-                          { day: "Segunda — Sexta", hour: config?.hoursMonFri || "8h às 18h" },
-                          { day: "Sábado", hour: config?.hoursSat || "Fechado", inactive: (config?.hoursSat === "Fechado" || !config?.hoursSat) },
-                          { day: "Domingo", hour: config?.hoursSun || "Fechado", inactive: (config?.hoursSun === "Fechado" || !config?.hoursSun) },
-                        ].map((item, idx) => (
-                          <div key={idx} className="flex justify-between items-center text-sm">
-                            <span className="text-slate-600">{item.day}</span>
-                            <span className={item.inactive ? "text-red-500/60" : "text-primary font-bold"}>{item.hour}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </ScrollReveal>
+                    </ScrollReveal>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* FAQ Section */}
-        <section className="py-32 border-t border-slate-100">
-          <div className="container">
-            <div className="text-center space-y-4 mb-20">
-              <ScrollReveal direction="up" delay={0.1}>
-                <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight">
-                  {config?.faqTitle?.split(" ")[0] || "Perguntas"} <span className="text-primary">{config?.faqTitle?.split(" ").slice(1).join(" ") || "frequentes"}</span>
-                </h2>
-              </ScrollReveal>
-              {config?.faqBadge && (
-                <ScrollReveal direction="up" delay={0.2}>
-                  <p className="text-slate-600 max-w-2xl mx-auto text-lg">
-                    {config.faqBadge}
-                  </p>
+          {/* FAQ Section */}
+          <section className="py-32 border-t border-slate-100 bg-transparent">
+            <div className="container">
+              <div className="text-center space-y-4 mb-20">
+                <ScrollReveal direction="up" delay={0.1}>
+                  <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight">
+                    {config?.faqTitle?.split(" ")[0] || "Perguntas"} <span className="text-primary">{config?.faqTitle?.split(" ").slice(1).join(" ") || "frequentes"}</span>
+                  </h2>
                 </ScrollReveal>
-              )}
-            </div>
-
-            <div className="max-w-3xl mx-auto">
-              <Accordion type="single" collapsible className="space-y-4">
-                {faqs.map((faq, idx) => (
-                  <ScrollReveal key={idx} direction="up" delay={0.1 * (idx + 1)}>
-                    <AccordionItem
-                      value={`item-${idx}`}
-                      className="border border-slate-200 bg-slate-50/50 rounded-2xl px-6 overflow-hidden"
-                    >
-                      <AccordionTrigger className="text-emerald-900 hover:text-orange-600 text-left py-6 font-bold hover:no-underline">
-                        {faq.q}
-                      </AccordionTrigger>
-                      <AccordionContent className="text-slate-600 pb-6 leading-relaxed">
-                        {faq.a}
-                      </AccordionContent>
-                    </AccordionItem>
+                {config?.faqBadge && (
+                  <ScrollReveal direction="up" delay={0.2}>
+                    <p className="text-slate-600 max-w-2xl mx-auto text-lg">
+                      {config.faqBadge}
+                    </p>
                   </ScrollReveal>
-                ))}
-              </Accordion>
+                )}
+              </div>
+
+              <div className="max-w-3xl mx-auto">
+                <Accordion type="single" collapsible className="space-y-4">
+                  {faqs.map((faq, idx) => (
+                    <ScrollReveal key={idx} direction="up" delay={0.1 * (idx + 1)}>
+                      <AccordionItem
+                        value={`item-${idx}`}
+                        className="border border-slate-200 bg-slate-50/50 rounded-2xl px-6 overflow-hidden"
+                      >
+                        <AccordionTrigger className="text-emerald-900 hover:text-orange-600 text-left py-6 font-bold hover:no-underline">
+                          {faq.q}
+                        </AccordionTrigger>
+                        <AccordionContent className="text-slate-600 pb-6 leading-relaxed">
+                          {faq.a}
+                        </AccordionContent>
+                      </AccordionItem>
+                    </ScrollReveal>
+                  ))}
+                </Accordion>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
     </LandingLayout>
   );

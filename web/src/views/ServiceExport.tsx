@@ -55,63 +55,65 @@ export default function ServiceExport() {
           </div>
         </section>
 
-        {/* Content Sections */}
-        {sections.map((section, idx) => (
-          <section key={idx} className={`py-24 ${idx % 2 === 1 ? "bg-slate-50" : "bg-white"}`}>
-            <div className="container">
-              <div className={`flex flex-col lg:flex-row items-center gap-16 ${idx % 2 === 1 ? "lg:flex-row-reverse" : ""}`}>
-                <div className="flex-1 space-y-8">
-                  <ScrollReveal direction={idx % 2 === 1 ? "right" : "left"}>
-                    <div className="h-14 w-14 rounded-2xl bg-orange-500/10 flex items-center justify-center text-orange-600 mb-6">
-                      <section.icon className="h-7 w-7" />
-                    </div>
-                    <h2 className="text-3xl md:text-4xl font-bold text-emerald-950 mb-6">{section.title}</h2>
-                    <p className="text-slate-600 text-lg leading-relaxed mb-8">
-                      {section.desc}
-                    </p>
-                    <ul className="space-y-4">
-                      {section.features.map((feature, fIdx) => (
-                        <li key={fIdx} className="flex items-start gap-3">
-                          <CheckCircle2 className="h-6 w-6 text-primary shrink-0 mt-0.5" />
-                          <span className="text-slate-700 font-medium">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </ScrollReveal>
+        <div className="bg-[radial-gradient(circle_at_top_right,hsl(var(--primary)/0.05),transparent_100%)]">
+          {/* Content Sections */}
+          {sections.map((section, idx) => (
+            <section key={idx} className="py-24 bg-transparent">
+              <div className="container">
+                <div className={`flex flex-col lg:flex-row items-center gap-16 ${idx % 2 === 1 ? "lg:flex-row-reverse" : ""}`}>
+                  <div className="flex-1 space-y-8">
+                    <ScrollReveal direction={idx % 2 === 1 ? "right" : "left"}>
+                      <div className="h-14 w-14 rounded-2xl bg-orange-500/10 flex items-center justify-center text-orange-600 mb-6">
+                        <section.icon className="h-7 w-7" />
+                      </div>
+                      <h2 className="text-3xl md:text-4xl font-bold text-emerald-950 mb-6">{section.title}</h2>
+                      <p className="text-slate-600 text-lg leading-relaxed mb-8">
+                        {section.desc}
+                      </p>
+                      <ul className="space-y-4">
+                        {section.features.map((feature, fIdx) => (
+                          <li key={fIdx} className="flex items-start gap-3">
+                            <CheckCircle2 className="h-6 w-6 text-primary shrink-0 mt-0.5" />
+                            <span className="text-slate-700 font-medium">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </ScrollReveal>
+                  </div>
+                  <div className="flex-1 w-full">
+                    <ScrollReveal direction={idx % 2 === 1 ? "left" : "right"}>
+                      <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-2xl">
+                        <img 
+                          src={section.image} 
+                          alt={section.title}
+                          className="object-cover w-full h-full"
+                        />
+                        <div className="absolute inset-0 bg-emerald-950/10" />
+                      </div>
+                    </ScrollReveal>
+                  </div>
                 </div>
-                <div className="flex-1 w-full">
-                  <ScrollReveal direction={idx % 2 === 1 ? "left" : "right"}>
-                    <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-2xl">
-                      <img 
-                        src={section.image} 
-                        alt={section.title}
-                        className="object-cover w-full h-full"
-                      />
-                      <div className="absolute inset-0 bg-emerald-950/10" />
-                    </div>
-                  </ScrollReveal>
-                </div>
+              </div>
+            </section>
+          ))}
+
+          {/* CTA Section */}
+          <section className="py-24 bg-primary text-white relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 blur-3xl rounded-full -mr-32 -mt-32" />
+            <div className="container relative z-10 text-center space-y-8">
+              <h2 className="text-3xl md:text-5xl font-bold">Operação Urgente? <span className="text-emerald-950">Nós cuidamos!</span></h2>
+              <p className="text-emerald-50 max-w-2xl mx-auto text-lg font-medium">
+                Não perca prazos. Nossa equipe está pronta para agir agora.
+              </p>
+              <div className="flex flex-wrap justify-center gap-6">
+                <button className="bg-emerald-950 text-white px-10 py-4 rounded-full font-bold hover:bg-emerald-900 transition-all shadow-xl flex items-center gap-3 text-xl group">
+                  <Phone className="h-6 w-6 text-primary group-hover:animate-bounce" />
+                  Ligue Agora
+                </button>
               </div>
             </div>
           </section>
-        ))}
-
-        {/* CTA Section */}
-        <section className="py-24 bg-primary text-white relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 blur-3xl rounded-full -mr-32 -mt-32" />
-          <div className="container relative z-10 text-center space-y-8">
-            <h2 className="text-3xl md:text-5xl font-bold">Operação Urgente? <span className="text-emerald-950">Nós cuidamos!</span></h2>
-            <p className="text-emerald-50 max-w-2xl mx-auto text-lg font-medium">
-              Não perca prazos. Nossa equipe está pronta para agir agora.
-            </p>
-            <div className="flex flex-wrap justify-center gap-6">
-              <button className="bg-emerald-950 text-white px-10 py-4 rounded-full font-bold hover:bg-emerald-900 transition-all shadow-xl flex items-center gap-3 text-xl group">
-                <Phone className="h-6 w-6 text-primary group-hover:animate-bounce" />
-                Ligue Agora
-              </button>
-            </div>
-          </div>
-        </section>
+        </div>
       </div>
     </LandingLayout>
   );

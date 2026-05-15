@@ -97,257 +97,208 @@ export default function ServiceTransport() {
         </section>
 
 
-        {/* Main Content Section */}
-        <section className="py-24">
-          <div className="container">
-            <div className="flex flex-col lg:flex-row items-center gap-16">
-              <div className="flex-1 w-full">
-                <ScrollReveal direction="left">
-                  <div className="relative aspect-video lg:aspect-[4/3] rounded-[40px] overflow-hidden shadow-2xl group">
-                    {config.highlightImage && (
-                      <Image
-                        src={config.highlightImage ? `${process.env.NEXT_PUBLIC_API_URL}/files/${config.highlightImage}` : ""}
-                        alt="Transporte Rodoviário AvantCargo"
-                        className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
-                        priority
-                        width={1000}
-                        height={1000}
-                      />
-                    )}
-                    <div className="absolute inset-0 bg-emerald-950/10" />
-                  </div>
-                </ScrollReveal>
-              </div>
-              <div className="flex-1 space-y-8">
-                <ScrollReveal direction="right">
-                  <h2 className="text-3xl md:text-4xl font-bold text-emerald-950">{config.highlightTitle || "Estratégia e Crescimento para seu Negócio"}</h2>
-                  <p className="text-slate-600 text-lg leading-relaxed mt-4">
-                    {config.highlightText1 || "Entendendo a necessidade de nossos clientes, implantamos constantemente serviços estrategicamente desenvolvidos para auxiliar no crescimento da sua empresa através da Avant."}
-                  </p>
-                  <p className="text-slate-600 text-lg leading-relaxed italic border-l-4 border-primary pl-6 mt-8 mb-6">
-                    {config.highlightQuote || ""}
-                  </p>
-                  <div className="pt-4">
-                    <a
-                      href={config.buttonLink ? `https://wa.me/55${config.buttonLink.replace(/\D/g, '')}` : "#"}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-primary/20 text-lg"
-                    >
-                      <FaWhatsapp className="w-5 h-5" />
-                      {config.buttonText || "Saiba Mais"}
-                    </a>
-                  </div>
-                </ScrollReveal>
-              </div>
-            </div>
-          </div>
-        </section>
+        <div className="bg-[radial-gradient(circle_at_top_right,hsl(var(--primary)/0.05),transparent_100%)]">
 
-
-        <section className="py-24">
-          <div className="container">
-            <div className="flex flex-col lg:flex-row items-center gap-16">
-              <div className="flex-1 space-y-8">
-                <ScrollReveal direction="left">
-                  <h2 className="text-3xl md:text-4xl font-bold text-emerald-950">
-                    {config.priorityTitle || "Prioridade Máxima em Lançamentos"}
-                  </h2>
-                  <p className="text-slate-600 text-lg leading-relaxed whitespace-pre-wrap">
-                    {config.priorityText || "Quando o assunto é impulsionar seu negócio através dos nossos serviços, tratamos com prioridade máxima."}
-                  </p>
-                  <div className="pt-4">
-                    <a
-                      href={config.priorityButtonLink ? `https://wa.me/55${config.priorityButtonLink.replace(/\D/g, "")}` : "https://wa.me/5511964503217"}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-primary/20 text-lg"
-                    >
-                      <FaWhatsapp className="w-5 h-5" />
-                      {config.priorityButtonText || "Saiba Mais"}
-                    </a>
-                  </div>
-                </ScrollReveal>
-              </div>
-              <div className="flex-1 w-full max-w-lg">
-                <ScrollReveal direction="right">
-                  <div className="relative p-8 bg-emerald-950 rounded-[40px] shadow-2xl overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-3xl rounded-full" />
-                    <div className="relative z-10 space-y-6 text-white">
-                      <div className="h-16 w-16 rounded-2xl bg-white/10 flex items-center justify-center">
-                        <Monitor className="h-8 w-8 text-primary" />
-                      </div>
-                      <h3 className="text-2xl font-bold">{config.cardTitle || "Por que Avant?"}</h3>
-                      <ul className="space-y-4">
-                        {(config.cardTopics || "Atendimento direto - sem burocracia\nPrecisão técnica em cada lançamento\nEscalabilidade com segurança operacional")
-                          .split("\n")
-                          .filter(Boolean)
-                          .map((topic: string, i: number) => (
-                            <li key={i} className="flex items-start gap-3">
-                              <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-1" />
-                              <span>{topic}</span>
-                            </li>
-                          ))}
-                      </ul>
-                    </div>
-                  </div>
-                </ScrollReveal>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/*  COMO TRABALHAMOS - DINÂMICO */}
-        {(() => {
-          const currentWorkSteps = config.workSteps || [];
-          const stepsCount = currentWorkSteps.length;
-
-          return (
-            <section className="py-24 bg-white relative overflow-hidden">
-              <div className="absolute top-1/2 left-0 w-1/2 h-1/2 bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
-
-              <div className="container relative z-10">
-                <div className="text-center space-y-4 mb-20 mx-auto">
-                  <ScrollReveal>
-                    <Badge variant="outline" className="text-primary gap-2 border-primary/20 bg-primary/5 uppercase tracking-widest px-4 py-1 rounded-full">
-                      <BiSolidDirections />
-                      {config.workStepsBadge || "Como Trabalhamos"}
-                    </Badge>
-                  </ScrollReveal>
-                  <ScrollReveal delay={0.1}>
-                    <h2 className="text-5xl font-bold text-emerald-950">
-                      {config.workStepsTitle ? (
-                        config.workStepsTitle.split(" ").map((word: string, i: number) => {
-                          if (word === String(stepsCount) || (word === "4" && stepsCount === 0)) {
-                            return (
-                              <span key={i}>
-                                {i > 0 && " "}
-                                <span className="text-primary">{word} etapas</span>
-                              </span>
-                            );
-                          }
-                          if (word.toLowerCase() === "etapas" && config.workStepsTitle.includes(String(stepsCount || 4))) {
-                            return null;
-                          }
-                          return <span key={i}>{i > 0 && " "}{word}</span>;
-                        })
-                      ) : (
-                        <>Nossa abordagem em <span className="text-primary">{stepsCount || 4} etapas</span></>
+          {/* Main Content Section */}
+          <section className="py-24 ">
+            <div className="container">
+              <div className="flex flex-col lg:flex-row items-center gap-16">
+                <div className="flex-1 w-full">
+                  <ScrollReveal direction="left">
+                    <div className="relative aspect-video lg:aspect-[4/3] rounded-[40px] overflow-hidden shadow-2xl group">
+                      {config.highlightImage && (
+                        <Image
+                          src={config.highlightImage ? `${process.env.NEXT_PUBLIC_API_URL}/files/${config.highlightImage}` : ""}
+                          alt="Transporte Rodoviário AvantCargo"
+                          className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
+                          priority
+                          width={1000}
+                          height={1000}
+                        />
                       )}
-                    </h2>
-                  </ScrollReveal>
-                  <ScrollReveal delay={0.2} className="flex justify-center">
-                    <p className="text-slate-600 max-w-2xl text-lg">
-                      {config.workStepsDescription || "Um fluxo de trabalho transparente e eficiente desenhado para mitigar riscos e maximizar resultados."}
-                    </p>
+                      <div className="absolute inset-0 bg-emerald-950/10" />
+                    </div>
                   </ScrollReveal>
                 </div>
+                <div className="flex-1 space-y-8">
+                  <ScrollReveal direction="right">
+                    <h2 className="text-3xl md:text-4xl font-bold text-emerald-950">{config.highlightTitle || "Estratégia e Crescimento para seu Negócio"}</h2>
+                    <p className="text-slate-600 text-lg leading-relaxed mt-4">
+                      {config.highlightText1 || "Entendendo a necessidade de nossos clientes, implantamos constantemente serviços estrategicamente desenvolvidos para auxiliar no crescimento da sua empresa através da Avant."}
+                    </p>
+                    <p className="text-slate-600 text-lg leading-relaxed italic border-l-4 border-primary pl-6 mt-8 mb-6">
+                      {config.highlightQuote || ""}
+                    </p>
+                    <div className="pt-4">
+                      <a
+                        href={config.buttonLink ? `https://wa.me/55${config.buttonLink.replace(/\D/g, '')}` : "#"}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-primary/20 text-lg"
+                      >
+                        <FaWhatsapp className="w-5 h-5" />
+                        {config.buttonText || "Saiba Mais"}
+                      </a>
+                    </div>
+                  </ScrollReveal>
+                </div>
+              </div>
+            </div>
+          </section>
 
-                <div className="max-w-4xl mx-auto relative">
-                  <div className="absolute left-8 top-8 bottom-24 w-[2px] bg-slate-200 -translate-x-1/2" />
 
-                  <div className="space-y-16 relative">
-                    {currentWorkSteps.map((step: any, idx: number) => (
-                      <ScrollReveal key={idx} delay={idx * 0.15} direction="up" distance={30}>
-                        <div className="flex items-start gap-8 md:gap-16 group">
-                          <div className="relative z-10 shrink-0 h-16 w-16 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                            <div className="absolute inset-0 rounded-full border-[3px] border-slate-100 group-hover:border-orange-500/30 transition-colors duration-500" />
-                            <div className="h-[3.25rem] w-[3.25rem] rounded-full bg-primary flex items-center justify-center text-lg font-bold text-white group-hover:bg-orange-500 transition-colors duration-500 shadow-lg shadow-primary/20 group-hover:shadow-orange-500/20">
-                              {idx + 1 < 10 ? `0${idx + 1}` : idx + 1}
+          {/*  COMO TRABALHAMOS - DINÂMICO */}
+          {(() => {
+            const currentWorkSteps = config.workSteps || [];
+            const stepsCount = currentWorkSteps.length;
+
+            return (
+              <section className="py-24  relative overflow-hidden">
+                <div className="absolute top-1/2 left-0 w-1/2 h-1/2 bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+
+                <div className="container relative z-10">
+                  <div className="text-center space-y-4 mb-20 mx-auto">
+                    <ScrollReveal>
+                      <Badge variant="outline" className="text-primary gap-2 border-primary/20 bg-primary/5 uppercase tracking-widest px-4 py-1 rounded-full">
+                        <BiSolidDirections />
+                        {config.workStepsBadge || "Como Trabalhamos"}
+                      </Badge>
+                    </ScrollReveal>
+                    <ScrollReveal delay={0.1}>
+                      <h2 className="text-5xl font-bold text-emerald-950">
+                        {config.workStepsTitle ? (
+                          config.workStepsTitle.split(" ").map((word: string, i: number) => {
+                            if (word === String(stepsCount) || (word === "4" && stepsCount === 0)) {
+                              return (
+                                <span key={i}>
+                                  {i > 0 && " "}
+                                  <span className="text-primary">{word} etapas</span>
+                                </span>
+                              );
+                            }
+                            if (word.toLowerCase() === "etapas" && config.workStepsTitle.includes(String(stepsCount || 4))) {
+                              return null;
+                            }
+                            return <span key={i}>{i > 0 && " "}{word}</span>;
+                          })
+                        ) : (
+                          <>Nossa abordagem em <span className="text-primary">{stepsCount || 4} etapas</span></>
+                        )}
+                      </h2>
+                    </ScrollReveal>
+                    <ScrollReveal delay={0.2} className="flex justify-center">
+                      <p className="text-slate-600 max-w-2xl text-lg">
+                        {config.workStepsDescription || "Um fluxo de trabalho transparente e eficiente desenhado para mitigar riscos e maximizar resultados."}
+                      </p>
+                    </ScrollReveal>
+                  </div>
+
+                  <div className="max-w-4xl mx-auto relative">
+                    <div className="absolute left-8 top-8 bottom-24 w-[2px] bg-slate-200 -translate-x-1/2" />
+
+                    <div className="space-y-16 relative">
+                      {currentWorkSteps.map((step: any, idx: number) => (
+                        <ScrollReveal key={idx} delay={idx * 0.15} direction="up" distance={30}>
+                          <div className="flex items-start gap-8 md:gap-16 group">
+                            <div className="relative z-10 shrink-0 h-16 w-16 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                              <div className="absolute inset-0 rounded-full border-[3px] border-slate-100 group-hover:border-orange-500/30 transition-colors duration-500" />
+                              <div className="h-[3.25rem] w-[3.25rem] rounded-full bg-primary flex items-center justify-center text-lg font-bold text-white group-hover:bg-orange-500 transition-colors duration-500 shadow-lg shadow-primary/20 group-hover:shadow-orange-500/20">
+                                {idx + 1 < 10 ? `0${idx + 1}` : idx + 1}
+                              </div>
+                            </div>
+
+                            <div className="space-y-4 pt-2">
+                              <h3 className="text-2xl font-bold text-emerald-900 group-hover:text-primary transition-colors duration-300">{step.title}</h3>
+                              <p className="text-lg text-slate-600 leading-relaxed max-w-2xl">
+                                {step.desc}
+                              </p>
                             </div>
                           </div>
+                        </ScrollReveal>
+                      ))}
+                    </div>
 
-                          <div className="space-y-4 pt-2">
-                            <h3 className="text-2xl font-bold text-emerald-900 group-hover:text-primary transition-colors duration-300">{step.title}</h3>
-                            <p className="text-lg text-slate-600 leading-relaxed max-w-2xl">
-                              {step.desc}
-                            </p>
-                          </div>
-                        </div>
-                      </ScrollReveal>
-                    ))}
+                    <ScrollReveal delay={0.6} className="mt-16 flex justify-center">
+                      <Button
+                        asChild
+                        className="bg-primary hover:bg-emerald-700 text-white font-bold text-base shadow-xl shadow-primary/10 rounded-full group transition-all duration-300 hover:scale-105 h-14 px-10"
+                      >
+                        <a href={config.workStepsCtaLink ? `https://wa.me/55${config.workStepsCtaLink.replace(/\D/g, "")}` : "#"} target="_blank" rel="noopener noreferrer">
+                          <FaWhatsapp className=" h-5 w-5 group-hover:scale-110 transition-transform mr-2" />
+                          {config.workStepsCtaText || "Falar com um especialista"}
+                        </a>
+                      </Button>
+                    </ScrollReveal>
                   </div>
+                </div>
+              </section>
+            );
+          })()}
 
-                  <ScrollReveal delay={0.6} className="mt-16 flex justify-center">
-                    <Button
-                      asChild
-                      className="bg-primary hover:bg-emerald-700 text-white font-bold text-base shadow-xl shadow-primary/10 rounded-full group transition-all duration-300 hover:scale-105 h-14 px-10"
-                    >
-                      <a href={config.workStepsCtaLink ? `https://wa.me/55${config.workStepsCtaLink.replace(/\D/g, "")}` : "#"} target="_blank" rel="noopener noreferrer">
-                        <FaWhatsapp className=" h-5 w-5 group-hover:scale-110 transition-transform mr-2" />
-                        {config.workStepsCtaText || "Falar com um especialista"}
-                      </a>
-                    </Button>
+
+          {/* Features Grid */}
+          <section className="py-24">
+            <div className="container">
+              <div className="text-center mb-16 space-y-4">
+                <h2 className="text-3xl md:text-4xl font-bold text-emerald-950">{config.diffsSectionTitle || "Diferenciais"} <span className="text-primary">{config.diffsSectionHighlight || "Logísticos"}</span></h2>
+                <p className="text-slate-600 max-w-2xl mx-auto">{config.diffsSectionDescription || ""}</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {config && currentDifferentials?.map((feature, idx) => (
+                  <ScrollReveal key={idx} delay={idx * 0.05}>
+                    <div className="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm hover:border-primary/30 hover:shadow-md transition-all flex items-start gap-4 group h-full">
+                      <div className="h-10 w-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-all mt-1">
+                        {/* Garanta que o nome do ícone existe, ou passe uma string fixa para teste */}
+                        <DynamicIcon name={feature.icon || "Award"} className="h-5 w-5" />
+                      </div>
+                      {/* Aqui você precisa acessar a propriedade de texto, ex: feature.title ou feature.text */}
+                      <span className="font-semibold text-slate-700 group-hover:text-emerald-950 transition-colors leading-snug">
+                        {feature.title || feature.text || "Diferencial sem texto"}
+                      </span>
+                    </div>
                   </ScrollReveal>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <Regions data={regionsData?.result} />
+
+          {/* Footer CTA */}
+          <section className="py-24 border-t border-slate-100">
+            <div className="container">
+              <div className="p-12 md:p-16 rounded-[48px] bg-gradient-to-br from-primary/5 to-orange-500/5 border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-12 text-center md:text-left">
+                <div className="space-y-4">
+                  <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight leading-tight">
+                    {config.footerCtaTitleDark || "Sua carga em"} <span className="text-orange-500">{config.footerCtaTitleHighlight || "boas mãos?"}</span>
+                  </h2>
+                  <p className="text-slate-600 max-w-xl text-lg whitespace-pre-wrap">
+                    {config.footerCtaDescription || "Otimize seu transporte rodoviário com uma frota dedicada e agilidade total no pré-embarque internacional."}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-4 w-full md:w-auto">
+                  <Button
+                    asChild
+                    className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-14 px-10 rounded-full shadow-lg shadow-orange-500/20 text-lg gap-2"
+                  >
+                    <a href={config.footerWhatsappNumber ? `https://wa.me/55${config.footerWhatsappNumber.replace(/\\D/g, '')}` : "https://wa.me/5511964503217"} target="_blank" rel="noopener noreferrer">
+                      <FaWhatsapp className="w-5 h-5" /> {config.footerWhatsappText || "Falar conosco"}
+                    </a>
+                  </Button>
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 h-14 px-10 rounded-full text-lg gap-2"
+                  >
+                    <a href={config.footerMessageLink || "/contato"}>
+                      <Mail className="h-4 w-4 text-primary" /> {config.footerMessageText || "Enviar mensagem"}
+                    </a>
+                  </Button>
                 </div>
               </div>
-            </section>
-          );
-        })()}
-
-
-        {/* Features Grid */}
-        <section className="py-24 bg-slate-50">
-          <div className="container">
-            <div className="text-center mb-16 space-y-4">
-              <h2 className="text-3xl md:text-4xl font-bold text-emerald-950">{config.diffsSectionTitle || "Diferenciais"} <span className="text-primary">{config.diffsSectionHighlight || "Logísticos"}</span></h2>
-              <p className="text-slate-600 max-w-2xl mx-auto">{config.diffsSectionDescription || ""}</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {config && currentDifferentials?.map((feature, idx) => (
-                <ScrollReveal key={idx} delay={idx * 0.05}>
-                  <div className="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm hover:border-primary/30 hover:shadow-md transition-all flex items-start gap-4 group h-full">
-                    <div className="h-10 w-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-all mt-1">
-                      {/* Garanta que o nome do ícone existe, ou passe uma string fixa para teste */}
-                      <DynamicIcon name={feature.icon || "Award"} className="h-5 w-5" />
-                    </div>
-                    {/* Aqui você precisa acessar a propriedade de texto, ex: feature.title ou feature.text */}
-                    <span className="font-semibold text-slate-700 group-hover:text-emerald-950 transition-colors leading-snug">
-                      {feature.title || feature.text || "Diferencial sem texto"}
-                    </span>
-                  </div>
-                </ScrollReveal>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <Regions data={regionsData?.result} />
-
-        {/* Footer CTA */}
-        <section className="py-24 border-t border-slate-100">
-          <div className="container">
-            <div className="p-12 md:p-16 rounded-[48px] bg-gradient-to-br from-primary/5 to-orange-500/5 border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-12 text-center md:text-left">
-              <div className="space-y-4">
-                <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight leading-tight">
-                  {config.footerCtaTitleDark || "Sua carga em"} <span className="text-orange-500">{config.footerCtaTitleHighlight || "boas mãos?"}</span>
-                </h2>
-                <p className="text-slate-600 max-w-xl text-lg whitespace-pre-wrap">
-                  {config.footerCtaDescription || "Otimize seu transporte rodoviário com uma frota dedicada e agilidade total no pré-embarque internacional."}
-                </p>
-              </div>
-              <div className="flex flex-col gap-4 w-full md:w-auto">
-                <Button
-                  asChild
-                  className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-14 px-10 rounded-full shadow-lg shadow-orange-500/20 text-lg gap-2"
-                >
-                  <a href={config.footerWhatsappNumber ? `https://wa.me/55${config.footerWhatsappNumber.replace(/\\D/g, '')}` : "https://wa.me/5511964503217"} target="_blank" rel="noopener noreferrer">
-                    <FaWhatsapp className="w-5 h-5" /> {config.footerWhatsappText || "Falar conosco"}
-                  </a>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 h-14 px-10 rounded-full text-lg gap-2"
-                >
-                  <a href={config.footerMessageLink || "/contato"}>
-                    <Mail className="h-4 w-4 text-primary" /> {config.footerMessageText || "Enviar mensagem"}
-                  </a>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
     </LandingLayout>
   );

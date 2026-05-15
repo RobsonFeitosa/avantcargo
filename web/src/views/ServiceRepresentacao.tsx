@@ -77,149 +77,151 @@ export default function ServiceRepresentacao() {
           </div>
         </section>
 
-        {/* Import Sections Title */}
-        <section className="pt-24 pb-8 bg-white">
-          <div className="container text-center">
-            <ScrollReveal>
-              <h2 className="text-3xl md:text-5xl font-bold text-emerald-950">Importações <span className="text-primary">Aéreas</span></h2>
-            </ScrollReveal>
-          </div>
-        </section>
+        <div className="bg-[radial-gradient(circle_at_top_right,hsl(var(--primary)/0.05),transparent_100%)]">
+          {/* Import Sections Title */}
+          <section className="pt-24 pb-8 bg-transparent">
+            <div className="container text-center">
+              <ScrollReveal>
+                <h2 className="text-3xl md:text-5xl font-bold text-emerald-950">Importações <span className="text-primary">Aéreas</span></h2>
+              </ScrollReveal>
+            </div>
+          </section>
 
-        {/* Import Content Sections */}
-        {importSections.map((section: any, idx: number) => (
-          <section key={idx} className={`py-20 ${idx % 2 === 1 ? "bg-slate-50" : "bg-white"}`}>
-            <div className="container">
-              <div className={`flex flex-col lg:flex-row items-center gap-16 ${idx % 2 === 1 ? "lg:flex-row-reverse" : ""}`}>
-                <div className="flex-1 space-y-8">
-                  <ScrollReveal direction={idx % 2 === 1 ? "right" : "left"}>
-                    <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6">
-                      <DynamicIcon name={section.icon} className="h-7 w-7" />
-                    </div>
-                    <h3 className="text-3xl md:text-4xl font-bold text-emerald-950 mb-6">{section.title}</h3>
-                    <p className="text-slate-600 text-lg leading-relaxed mb-8">
-                      {section.desc}
-                    </p>
-                    <ul className="space-y-4">
-                      {section.topics?.split("\n").map((feature: string, fIdx: number) => (
-                        <li key={fIdx} className="flex items-start gap-3">
-                          <CheckCircle2 className="h-6 w-6 text-orange-500 shrink-0 mt-0.5" />
-                          <span className="text-slate-700 font-medium">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
+          {/* Import Content Sections */}
+          {importSections.map((section: any, idx: number) => (
+            <section key={idx} className="py-20 bg-transparent">
+              <div className="container">
+                <div className={`flex flex-col lg:flex-row items-center gap-16 ${idx % 2 === 1 ? "lg:flex-row-reverse" : ""}`}>
+                  <div className="flex-1 space-y-8">
+                    <ScrollReveal direction={idx % 2 === 1 ? "right" : "left"}>
+                      <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6">
+                        <DynamicIcon name={section.icon} className="h-7 w-7" />
+                      </div>
+                      <h3 className="text-3xl md:text-4xl font-bold text-emerald-950 mb-6">{section.title}</h3>
+                      <p className="text-slate-600 text-lg leading-relaxed mb-8">
+                        {section.desc}
+                      </p>
+                      <ul className="space-y-4">
+                        {section.topics?.split("\n").map((feature: string, fIdx: number) => (
+                          <li key={fIdx} className="flex items-start gap-3">
+                            <CheckCircle2 className="h-6 w-6 text-orange-500 shrink-0 mt-0.5" />
+                            <span className="text-slate-700 font-medium">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </ScrollReveal>
+                  </div>
+                  <div className="flex-1 w-full">
+                    <ScrollReveal direction={idx % 2 === 1 ? "left" : "right"}>
+                      <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-2xl">
+                        <Image
+                          width={1000}
+                          height={1000}
+                          src={section.image ? `${process.env.NEXT_PUBLIC_API_URL}/files/${section.image}` : "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1000&auto=format&fit=crop"}
+                          alt={section.title}
+                          className="object-cover w-full h-full"
+                        />
+                        <div className="absolute inset-0 bg-emerald-950/10" />
+                      </div>
+                    </ScrollReveal>
+                  </div>
+                </div>
+              </div>
+            </section>
+          ))}
+
+          {exportSections.length > 0 && (
+            <>
+              {/* Export Sections Title */}
+              <section className="pt-24 pb-8 bg-transparent border-t border-slate-100 ">
+                <div className="container text-center">
+                  <ScrollReveal>
+                    <h2 className="text-3xl md:text-5xl font-bold text-emerald-950">Exportações <span className="text-primary">Aéreas</span></h2>
                   </ScrollReveal>
                 </div>
-                <div className="flex-1 w-full">
-                  <ScrollReveal direction={idx % 2 === 1 ? "left" : "right"}>
-                    <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-2xl">
-                      <Image
-                        width={1000}
-                        height={1000}
-                        src={section.image ? `${process.env.NEXT_PUBLIC_API_URL}/files/${section.image}` : "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1000&auto=format&fit=crop"}
-                        alt={section.title}
-                        className="object-cover w-full h-full"
-                      />
-                      <div className="absolute inset-0 bg-emerald-950/10" />
+              </section>
+
+              {/* Export Content Sections */}
+              {exportSections.map((section: any, idx: number) => (
+                <section key={idx} className="py-20 bg-transparent">
+                  <div className="container">
+                    <div className={`flex flex-col lg:flex-row items-center gap-16 ${idx % 2 === 1 ? "lg:flex-row-reverse" : ""}`}>
+                      <div className="flex-1 space-y-8">
+                        <ScrollReveal direction={idx % 2 === 1 ? "right" : "left"}>
+                          <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6">
+                            <DynamicIcon name={section.icon} className="h-7 w-7" />
+                          </div>
+                          <h3 className="text-3xl md:text-4xl font-bold text-emerald-950 mb-6">{section.title}</h3>
+                          <p className="text-slate-600 text-lg leading-relaxed mb-8">
+                            {section.desc}
+                          </p>
+                          <ul className="space-y-4">
+                            {section.topics?.split("\n").map((feature: string, fIdx: number) => (
+                              <li key={fIdx} className="flex items-start gap-3">
+                                <CheckCircle2 className="h-6 w-6 text-orange-500 shrink-0 mt-0.5" />
+                                <span className="text-slate-700 font-medium">{feature}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </ScrollReveal>
+                      </div>
+                      <div className="flex-1 w-full">
+                        <ScrollReveal direction={idx % 2 === 1 ? "left" : "right"}>
+                          <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-2xl">
+                            <Image
+                              width={1000}
+                              height={1000}
+                              src={section.image ? `${process.env.NEXT_PUBLIC_API_URL}/files/${section.image}` : "https://images.unsplash.com/photo-1436450412740-6b988f486c6b?q=80&w=1000&auto=format&fit=crop"}
+                              alt={section.title}
+                              className="object-cover w-full h-full"
+                            />
+                            <div className="absolute inset-0 bg-emerald-950/10" />
+                          </div>
+                        </ScrollReveal>
+                      </div>
                     </div>
-                  </ScrollReveal>
+                  </div>
+                </section>
+              ))}
+            </>
+          )}
+
+          {/* CTA Section */}
+
+          <section className="py-24 border-t border-slate-100">
+            <div className="container">
+              <div className="p-12 md:p-16 rounded-[48px] bg-gradient-to-br from-primary/5 to-orange-500/5 border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-12 text-center md:text-left">
+                <div className="space-y-4">
+                  <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight leading-tight">
+                    {config.footerCtaTitleDark || "Operação Urgente?"} <span className="text-orange-500">{config.footerCtaTitleHighlight || "Nós cuidamos!"}</span>
+                  </h2>
+                  <p className="text-slate-600 max-w-xl text-lg whitespace-pre-wrap">
+                    {config.footerCtaDescription || "Não perca prazos. Nossa equipe está pronta para agir agora."}
+                  </p>
+                </div>
+                <div className="flex flex-col gap-4 w-full md:w-auto">
+                  <Button
+                    asChild
+                    className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-14 px-10 rounded-full shadow-lg shadow-orange-500/20 text-lg gap-2"
+                  >
+                    <a href={config.footerWhatsappNumber ? `https://wa.me/55${config.footerWhatsappNumber.replace(/\\D/g, '')}` : "https://wa.me/5511964503217"} target="_blank" rel="noopener noreferrer">
+                      <FaWhatsapp className="w-5 h-5" /> {config.footerWhatsappText || "Ligue Agora"}
+                    </a>
+                  </Button>
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 h-14 px-10 rounded-full text-lg gap-2"
+                  >
+                    <a href={config.footerMessageLink || "/contato"}>
+                      <Mail className="h-4 w-4 text-primary" /> {config.footerMessageText || "Enviar mensagem"}
+                    </a>
+                  </Button>
                 </div>
               </div>
             </div>
           </section>
-        ))}
-
-        {exportSections.length > 0 && (
-          <>
-            {/* Export Sections Title */}
-            <section className="pt-24 pb-8 bg-white border-t border-slate-100 ">
-              <div className="container text-center">
-                <ScrollReveal>
-                  <h2 className="text-3xl md:text-5xl font-bold text-emerald-950">Exportações <span className="text-primary">Aéreas</span></h2>
-                </ScrollReveal>
-              </div>
-            </section>
-
-            {/* Export Content Sections */}
-            {exportSections.map((section: any, idx: number) => (
-              <section key={idx} className={`py-20 ${idx % 2 === 1 ? "bg-slate-50" : "bg-white"}`}>
-                <div className="container">
-                  <div className={`flex flex-col lg:flex-row items-center gap-16 ${idx % 2 === 1 ? "lg:flex-row-reverse" : ""}`}>
-                    <div className="flex-1 space-y-8">
-                      <ScrollReveal direction={idx % 2 === 1 ? "right" : "left"}>
-                        <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6">
-                          <DynamicIcon name={section.icon} className="h-7 w-7" />
-                        </div>
-                        <h3 className="text-3xl md:text-4xl font-bold text-emerald-950 mb-6">{section.title}</h3>
-                        <p className="text-slate-600 text-lg leading-relaxed mb-8">
-                          {section.desc}
-                        </p>
-                        <ul className="space-y-4">
-                          {section.topics?.split("\n").map((feature: string, fIdx: number) => (
-                            <li key={fIdx} className="flex items-start gap-3">
-                              <CheckCircle2 className="h-6 w-6 text-orange-500 shrink-0 mt-0.5" />
-                              <span className="text-slate-700 font-medium">{feature}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </ScrollReveal>
-                    </div>
-                    <div className="flex-1 w-full">
-                      <ScrollReveal direction={idx % 2 === 1 ? "left" : "right"}>
-                        <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-2xl">
-                          <Image
-                            width={1000}
-                            height={1000}
-                            src={section.image ? `${process.env.NEXT_PUBLIC_API_URL}/files/${section.image}` : "https://images.unsplash.com/photo-1436450412740-6b988f486c6b?q=80&w=1000&auto=format&fit=crop"}
-                            alt={section.title}
-                            className="object-cover w-full h-full"
-                          />
-                          <div className="absolute inset-0 bg-emerald-950/10" />
-                        </div>
-                      </ScrollReveal>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            ))}
-          </>
-        )}
-
-        {/* CTA Section */}
-
-        <section className="py-24 border-t border-slate-100">
-          <div className="container">
-            <div className="p-12 md:p-16 rounded-[48px] bg-gradient-to-br from-primary/5 to-orange-500/5 border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-12 text-center md:text-left">
-              <div className="space-y-4">
-                <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight leading-tight">
-                  {config.footerCtaTitleDark || "Operação Urgente?"} <span className="text-orange-500">{config.footerCtaTitleHighlight || "Nós cuidamos!"}</span>
-                </h2>
-                <p className="text-slate-600 max-w-xl text-lg whitespace-pre-wrap">
-                  {config.footerCtaDescription || "Não perca prazos. Nossa equipe está pronta para agir agora."}
-                </p>
-              </div>
-              <div className="flex flex-col gap-4 w-full md:w-auto">
-                <Button
-                  asChild
-                  className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-14 px-10 rounded-full shadow-lg shadow-orange-500/20 text-lg gap-2"
-                >
-                  <a href={config.footerWhatsappNumber ? `https://wa.me/55${config.footerWhatsappNumber.replace(/\\D/g, '')}` : "https://wa.me/5511964503217"} target="_blank" rel="noopener noreferrer">
-                    <FaWhatsapp className="w-5 h-5" /> {config.footerWhatsappText || "Ligue Agora"}
-                  </a>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 h-14 px-10 rounded-full text-lg gap-2"
-                >
-                  <a href={config.footerMessageLink || "/contato"}>
-                    <Mail className="h-4 w-4 text-primary" /> {config.footerMessageText || "Enviar mensagem"}
-                  </a>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
+        </div>
       </div>
     </LandingLayout>
   );

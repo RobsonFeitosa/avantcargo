@@ -73,50 +73,52 @@ export default function AreasOfAction() {
           </div>
         </section>
 
-        <section className="py-24">
-          <div className="container">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {areas.map((area, idx) => (
-                <ScrollReveal key={idx} direction="up" delay={0.1 * (idx + 1)} className="h-full">
-                  <Card className="p-8 group border-slate-200 bg-white hover:border-primary hover:shadow-xl transition-all duration-300 shadow-sm h-full">
-                    <div className="h-14 w-14 rounded-2xl bg-slate-50 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
-                      <area.icon className="h-7 w-7 text-primary group-hover:text-white" />
-                    </div>
-                    <h3 className="text-xl font-bold mb-4 text-emerald-950">{area.title}</h3>
-                    <p className="text-sm text-slate-500 mb-6 leading-relaxed">
-                      {area.desc}
-                    </p>
-                    <ul className="space-y-3 pt-6 border-t border-slate-100">
-                      {area.details.map((detail, dIdx) => (
-                        <li key={dIdx} className="flex items-center gap-2 text-xs font-medium text-slate-600">
-                           <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                           {detail}
-                        </li>
-                      ))}
-                    </ul>
-                  </Card>
-                </ScrollReveal>
-              ))}
+        <div className="bg-[radial-gradient(circle_at_top_right,hsl(var(--primary)/0.05),transparent_100%)]">
+          <section className="py-24 bg-transparent">
+            <div className="container">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {areas.map((area, idx) => (
+                  <ScrollReveal key={idx} direction="up" delay={0.1 * (idx + 1)} className="h-full">
+                    <Card className="p-8 group border-slate-200 bg-white hover:border-primary hover:shadow-xl transition-all duration-300 shadow-sm h-full">
+                      <div className="h-14 w-14 rounded-2xl bg-slate-50 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
+                        <area.icon className="h-7 w-7 text-primary group-hover:text-white" />
+                      </div>
+                      <h3 className="text-xl font-bold mb-4 text-emerald-950">{area.title}</h3>
+                      <p className="text-sm text-slate-500 mb-6 leading-relaxed">
+                        {area.desc}
+                      </p>
+                      <ul className="space-y-3 pt-6 border-t border-slate-100">
+                        {area.details.map((detail, dIdx) => (
+                          <li key={dIdx} className="flex items-center gap-2 text-xs font-medium text-slate-600">
+                             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                             {detail}
+                          </li>
+                        ))}
+                      </ul>
+                    </Card>
+                  </ScrollReveal>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="py-24 bg-slate-50">
-           <div className="container">
-              <ScrollReveal direction="up" delay={0.1}>
-                <div className="bg-white border border-slate-200 p-12 text-center space-y-8 relative overflow-hidden rounded-[32px] shadow-sm">
-                   <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-3xl -mr-32 -mt-32 rounded-full" />
-                   <div className="relative z-10 max-w-2xl mx-auto space-y-6">
-                      <h2 className="text-3xl font-bold text-emerald-950">Precisa de uma solução <span className="text-primary">específica</span>?</h2>
-                      <p className="text-slate-600">Se sua empresa possui um desafio logístico único ou uma operação de grande escala, nossa equipe técnica está pronta para desenhar um projeto sob medida.</p>
-                      <button className="bg-primary text-white px-8 py-3 rounded-full font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-primary/10">
-                         Solicitar Análise Técnica
-                      </button>
-                   </div>
-                </div>
-              </ScrollReveal>
-           </div>
-        </section>
+          <section className="py-24 bg-transparent">
+             <div className="container">
+                <ScrollReveal direction="up" delay={0.1}>
+                  <div className="bg-white border border-slate-200 p-12 text-center space-y-8 relative overflow-hidden rounded-[32px] shadow-sm">
+                     <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-3xl -mr-32 -mt-32 rounded-full" />
+                     <div className="relative z-10 max-w-2xl mx-auto space-y-6">
+                        <h2 className="text-3xl font-bold text-emerald-950">Precisa de uma solução <span className="text-primary">específica</span>?</h2>
+                        <p className="text-slate-600">Se sua empresa possui um desafio logístico único ou uma operação de grande escala, nossa equipe técnica está pronta para desenhar um projeto sob medida.</p>
+                        <button className="bg-primary text-white px-8 py-3 rounded-full font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-primary/10">
+                           Solicitar Análise Técnica
+                        </button>
+                     </div>
+                  </div>
+                </ScrollReveal>
+             </div>
+          </section>
+        </div>
       </div>
     </LandingLayout>
   );
