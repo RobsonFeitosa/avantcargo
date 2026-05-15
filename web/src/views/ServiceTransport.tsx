@@ -10,8 +10,10 @@ import exempl1transport from "@/assets/exempl1transport.jpg";
 import { FaWhatsapp } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { transportActions } from "@/admin/actions/transport.actions";
+import { regionsActions } from "@/admin/actions/home-sections.actions";
 import * as LucideIcons from "lucide-react";
 import { BiSolidDirections } from "react-icons/bi";
+import { Regions } from "@/components/landing/Regions";
 
 const DynamicIcon = ({ name, className }: { name: string, className?: string }) => {
   const Icon = (LucideIcons as any)[name];
@@ -38,6 +40,11 @@ export default function ServiceTransport() {
   const { data: configData } = useQuery({
     queryKey: ["transport-config"],
     queryFn: () => transportActions.get(),
+  });
+
+  const { data: regionsData } = useQuery({
+    queryKey: ["regions", "transport"],
+    queryFn: () => regionsActions.get("transport"),
   });
 
   const config = configData?.result || {};
@@ -304,6 +311,7 @@ export default function ServiceTransport() {
           </div>
         </section>
 
+        <Regions data={regionsData?.result} />
 
         {/* Footer CTA */}
         <section className="py-24 border-t border-slate-100">

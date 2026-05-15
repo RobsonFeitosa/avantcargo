@@ -15,8 +15,8 @@ export class GetRegionsUseCase {
         private readonly regionsRepository: RegionsRepository
     ) {}
 
-    async execute() {
-        return this.regionsRepository.find();
+    async execute(page: string = 'home') {
+        return this.regionsRepository.findByPage(page);
     }
 }
 
@@ -27,11 +27,11 @@ export class UpdateRegionsUseCase {
         private readonly regionsRepository: RegionsRepository
     ) {}
 
-    async execute(request: UpdateRegionsRequest) {
-        let config = await this.regionsRepository.find();
+    async execute(page: string, request: UpdateRegionsRequest) {
+        let config = await this.regionsRepository.findByPage(page);
 
         if (!config) {
-            config = new RegionConfig(request);
+            config = new RegionConfig({ ...request, page });
         } else {
             Object.assign(config, request);
         }

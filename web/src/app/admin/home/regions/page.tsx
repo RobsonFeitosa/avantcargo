@@ -41,8 +41,8 @@ export default function RegionsConfig() {
   const [isUploading, setIsUploading] = useState(false);
 
   const { data: configData, isLoading } = useQuery({
-    queryKey: ["regions"],
-    queryFn: () => regionsActions.get(),
+    queryKey: ["regions", "home"],
+    queryFn: () => regionsActions.get("home"),
     enabled: !!user,
   });
 
@@ -56,9 +56,9 @@ export default function RegionsConfig() {
   }, [configData]);
 
   const mutation = useMutation({
-    mutationFn: (data: any) => regionsActions.update(data),
+    mutationFn: (data: any) => regionsActions.update("home", data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["regions"] });
+      queryClient.invalidateQueries({ queryKey: ["regions", "home"] });
       toast.success("Configurações salvas com sucesso!");
     },
     onError: () => {

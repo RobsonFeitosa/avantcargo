@@ -22,10 +22,24 @@ import {
   Loader2,
   ImageIcon,
   MonitorSmartphone,
-  ListOrdered
+  ListOrdered,
+  MapPin
 } from "lucide-react";
 
 import { formatPhoneNumber } from "@/admin/utils/formatMask";
+
+import { regionsActions } from "@/admin/actions/home-sections.actions";
+import { uploadActions } from "@/admin/actions/upload.actions";
+
+const getImageUrl = (url: any) => {
+  if (!url) return "";
+  if (typeof url !== "string") return url;
+  if (url.includes("/api/files/")) return url;
+  if (url.includes("/files/")) {
+    return url.replace("/files/", "/api/files/");
+  }
+  return url;
+};
 
 import {
   DndContext,
@@ -140,9 +154,23 @@ export default function TransportConfig() {
   const [differentials, setDifferentials] = useState<any[]>([]);
   const [workSteps, setWorkSteps] = useState<any[]>([]);
 
+  const [regionsConfig, setRegionsConfig] = useState({
+    title: "",
+    description: "",
+    mapImageUrl: ""
+  });
+  const [localPreviewRegions, setLocalPreviewRegions] = useState<string | null>(null);
+  const [isUploadingRegions, setIsUploadingRegions] = useState(false);
+
   const { data: configData, isLoading } = useQuery({
     queryKey: ["transport-config"],
     queryFn: () => transportActions.get(),
+    enabled: !!user,
+  });
+
+  const { data: regionsData, isLoading: isLoadingRegions } = useQuery({
+    queryKey: ["regions", "transport"],
+    queryFn: () => regionsActions.get("transport"),
     enabled: !!user,
   });
 
@@ -204,6 +232,17 @@ export default function TransportConfig() {
     }
   }, [configData]);
 
+  useEffect(() => {
+    if (regionsData?.result) {
+      setRegionsConfig({
+        title: regionsData.result.title || "",
+        description: regionsData.result.description || "",
+        mapImageUrl: regionsData.result.mapImageUrl || ""
+      });
+      setLocalPreviewRegions(null);
+    }
+  }, [regionsData]);
+
   const updateMutation = useMutation({
     mutationFn: (data: any) => transportActions.update(data),
     onSuccess: () => {
@@ -212,6 +251,13 @@ export default function TransportConfig() {
     },
     onError: () => {
       toast.error("Erro ao salvar configurações.");
+    }
+  });
+
+  const updateRegionsMutation = useMutation({
+    mutationFn: (data: any) => regionsActions.update("transport", data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["regions", "transport"] });
     }
   });
 
@@ -243,6 +289,41 @@ export default function TransportConfig() {
     }
 
     uploadMutation.mutate(file);
+  };
+
+  const handleRegionsImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("A imagem não pode ultrapassar 5MB");
+      return;
+    }
+
+    const previewUrl = URL.createObjectURL(file);
+    setLocalPreviewRegions(previewUrl);
+
+    try {
+      setIsUploadingRegions(true);
+      const res = await uploadActions.upload(file);
+      const url = res?.url || res?.result?.url || res?.data?.url;
+
+      if (url) {
+        setRegionsConfig(prev => ({ ...prev, mapImageUrl: url }));
+        toast.success("Imagem enviada com sucesso!");
+      } else {
+        throw new Error("URL não encontrada na resposta");
+      }
+    } catch (error) {
+      toast.error("Erro ao enviar imagem.");
+    } finally {
+      setIsUploadingRegions(false);
+    }
+  };
+
+  const handleRemoveRegionsImage = () => {
+    setRegionsConfig(prev => ({ ...prev, mapImageUrl: "" }));
+    setLocalPreviewRegions(null);
   };
 
   const sensors = useSensors(
@@ -300,9 +381,10 @@ export default function TransportConfig() {
       </div>
 
       <Tabs defaultValue="header" className="w-full">
-        <TabsList className="grid w-full grid-cols-4 bg-emerald-50/50 border border-emerald-100 p-1 rounded-xl h-auto mb-8">
+        <TabsList className="grid w-full grid-cols-5 bg-emerald-50/50 border border-emerald-100 p-1 rounded-xl h-auto mb-8">
           <TabsTrigger value="header" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Cabeçalho & Destaque</TabsTrigger>
           <TabsTrigger value="differentials" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Grid de Capacidades</TabsTrigger>
+          <TabsTrigger value="regions" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Regiões de Atuação</TabsTrigger>
           <TabsTrigger value="work-steps" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Etapas de Trabalho</TabsTrigger>
           <TabsTrigger value="cta" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-emerald-950 data-[state=active]:shadow-sm py-3 font-semibold text-emerald-800">Botões e CTAs</TabsTrigger>
         </TabsList>
@@ -609,6 +691,118 @@ export default function TransportConfig() {
 
         </TabsContent>
 
+        <TabsContent value="regions" className="space-y-8 focus-visible:outline-none focus-visible:ring-0 mt-0">
+          <div className="grid gap-8 lg:grid-cols-2">
+            <div className="space-y-8">
+              <Card className="border-none shadow-sm overflow-hidden h-fit">
+                <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-5 h-5 text-emerald-600" />
+                    <CardTitle className="text-lg font-bold text-emerald-950">Textos da Seção</CardTitle>
+                  </div>
+                  <CardDescription className="text-emerald-800/60 font-medium">
+                    Edite o título e a descrição. Use **texto** para negrito.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-6 space-y-4">
+                  <div className="space-y-2">
+                    <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">
+                      Título Principal
+                    </Label>
+                    <Textarea
+                      value={regionsConfig.title}
+                      onChange={(e) => setRegionsConfig({ ...regionsConfig, title: e.target.value })}
+                      className="min-h-[100px] border-emerald-100 focus-visible:ring-emerald-500 font-semibold"
+                      placeholder="Ex: Nossa atuação se concentra nas principais regiões..."
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">
+                      Descrição / Detalhes
+                    </Label>
+                    <Textarea
+                      value={regionsConfig.description}
+                      onChange={(e) => setRegionsConfig({ ...regionsConfig, description: e.target.value })}
+                      className="min-h-[150px] border-emerald-100 focus-visible:ring-emerald-500"
+                      placeholder="Ex: Essas regiões representam muito mais do que pontos no mapa..."
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="space-y-8">
+              <Card className="border-none shadow-sm overflow-hidden h-fit">
+                <CardHeader className="bg-emerald-50/50 border-b border-emerald-100">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <ImageIcon className="w-5 h-5 text-emerald-600" />
+                      <CardTitle className="text-lg font-bold text-emerald-950">Mapa Ilustrativo</CardTitle>
+                    </div>
+                    {(regionsConfig.mapImageUrl || localPreviewRegions) && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                        onClick={handleRemoveRegionsImage}
+                      >
+                        <Trash2 size={14} className="mr-1" /> Remover
+                      </Button>
+                    )}
+                  </div>
+                  <CardDescription className="text-emerald-800/60 font-medium">
+                    Upload da imagem do mapa (PNG preferencialmente).
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-6 space-y-4">
+                  <div className="flex flex-col items-center justify-center border-2 border-dashed border-emerald-100 rounded-xl p-8 bg-emerald-50/10 gap-4">
+                    {regionsConfig.mapImageUrl || localPreviewRegions ? (
+                      <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-emerald-100 bg-white">
+                        <img
+                          src={localPreviewRegions || getImageUrl(regionsConfig.mapImageUrl)}
+                          alt="Preview do Mapa"
+                          className="w-full h-full object-contain"
+                        />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <Label
+                            htmlFor="regions-map-upload"
+                            className="cursor-pointer bg-white text-emerald-600 px-4 py-2 rounded-full font-bold flex items-center gap-2 shadow-lg"
+                          >
+                            <Upload size={16} /> Alterar Imagem
+                          </Label>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center gap-2 py-8 text-emerald-900/40">
+                        <ImageIcon size={48} strokeWidth={1} />
+                        <p className="font-medium">Nenhuma imagem selecionada</p>
+                        <Label htmlFor="regions-map-upload" className="mt-2 cursor-pointer bg-emerald-600 text-white px-6 py-2 rounded-full font-bold flex items-center gap-2 shadow-lg hover:bg-emerald-700 transition-colors">
+                          <Upload size={16} /> Escolher Arquivo
+                        </Label>
+                      </div>
+                    )}
+                    <input
+                      id="regions-map-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleRegionsImageUpload}
+                      className="hidden"
+                      disabled={isUploadingRegions}
+                    />
+                    {isUploadingRegions && (
+                      <div className="flex items-center gap-2 text-emerald-600 font-medium animate-pulse">
+                        <Loader2 size={16} className="animate-spin" />
+                        Enviando imagem...
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </TabsContent>
+
         <TabsContent value="work-steps" className="space-y-8 focus-visible:outline-none focus-visible:ring-0 mt-0">
           <div className="grid gap-8 lg:grid-cols-2">
             <div className="space-y-8">
@@ -801,11 +995,12 @@ export default function TransportConfig() {
               differentials,
               workSteps
             });
+            updateRegionsMutation.mutate(regionsConfig);
           }}
-          disabled={updateMutation.isPending}
+          disabled={updateMutation.isPending || updateRegionsMutation.isPending || isUploadingRegions}
           className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 px-10"
         >
-          {updateMutation.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+          {(updateMutation.isPending || updateRegionsMutation.isPending) ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
           Salvar Alterações
         </Button>
       </div>

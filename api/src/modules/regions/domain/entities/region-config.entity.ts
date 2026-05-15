@@ -20,6 +20,9 @@ export class RegionConfig {
     @Column({ name: 'map_image_url', nullable: true })
     mapImageUrl: string;
 
+    @Column({ name: 'page', default: 'home' })
+    page: string;
+
     @CreateDateColumn({ name: 'created_at' })
     created_at: Date;
 

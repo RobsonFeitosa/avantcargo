@@ -45,12 +45,12 @@ export const footerActions = {
 };
 
 export const regionsActions = {
-    async get() {
-        const response = await api.get("/regions");
+    async get(page: string = 'home') {
+        const response = await api.get(`/regions/${page}`);
         return response.data;
     },
-    async update(data: any) {
-        const response = await api.post("/regions", data);
+    async update(page: string, data: any) {
+        const response = await api.post(`/regions/${page}`, data);
         return response.data;
     },
 };

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { Public } from "src/shared/infra/http/decorators/public.decorator";
 import { GetRegionsUseCase, UpdateRegionsUseCase, UpdateRegionsRequest } from "../../../application/regions.use-cases";
 
@@ -9,14 +9,20 @@ export class RegionsController {
         private readonly updateRegionsUseCase: UpdateRegionsUseCase,
     ) {}
 
+    @Get(':page')
+    @Public()
+    async getByPage(@Param('page') page: string) {
+        return this.getRegionsUseCase.execute(page);
+    }
+
     @Get()
     @Public()
     async get() {
-        return this.getRegionsUseCase.execute();
+        return this.getRegionsUseCase.execute('home');
     }
 
-    @Post()
-    async update(@Body() body: UpdateRegionsRequest) {
-        return this.updateRegionsUseCase.execute(body);
+    @Post(':page')
+    async update(@Param('page') page: string, @Body() body: UpdateRegionsRequest) {
+        return this.updateRegionsUseCase.execute(page, body);
     }
 }

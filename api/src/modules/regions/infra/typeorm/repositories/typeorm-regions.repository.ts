@@ -9,8 +9,8 @@ export class TypeORMRegionsRepository implements RegionsRepository {
         private readonly repository: Repository<RegionConfig>
     ) {}
 
-    async find(): Promise<RegionConfig | null> {
-        return this.repository.findOne({ where: {} });
+    async findByPage(page: string): Promise<RegionConfig | null> {
+        return this.repository.findOne({ where: { page } });
     }
 
     async save(config: RegionConfig): Promise<RegionConfig> {
