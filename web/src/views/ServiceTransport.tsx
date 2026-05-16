@@ -100,48 +100,79 @@ export default function ServiceTransport() {
         <div className="bg-[radial-gradient(circle_at_top_right,hsl(var(--primary)/0.05),transparent_100%)]">
 
           {/* Main Content Section */}
-          <section className="py-24 ">
-            <div className="container">
-              <div className="flex flex-col lg:flex-row items-center gap-16">
-                <div className="flex-1 w-full">
-                  <ScrollReveal direction="left">
-                    <div className="relative aspect-video lg:aspect-[4/3] rounded-[40px] overflow-hidden shadow-2xl group">
-                      {config.highlightImage && (
-                        <Image
-                          src={config.highlightImage ? `${process.env.NEXT_PUBLIC_API_URL}/files/${config.highlightImage}` : ""}
-                          alt="Transporte Rodoviário AvantCargo"
-                          className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
-                          priority
-                          width={1000}
-                          height={1000}
-                        />
-                      )}
-                      <div className="absolute inset-0 bg-emerald-950/10" />
+          <section className="relative py-32 overflow-hidden flex items-center min-h-[80vh]">
+            {/* Background Media */}
+            <div className="absolute inset-0 z-0 bg-emerald-950">
+              {config.highlightMediaType === 'video' && config.highlightVideoIframe ? (
+                <>
+                  <div className="absolute inset-0 bg-emerald-950/60 z-10" />
+                  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    {config.highlightVideoIframe.includes('<iframe') ? (
+                      <div 
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:border-0 [&>iframe]:absolute [&>iframe]:inset-0"
+                        dangerouslySetInnerHTML={{ 
+                          __html: config.highlightVideoIframe
+                            .replace(/(src="[^"]+)"/, '$1&background=1&autoplay=1&mute=1&loop=1&controls=0"')
+                            .replace(/\?&/, '?')
+                        }} 
+                      />
+                    ) : (
+                      <iframe 
+                        src={`${config.highlightVideoIframe}${config.highlightVideoIframe.includes('?') ? '&' : '?'}background=1&autoplay=1&mute=1&loop=1&controls=0`}
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] border-0"
+                        allow="autoplay; fullscreen; picture-in-picture"
+                      />
+                    )}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="absolute inset-0 bg-emerald-950/70 z-10" />
+                  {config.highlightImage && (
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_API_URL}/files/${config.highlightImage}`}
+                      alt="Transporte Rodoviário AvantCargo"
+                      className="object-cover w-full h-full"
+                      priority
+                      width={1920}
+                      height={1080}
+                    />
+                  )}
+                </>
+              )}
+            </div>
+
+            {/* Content Overlay */}
+            <div className="container relative z-20">
+              <div className="max-w-3xl space-y-8">
+                <ScrollReveal direction="up">
+                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg">
+                    {config.highlightTitle || "Estratégia e Crescimento para seu Negócio"}
+                  </h2>
+                  <p className="text-slate-200 text-xl md:text-2xl leading-relaxed mt-6 font-light drop-shadow">
+                    {config.highlightText1 || "Entendendo a necessidade de nossos clientes, implantamos constantemente serviços estrategicamente desenvolvidos para auxiliar no crescimento da sua empresa através da Avant."}
+                  </p>
+                  
+                  {config.highlightQuote && (
+                    <div className="mt-10 p-8 border-l-4 border-primary bg-white/5 backdrop-blur-sm rounded-r-2xl">
+                      <p className="text-white text-xl leading-relaxed italic drop-shadow-sm">
+                        "{config.highlightQuote}"
+                      </p>
                     </div>
-                  </ScrollReveal>
-                </div>
-                <div className="flex-1 space-y-8">
-                  <ScrollReveal direction="right">
-                    <h2 className="text-3xl md:text-4xl font-bold text-emerald-950">{config.highlightTitle || "Estratégia e Crescimento para seu Negócio"}</h2>
-                    <p className="text-slate-600 text-lg leading-relaxed mt-4">
-                      {config.highlightText1 || "Entendendo a necessidade de nossos clientes, implantamos constantemente serviços estrategicamente desenvolvidos para auxiliar no crescimento da sua empresa através da Avant."}
-                    </p>
-                    <p className="text-slate-600 text-lg leading-relaxed italic border-l-4 border-primary pl-6 mt-8 mb-6">
-                      {config.highlightQuote || ""}
-                    </p>
-                    <div className="pt-4">
-                      <a
-                        href={config.buttonLink ? `https://wa.me/55${config.buttonLink.replace(/\D/g, '')}` : "#"}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-primary/20 text-lg"
-                      >
-                        <FaWhatsapp className="w-5 h-5" />
-                        {config.buttonText || "Saiba Mais"}
-                      </a>
-                    </div>
-                  </ScrollReveal>
-                </div>
+                  )}
+
+                  <div className="pt-10">
+                    <a
+                      href={config.buttonLink ? `https://wa.me/55${config.buttonLink.replace(/\D/g, '')}` : "#"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-3 bg-primary text-white px-10 py-4 rounded-full font-bold hover:bg-emerald-600 transition-all shadow-[0_0_40px_-10px_rgba(0,255,170,0.4)] text-lg hover:scale-105"
+                    >
+                      <FaWhatsapp className="w-6 h-6" />
+                      {config.buttonText || "Saiba Mais"}
+                    </a>
+                  </div>
+                </ScrollReveal>
               </div>
             </div>
           </section>

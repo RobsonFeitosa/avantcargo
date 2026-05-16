@@ -125,11 +125,12 @@ export default function TransportConfig() {
     highlightTitle: "",
     highlightText1: "",
     highlightQuote: "",
-    buttonText: "",
     buttonLink: "",
     diffsSectionTitle: "",
     diffsSectionHighlight: "",
-    diffsSectionDescription: ""
+    diffsSectionDescription: "",
+    highlightMediaType: "image",
+    highlightVideoIframe: ""
   });
 
   const [ctaConfig, setCtaConfig] = useState({
@@ -193,11 +194,12 @@ export default function TransportConfig() {
         highlightTitle: result.highlightTitle || "Estratégia e Crescimento para seu Negócio",
         highlightText1: result.highlightText1 || "Entendendo a necessidade de nossos clientes...",
         highlightQuote: result.highlightQuote || "Ofereça soluções aos seus clientes...",
-        buttonText: result.buttonText || "Saiba Mais",
         buttonLink: result.buttonLink || "",
         diffsSectionTitle: result.diffsSectionTitle || "Diferenciais",
         diffsSectionHighlight: result.diffsSectionHighlight || "Logísticos",
-        diffsSectionDescription: result.diffsSectionDescription || "Soluções completas de transporte e pré-embarque para garantir o sucesso da sua operação."
+        diffsSectionDescription: result.diffsSectionDescription || "Soluções completas de transporte e pré-embarque para garantir o sucesso da sua operação.",
+        highlightMediaType: result.highlightMediaType || "image",
+        highlightVideoIframe: result.highlightVideoIframe || ""
       });
       setCtaConfig({
         heroWhatsappText: result.heroWhatsappText || "",
@@ -490,57 +492,97 @@ export default function TransportConfig() {
             <CardContent className="pt-6">
               <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
 
-                {/* Imagem (Esquerda) */}
-                <div className="xl:col-span-4 space-y-2 shrink-0">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Imagem de Destaque</Label>
-                    {headerConfig.highlightImage && (
-                      <button
+                {/* Mídia (Esquerda) */}
+                <div className="xl:col-span-4 space-y-4 shrink-0">
+                  <div className="space-y-2">
+                    <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Tipo de Mídia (Destaque)</Label>
+                    <div className="flex gap-2">
+                      <Button
                         type="button"
-                        onClick={() => {
-                          const updated = { ...headerConfig, highlightImage: "" };
-                          setHeaderConfig(updated);
-                          updateMutation.mutate({ ...updated, ...ctaConfig, differentials });
-                        }}
-                        className="text-[10px] text-red-500 hover:text-red-700 hover:underline"
+                        variant={headerConfig.highlightMediaType === 'image' ? 'default' : 'outline'}
+                        onClick={() => setHeaderConfig({ ...headerConfig, highlightMediaType: 'image' })}
+                        className={`flex-1 ${headerConfig.highlightMediaType === 'image' ? 'bg-emerald-600 text-white' : 'text-emerald-700 border-emerald-200'}`}
+                        size="sm"
                       >
-                        Remover
-                      </button>
-                    )}
+                        Imagem
+                      </Button>
+                      <Button
+                        type="button"
+                        variant={headerConfig.highlightMediaType === 'video' ? 'default' : 'outline'}
+                        onClick={() => setHeaderConfig({ ...headerConfig, highlightMediaType: 'video' })}
+                        className={`flex-1 ${headerConfig.highlightMediaType === 'video' ? 'bg-emerald-600 text-white' : 'text-emerald-700 border-emerald-200'}`}
+                        size="sm"
+                      >
+                        Vídeo (iframe)
+                      </Button>
+                    </div>
                   </div>
-                  <div
-                    onClick={() => document.getElementById('highlight-image')?.click()}
-                    className="relative border-2 border-dashed border-emerald-100 rounded-xl p-4 text-center hover:bg-emerald-50 transition-colors cursor-pointer group flex flex-col items-center justify-center h-48 overflow-hidden"
-                  >
-                    {headerConfig.highlightImage ? (
-                      <div className="absolute inset-0">
-                        <Image
-                          src={`${process.env.NEXT_PUBLIC_API_URL}/files/${headerConfig.highlightImage}`}
-                          alt="Preview"
-                          fill
-                          className="object-cover"
-                        />
-                        <div className="absolute inset-0 bg-emerald-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
-                          <ImageIcon className="text-white w-6 h-6" />
-                          <span className="text-[10px] text-white font-medium bg-emerald-950/50 px-2 py-1 rounded-full">Trocar Imagem</span>
-                        </div>
+
+                  {headerConfig.highlightMediaType === 'image' && (
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Imagem de Destaque</Label>
+                        {headerConfig.highlightImage && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = { ...headerConfig, highlightImage: "" };
+                              setHeaderConfig(updated);
+                              updateMutation.mutate({ ...updated, ...ctaConfig, differentials });
+                            }}
+                            className="text-[10px] text-red-500 hover:text-red-700 hover:underline"
+                          >
+                            Remover
+                          </button>
+                        )}
                       </div>
-                    ) : (
-                      <>
-                        <div className="p-3 bg-white rounded-full shadow-sm group-hover:scale-110 transition-transform">
-                          <Upload className="w-5 h-5 text-emerald-600" />
-                        </div>
-                        <span className="text-xs font-medium text-emerald-800 mt-2">Clique para alterar a imagem</span>
-                      </>
-                    )}
-                    <input
-                      type="file"
-                      id="highlight-image"
-                      className="hidden"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                    />
-                  </div>
+                      <div
+                        onClick={() => document.getElementById('highlight-image')?.click()}
+                        className="relative border-2 border-dashed border-emerald-100 rounded-xl p-4 text-center hover:bg-emerald-50 transition-colors cursor-pointer group flex flex-col items-center justify-center h-48 overflow-hidden"
+                      >
+                        {headerConfig.highlightImage ? (
+                          <div className="absolute inset-0">
+                            <Image
+                              src={`${process.env.NEXT_PUBLIC_API_URL}/files/${headerConfig.highlightImage}`}
+                              alt="Preview"
+                              fill
+                              className="object-cover"
+                            />
+                            <div className="absolute inset-0 bg-emerald-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
+                              <ImageIcon className="text-white w-6 h-6" />
+                              <span className="text-[10px] text-white font-medium bg-emerald-950/50 px-2 py-1 rounded-full">Trocar Imagem</span>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="p-3 bg-white rounded-full shadow-sm group-hover:scale-110 transition-transform">
+                              <Upload className="w-5 h-5 text-emerald-600" />
+                            </div>
+                            <span className="text-xs font-medium text-emerald-800 mt-2">Clique para alterar a imagem</span>
+                          </>
+                        )}
+                        <input
+                          type="file"
+                          id="highlight-image"
+                          className="hidden"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {headerConfig.highlightMediaType === 'video' && (
+                    <div className="space-y-2">
+                      <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider">Código de Incorporação (iframe do Vídeo)</Label>
+                      <Textarea
+                        value={headerConfig.highlightVideoIframe}
+                        onChange={(e) => setHeaderConfig({ ...headerConfig, highlightVideoIframe: e.target.value })}
+                        placeholder='<iframe src="..."></iframe> ou Link'
+                        className="min-h-[160px] border-emerald-100 font-mono text-sm"
+                      />
+                    </div>
+                  )}
                 </div>
 
                 {/* Textos (Direita) */}

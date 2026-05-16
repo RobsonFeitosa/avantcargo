@@ -26,6 +26,12 @@ export class TransportConfig {
     @Column({ name: 'highlight_image', nullable: true })
     highlightImage: string;
 
+    @Column({ name: 'highlight_media_type', nullable: true, default: 'image' })
+    highlightMediaType: string;
+
+    @Column({ name: 'highlight_video_iframe', nullable: true })
+    highlightVideoIframe: string;
+
     @Column({ name: 'highlight_title', nullable: true })
     highlightTitle: string;
 
