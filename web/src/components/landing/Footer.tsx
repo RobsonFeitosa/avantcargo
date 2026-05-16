@@ -122,10 +122,6 @@ export const Footer = ({ data }: FooterProps) => {
           <p className="text-xs text-slate-400 text-center">
             {data?.copyrightText || "© 2026 AvantCargo - Logística e Serviços Aduaneiros. Todos os direitos reservados."}
           </p>
-          <div className="flex gap-6">
-            <Link href={data?.termsLink || "#"} className="text-[10px] uppercase tracking-widest text-slate-400 hover:text-primary transition-colors">Termos de Uso</Link>
-            <Link href={data?.privacyLink || "#"} className="text-[10px] uppercase tracking-widest text-slate-400 hover:text-primary transition-colors">Privacidade</Link>
-          </div>
         </div>
       </div>
     </footer>
