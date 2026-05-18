@@ -28,12 +28,11 @@ export class CreateUserUseCase {
             payload.password,
         )
 
-        const { name, user_id, role } = payload
+        const { name, user_id, } = payload
 
         const user = await this.userRepository.create(new UserDomain({
             id: user_id,
             name,
-            role,
             password: hashedPassword,
         }))
 

@@ -17,9 +17,6 @@ export class User {
     @Column()
     password: string;
 
-    @Column({ default: 'customer' })
-    role: 'customer' | 'shopkeeper';
-
     @CreateDateColumn({ name: 'created_at' })
     created_at: Date;
 
@@ -32,13 +29,11 @@ export class User {
 
     public getId() { return this.id; }
     public getName() { return this.name; }
-    public getRole() { return this.role; }
 
     public toJSON() {
         return {
             id: this.id,
             name: this.name,
-            role: this.role,
             password: this.password,
             created_at: this.created_at,
             updated_at: this.updated_at,
