@@ -111,6 +111,15 @@ export default function Contact() {
       color: "text-green-500",
       bg: "bg-green-500/10",
     },
+    ...(config?.phoneNumber ? [{
+      icon: Phone,
+      title: "Telefone",
+      value: `(${config.phoneNumber.slice(0, 2)}) ${config.phoneNumber.slice(2, 6)}-${config.phoneNumber.slice(6)}`,
+      desc: config?.phoneSubtitle || "Atendimento telefônico",
+      link: `tel:+55${config.phoneNumber.replace(/\D/g, "")}`,
+      color: "text-blue-500",
+      bg: "bg-blue-500/10",
+    }] : []),
     {
       icon: Mail,
       title: "E-mail",

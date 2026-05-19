@@ -35,6 +35,12 @@ export class GeneralContactConfig {
     @Column({ name: 'whatsapp_url', nullable: true })
     whatsappUrl: string;
 
+    @Column({ name: 'phone_number', nullable: true })
+    phoneNumber: string;
+
+    @Column({ name: 'phone_subtitle', nullable: true })
+    phoneSubtitle: string;
+
     @Column({ name: 'email', nullable: true })
     email: string;
 

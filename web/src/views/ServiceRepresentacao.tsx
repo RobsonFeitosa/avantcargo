@@ -190,7 +190,7 @@ export default function ServiceRepresentacao() {
 
           <section className="py-24 border-t border-slate-100">
             <div className="container">
-              <div className="p-12 md:p-16 rounded-[48px] bg-gradient-to-br from-primary/5 to-orange-500/5 border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-12 text-center md:text-left">
+              <div className="p-6 md:p-16 rounded-3xl md:rounded-[48px] bg-gradient-to-br from-primary/5 to-orange-500/5 border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12 text-center md:text-left">
                 <div className="space-y-4">
                   <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight leading-tight">
                     {config.footerCtaTitleDark || "Operação Urgente?"} <span className="text-orange-500">{config.footerCtaTitleHighlight || "Nós cuidamos!"}</span>

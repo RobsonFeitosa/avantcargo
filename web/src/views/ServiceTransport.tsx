@@ -74,21 +74,21 @@ export default function ServiceTransport() {
               <div className="flex flex-wrap justify-center gap-4 mt-10">
                 <Button
                   asChild
-                  className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 h-14 rounded-full shadow-lg shadow-orange-500/20 transition-all hover:scale-105 text-lg cursor-pointer"
+                  className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 md:px-8 h-auto min-h-[56px] py-3 rounded-full shadow-lg shadow-orange-500/20 transition-all hover:scale-105 text-base md:text-lg cursor-pointer whitespace-normal text-center leading-tight"
                 >
-                  <a href={config.heroWhatsappNumber ? `https://wa.me/55${config.heroWhatsappNumber.replace(/\\D/g, '')}` : "https://wa.me/5511964503217"} target="_blank" rel="noopener noreferrer">
-                    <FaWhatsapp className="w-5 h-5 mr-2" />
-                    {config.heroWhatsappText || "Falar com especialista"}
+                  <a href={config.heroWhatsappNumber ? `https://wa.me/55${config.heroWhatsappNumber.replace(/\D/g, '')}` : "https://wa.me/5511964503217"} target="_blank" rel="noopener noreferrer">
+                    <FaWhatsapp className="w-5 h-5 mr-2 shrink-0" />
+                    <span>{config.heroWhatsappText || "Falar com especialista"}</span>
                   </a>
                 </Button>
                 <Button
                   asChild
                   variant="outline"
-                  className="border-emerald-900 text-emerald-900 hover:bg-emerald-50 font-bold px-8 h-14 rounded-full transition-all text-lg cursor-pointer"
+                  className="border-emerald-900 text-emerald-900 hover:bg-emerald-50 font-bold px-6 md:px-8 h-auto min-h-[56px] py-3 rounded-full transition-all text-base md:text-lg cursor-pointer whitespace-normal text-center leading-tight"
                 >
                   <a href={config.heroMessageLink || "/contato"}>
-                    <Mail className="w-5 h-5 mr-2" />
-                    {config.heroMessageText || "Enviar mensagem"}
+                    <Mail className="w-5 h-5 mr-2 shrink-0" />
+                    <span>{config.heroMessageText || "Enviar mensagem"}</span>
                   </a>
                 </Button>
               </div>
@@ -298,9 +298,9 @@ export default function ServiceTransport() {
           {/* Footer CTA */}
           <section className="py-24 border-t border-slate-100">
             <div className="container">
-              <div className="p-12 md:p-16 rounded-[48px] bg-gradient-to-br from-primary/5 to-orange-500/5 border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-12 text-center md:text-left">
+              <div className="p-6 md:p-16 rounded-3xl md:rounded-[48px] bg-gradient-to-br from-primary/5 to-orange-500/5 border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12 text-center md:text-left">
                 <div className="space-y-4">
-                  <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight leading-tight">
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-emerald-950 tracking-tight leading-tight">
                     {config.footerCtaTitleDark || "Sua carga em"} <span className="text-orange-500">{config.footerCtaTitleHighlight || "boas mãos?"}</span>
                   </h2>
                   <p className="text-slate-600 max-w-xl text-lg whitespace-pre-wrap">
@@ -310,19 +310,21 @@ export default function ServiceTransport() {
                 <div className="flex flex-col gap-4 w-full md:w-auto">
                   <Button
                     asChild
-                    className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-14 px-10 rounded-full shadow-lg shadow-orange-500/20 text-lg gap-2"
+                    className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-auto min-h-[56px] py-3 px-6 md:px-10 rounded-full shadow-lg shadow-orange-500/20 text-base md:text-lg gap-2 whitespace-normal text-center leading-tight w-full md:w-auto"
                   >
-                    <a href={config.footerWhatsappNumber ? `https://wa.me/55${config.footerWhatsappNumber.replace(/\\D/g, '')}` : "https://wa.me/5511964503217"} target="_blank" rel="noopener noreferrer">
-                      <FaWhatsapp className="w-5 h-5" /> {config.footerWhatsappText || "Falar conosco"}
+                    <a href={config.footerWhatsappNumber ? `https://wa.me/55${config.footerWhatsappNumber.replace(/\D/g, '')}` : "https://wa.me/5511964503217"} target="_blank" rel="noopener noreferrer">
+                      <FaWhatsapp className="w-5 h-5 shrink-0" /> 
+                      <span>{config.footerWhatsappText || "Falar conosco"}</span>
                     </a>
                   </Button>
                   <Button
                     asChild
                     variant="outline"
-                    className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 h-14 px-10 rounded-full text-lg gap-2"
+                    className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 h-auto min-h-[56px] py-3 px-6 md:px-10 rounded-full text-base md:text-lg gap-2 whitespace-normal text-center leading-tight w-full md:w-auto"
                   >
                     <a href={config.footerMessageLink || "/contato"}>
-                      <Mail className="h-4 w-4 text-primary" /> {config.footerMessageText || "Enviar mensagem"}
+                      <Mail className="h-4 w-4 text-primary shrink-0" /> 
+                      <span>{config.footerMessageText || "Enviar mensagem"}</span>
                     </a>
                   </Button>
                 </div>

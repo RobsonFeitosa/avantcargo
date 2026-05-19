@@ -18,7 +18,7 @@ export class FooterConfig {
     social_links: { icon: string; link: string }[];
 
     @Column({ type: 'jsonb', nullable: true })
-    contact_info: { address: string; phone: string; email: string };
+    contact_info: { address: string; phone: string; phone2?: string; email: string };
 
     @Column({ type: 'jsonb', nullable: true })
     footer_links: { title: string; links: { name: string; path: string }[] }[];

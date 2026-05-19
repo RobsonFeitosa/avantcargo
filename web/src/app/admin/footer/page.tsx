@@ -23,6 +23,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { footerActions } from "@/admin/actions/home-sections.actions";
 import { useAuth } from "@/admin/hooks_generic/providers/auth";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function FooterConfig() {
   const { user } = useAuth();
@@ -33,6 +34,7 @@ export default function FooterConfig() {
   const [contactInfo, setContactInfo] = useState({
     address: "",
     phone: "",
+    phone2: "",
     email: ""
   });
   const [copyrightText, setCopyrightText] = useState("");
@@ -50,7 +52,7 @@ export default function FooterConfig() {
       const { result } = configData;
       setDescription(result.description || "");
       setSocialLinks(result.social_links || []);
-      setContactInfo(result.contact_info || { address: "", phone: "", email: "" });
+      setContactInfo(result.contact_info || { address: "", phone: "", phone2: "", email: "" });
       setCopyrightText(result.copyrightText || "");
       setTermsLink(result.termsLink || "");
       setPrivacyLink(result.privacyLink || "");
@@ -104,6 +106,17 @@ export default function FooterConfig() {
 
   const handlePhoneChange = (value: string) => {
     setContactInfo({ ...contactInfo, phone: formatPhone(value) });
+  };
+
+  const formatLandline = (value: string) => {
+    const digits = value.replace(/\D/g, "").slice(0, 10);
+    if (digits.length <= 2) return digits;
+    if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+  };
+
+  const handlePhone2Change = (value: string) => {
+    setContactInfo({ ...contactInfo, phone2: formatLandline(value) });
   };
 
   if (isLoading) {
@@ -249,12 +262,25 @@ export default function FooterConfig() {
 
               <div className="space-y-2">
                 <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider flex items-center gap-1">
-                  <Phone size={12} /> Telefone Principal (WhatsApp)
+                  <FaWhatsapp size={12} /> WhatsApp
                 </Label>
                 <Input 
                   maxLength={20} 
                   value={contactInfo.phone} 
                   onChange={(e) => handlePhoneChange(e.target.value)}
+                  placeholder="(00) 00000-0000"
+                  className="border-emerald-100 focus-visible:ring-emerald-500" 
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-emerald-900/70 font-semibold uppercase text-[10px] tracking-wider flex items-center gap-1">
+                  <Phone size={12} /> Telefone
+                </Label>
+                <Input 
+                  maxLength={20} 
+                  value={contactInfo.phone2 || ""} 
+                  onChange={(e) => handlePhone2Change(e.target.value)}
                   placeholder="(00) 00000-0000"
                   className="border-emerald-100 focus-visible:ring-emerald-500" 
                 />

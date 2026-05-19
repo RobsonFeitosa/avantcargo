@@ -132,7 +132,7 @@ export const Hero = ({ data }: HeroProps) => {
                   })}
                 </div>
 
-                <div className="grid grid-cols-3 gap-4 pt-8 ">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8 ">
                   {(data?.stats || [
                     { id: "1", value: "500+", label: "Clientes atendidos" },
                     { id: "2", value: "20+", label: "Anos de experiência" },

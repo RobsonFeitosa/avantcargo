@@ -76,7 +76,7 @@ export const Sectors = ({ data }: SectorsProps) => {
           </ScrollReveal>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-6">
           {currentSectors.map((sector: any, idx: number) => (
             <ScrollReveal key={sector.id || idx} direction="up" delay={0.1 * (idx + 1)} className="h-full">
               <div

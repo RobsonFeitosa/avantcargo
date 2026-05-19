@@ -406,16 +406,16 @@ Nossa equipe tem formação técnica multidisciplinar — direito, economia, eng
                 {differentials.map((d: any, idx: number) => (
                   <ScrollReveal key={idx} direction="up" delay={0.1 * (idx + 1)}>
                     <div className="p-8 rounded-3xl bg-white border border-slate-200 hover:bg-slate-50 transition-all group text-left relative overflow-hidden shadow-sm h-full">
-                      <div className="flex items-start gap-6 relative z-10">
-                        <div className="text-4xl font-black text-slate-100 group-hover:text-primary/10 transition-colors">
+                      <div className="flex flex-col gap-4 relative z-10">
+                        <div className="text-5xl font-black text-slate-100 group-hover:text-primary/10 transition-colors">
                           {d.num}
                         </div>
                         <div className="space-y-4">
-                          <div className="flex items-start gap-2 text-orange-600">
-                            <div className="flex  justify-center mt-1 w-8">
-                              <d.icon className="h-6 w-6" />
+                          <div className="flex items-start gap-3 text-orange-600">
+                            <div className="flex justify-center mt-0.5 shrink-0">
+                              <d.icon className="h-7 w-7" />
                             </div>
-                            <h4 className="font-bold text-2xl text-emerald-900">{d.title}</h4>
+                            <h4 className="font-bold text-2xl text-emerald-900 leading-tight">{d.title}</h4>
                           </div>
                           <p className="text-slate-500 text-lg leading-relaxed">{d.desc}</p>
                         </div>
@@ -430,10 +430,10 @@ Nossa equipe tem formação técnica multidisciplinar — direito, economia, eng
           {/* Footer CTA */}
           <section className="py-24 border-t border-slate-100 bg-transparent">
             <div className="container">
-              <div className="p-12 md:p-16 rounded-[48px] bg-gradient-to-br from-primary/5 to-orange-500/5 border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-12">
+              <div className="p-6 md:p-16 rounded-3xl md:rounded-[48px] bg-gradient-to-br from-primary/5 to-orange-500/5 border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
                 <div className="space-y-4 text-center md:text-left">
                   <ScrollReveal direction="left" delay={0.1}>
-                    <h2 className="text-4xl md:text-5xl font-bold text-emerald-950 tracking-tight leading-tight">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-emerald-950 tracking-tight leading-tight">
                       {config?.ctaTitleDark || "Vamos trabalhar"} <span className="text-orange-500">{config?.ctaTitleHighlight || "juntos?"}</span>
                     </h2>
                   </ScrollReveal>
@@ -448,7 +448,7 @@ Nossa equipe tem formação técnica multidisciplinar — direito, economia, eng
                     {config?.ctaPrimaryButtonLink && (
                       <Button
                         asChild
-                        className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-14 px-10 rounded-full shadow-lg shadow-orange-500/20 text-lg gap-2 w-full"
+                        className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-auto min-h-[56px] py-3 px-6 md:px-10 rounded-full shadow-lg shadow-orange-500/20 text-base md:text-lg gap-2 w-full whitespace-normal text-center leading-tight"
                       >
                         <Link
                           href={`https://wa.me/55${config.ctaPrimaryButtonLink.replace(/\D/g, "")}`}
@@ -464,7 +464,7 @@ Nossa equipe tem formação técnica multidisciplinar — direito, economia, eng
                       <Button
                         asChild
                         variant="outline"
-                        className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 h-14 px-10 rounded-full text-lg gap-2 w-full"
+                        className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 h-auto min-h-[56px] py-3 px-6 md:px-10 rounded-full text-base md:text-lg gap-2 w-full whitespace-normal text-center leading-tight"
                       >
                         <Link href={config?.ctaSecondaryButtonLink || "/contato"}>
                           <MessageSquare className="h-4 w-4 text-primary" /> {config?.ctaSecondaryButtonText || "Enviar mensagem"}

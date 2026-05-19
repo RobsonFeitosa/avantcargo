@@ -100,6 +100,9 @@ export default function ContactConfig() {
   const [whatsappNumber, setWhatsappNumber] = useState("");
   const [whatsappSubtitle, setWhatsappSubtitle] = useState("");
   
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneSubtitle, setPhoneSubtitle] = useState("");
+  
   const [email, setEmail] = useState("");
   const [emailSubtitle, setEmailSubtitle] = useState("");
   
@@ -140,6 +143,14 @@ export default function ContactConfig() {
     )}`;
   };
 
+  const formatLandline = (value: string) => {
+    if (!value) return value;
+    const digits = value.replace(/\D/g, "").slice(0, 10);
+    if (digits.length <= 2) return digits;
+    if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+  };
+
   useEffect(() => {
     if (configData?.result) {
       const { result } = configData;
@@ -150,6 +161,8 @@ export default function ContactConfig() {
       setFormDescription(result.formDescription || "");
       setWhatsappNumber(formatPhone(result.whatsappNumber || ""));
       setWhatsappSubtitle(result.whatsappSubtitle || "");
+      setPhoneNumber(formatLandline(result.phoneNumber || ""));
+      setPhoneSubtitle(result.phoneSubtitle || "");
       setEmail(result.email || "");
       setEmailSubtitle(result.emailSubtitle || "");
       setInstagramUser(result.instagramUser || "");
@@ -187,6 +200,8 @@ export default function ContactConfig() {
       formDescription,
       whatsappNumber: whatsappNumber.replace(/\D/g, ""), // Save clean number
       whatsappSubtitle,
+      phoneNumber: phoneNumber.replace(/\D/g, ""), // Save clean number
+      phoneSubtitle,
       email,
       emailSubtitle,
       instagramUser,
@@ -358,7 +373,30 @@ export default function ContactConfig() {
                 </div>
 
                 <div className="space-y-4 border-b border-emerald-50 pb-4">
-                  <Label className="text-emerald-900 font-bold flex items-center gap-2">2. E-mail</Label>
+                  <Label className="text-emerald-900 font-bold flex items-center gap-2">2. Telefone</Label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <Label className="text-emerald-900/70 font-semibold text-[10px]">Número (Visível)</Label>
+                      <Input 
+                        value={phoneNumber} 
+                        onChange={(e) => setPhoneNumber(formatLandline(e.target.value))}
+                        placeholder="(00) 0000-0000"
+                        className="border-emerald-100" 
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-emerald-900/70 font-semibold text-[10px]">Subtítulo</Label>
+                      <Input 
+                        value={phoneSubtitle} 
+                        onChange={(e) => setPhoneSubtitle(e.target.value)}
+                        className="border-emerald-100" 
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4 border-b border-emerald-50 pb-4">
+                  <Label className="text-emerald-900 font-bold flex items-center gap-2">3. E-mail</Label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="space-y-1">
                       <Label className="text-emerald-900/70 font-semibold text-[10px]">Endereço de E-mail</Label>
@@ -380,7 +418,7 @@ export default function ContactConfig() {
                 </div>
 
                 <div className="space-y-4">
-                  <Label className="text-emerald-900 font-bold flex items-center gap-2">3. Instagram</Label>
+                  <Label className="text-emerald-900 font-bold flex items-center gap-2">4. Instagram</Label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="space-y-1">
                       <Label className="text-emerald-900/70 font-semibold text-[10px]">Usuário (@)</Label>

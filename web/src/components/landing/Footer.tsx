@@ -4,6 +4,7 @@ import { Facebook, Instagram, Linkedin, Twitter, MapPin, Phone, Mail } from "luc
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/assets/logo.png";
+import { FaWhatsapp } from "react-icons/fa";
 
 import * as LucideIcons from "lucide-react";
 
@@ -11,7 +12,7 @@ interface FooterProps {
   data?: {
     description: string;
     social_links: { icon: string; link: string }[];
-    contact_info: { address: string; phone: string; email: string };
+    contact_info: { address: string; phone: string; phone2?: string; email: string };
     footer_links: { title: string; links: { name: string; path: string }[] }[];
     copyrightText: string;
     termsLink: string;
@@ -106,10 +107,16 @@ export const Footer = ({ data }: FooterProps) => {
                 <LucideIcons.MapPin className="h-5 w-5 text-primary shrink-0" />
                 <span>{data?.contact_info?.address || "Guarulhos - SP, Brasil"}</span>
               </li>
-              <li className="flex gap-3 text-sm text-slate-600">
-                <LucideIcons.Phone className="h-5 w-5 text-primary shrink-0" />
+              <li className="flex gap-3 text-sm text-slate-600 items-center">
+                <FaWhatsapp className="h-5 w-5 text-primary shrink-0" />
                 <span>{data?.contact_info?.phone || "(11) 96450-3217"}</span>
               </li>
+              {data?.contact_info?.phone2 && (
+                <li className="flex gap-3 text-sm text-slate-600 items-center">
+                  <LucideIcons.Phone className="h-5 w-5 text-primary shrink-0" />
+                  <span>{data.contact_info.phone2}</span>
+                </li>
+              )}
               <li className="flex gap-3 text-sm text-slate-600">
                 <LucideIcons.Mail className="h-5 w-5 text-primary shrink-0" />
                 <span>{data?.contact_info?.email || "comercial@avantcargo.com.br"}</span>

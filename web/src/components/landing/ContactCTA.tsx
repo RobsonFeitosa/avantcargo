@@ -29,11 +29,11 @@ export const ContactCTA = ({ data }: ContactCTAProps) => {
   return (
     <section className="py-24 bg-white relative overflow-hidden">
       <div className="container relative z-10">
-        <div className="p-12 md:p-16 rounded-[48px] bg-gradient-to-br from-primary/5 to-orange-500/5 border border-slate-200">
+        <div className="p-6 md:p-16 rounded-3xl md:rounded-[48px] bg-gradient-to-br from-primary/5 to-orange-500/5 border border-slate-200">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-16 items-center">
             <div className="space-y-10">
               <ScrollReveal direction="up" delay={0.1} className="space-y-4">
-                <h2 className="text-4xl font-bold leading-tight text-emerald-950 tracking-tight text-center md:text-left">
+                <h2 className="text-3xl md:text-4xl font-bold leading-tight text-emerald-950 tracking-tight text-center md:text-left">
                   {data?.headerTitle ? (
                     data.headerTitle.split(" ").map((word, i) => {
                       const isOrange = word.toLowerCase().includes("comércio") || word.toLowerCase().includes("exterior");
@@ -72,7 +72,7 @@ export const ContactCTA = ({ data }: ContactCTAProps) => {
                 <Button
                   asChild
                   size="lg"
-                  className="w-full sm:w-[340px] bg-orange-500 hover:bg-orange-600 text-white font-bold h-16 rounded-full shadow-xl shadow-orange-500/20 text-lg group"
+                  className="w-full sm:w-[340px] bg-orange-500 hover:bg-orange-600 text-white font-bold h-auto min-h-[64px] py-4 px-6 md:px-8 rounded-full shadow-xl shadow-orange-500/20 text-base md:text-lg group whitespace-normal text-center leading-tight"
                 >
                   <a href={data?.primaryButton?.link || "https://wa.me/5511964503217"} target="_blank" rel="noopener noreferrer">
                     <FaWhatsapp className="mr-2 !h-6 !w-6 group-hover:scale-110 transition-transform" />
@@ -84,7 +84,7 @@ export const ContactCTA = ({ data }: ContactCTAProps) => {
                   asChild
                   size="lg"
                   variant="outline"
-                  className="w-full sm:w-[280px] bg-white border-slate-200 text-slate-700 hover:bg-slate-50 h-16 rounded-full font-bold text-lg shadow-sm"
+                  className="w-full sm:w-[280px] bg-white border-slate-200 text-slate-700 hover:bg-slate-50 h-auto min-h-[64px] py-4 px-6 md:px-8 rounded-full font-bold text-base md:text-lg shadow-sm whitespace-normal text-center leading-tight"
                 >
                   <a href={data?.secondaryButton?.link || "tel:+5511964503217"}>
                     <Phone className="mr-2 h-5 w-5 text-primary" />
