@@ -37,7 +37,7 @@ export const Hero = ({ data }: HeroProps) => {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.7fr] gap-12 items-center">
           <div className="space-y-8">
             <ScrollReveal direction="right" delay={0.1}>
-              <Badge variant="outline" className="px-4 gap-2 py-1.5 border-orange-500/30 bg-orange-500/5 text-orange-500 text-xs font-semibold tracking-wider uppercase">
+              <Badge variant="outline" className="px-4 gap-2 py-1.5 border-primary/30 bg-primary/5 text-primary text-xs font-semibold tracking-wider uppercase">
                 <GoDotFill />
                 {data?.heroBadge || "Logística Aérea & Serviços Aduaneiros"}
               </Badge>
