@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "AvantCargo — Logística Internacional de Alta Performance",
   description:
-    "A AvantCargo é especialista em exportações aéreas, despacho aduaneiro e consultoria em comércio exterior nos aeroportos de GRU e VCP.",
+    "Oferecemos soluções estratégicas e integradas para otimizar as suas operações de comércio exterior com mais agilidade, controle e eficiência",
   icons: {
     icon: [
       { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
