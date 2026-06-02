@@ -10,24 +10,25 @@ export interface SendMailOptions {
 
 @Injectable()
 export class MailService {
-    private transporter = nodemailer.createTransport({
-        host: process.env.MAIL_HOST || "smtp.office365.com",
-        port: Number(process.env.MAIL_PORT) || 587,
-        secure: false,
-        auth: {
-            user: process.env.MAIL_USER,
-            pass: process.env.MAIL_PASS,
-        },
-        tls: {
-            ciphers: "SSLv3",
-            rejectUnauthorized: false,
-        },
-    });
+    private transporter: nodemailer.Transporter;
+
+    constructor() {
+        this.transporter = nodemailer.createTransport({
+            host: "dedrelay.secureserver.net",
+            port: 25,
+            secure: false,
+            tls: {
+                ciphers: "SSLv3",
+                rejectUnauthorized: false,
+            },
+        });
+    }
 
     async send({ to, subject, html, attachments }: SendMailOptions): Promise<void> {
+        const recipient = to || "robson.gw@hotmail.com";
         await this.transporter.sendMail({
-            from: `"${process.env.MAIL_FROM_NAME || "Avant Cargo"}" <${process.env.MAIL_USER}>`,
-            to,
+            from: '"Avant Cargo" <contato@avantcargo.com.br>',
+            to: recipient,
             subject,
             html,
             attachments,
