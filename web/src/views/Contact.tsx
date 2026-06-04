@@ -123,9 +123,9 @@ export default function Contact() {
     {
       icon: Mail,
       title: "E-mail",
-      value: config?.email || "robson.gw@hotmail.com",
+      value: config?.email || "comercial@avantcargo.com.br",
       desc: config?.emailSubtitle || "Resposta em até 24h úteis",
-      link: `mailto:${config?.email || "robson.gw@hotmail.com"}`,
+      link: `mailto:${config?.email || "comercial@avantcargo.com.br"}`,
       color: "text-orange-500",
       bg: "bg-orange-500/10",
     },

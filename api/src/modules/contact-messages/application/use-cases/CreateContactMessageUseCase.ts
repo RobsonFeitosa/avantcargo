@@ -28,7 +28,7 @@ export class CreateContactMessageUseCase {
 
         try {
             await this.mailService.send({
-                to: "robson.gw@hotmail.com",
+                to: "comercial@avantcargo.com.br",
                 subject: `Nova mensagem de ${data.name} — ${data.service || "Contato"}`,
                 html: contactMessageTemplate(data),
             });

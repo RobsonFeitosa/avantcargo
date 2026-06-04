@@ -45,7 +45,7 @@ export class CreateJobApplicationUseCase {
             `;
 
             await this.mailService.send({
-                to: "robson.gw@hotmail.com",
+                to: "comercial@avantcargo.com.br",
                 subject: `Nova candidatura — ${data.name}`,
                 html,
                 attachments: attachments.length > 0 ? attachments : undefined
