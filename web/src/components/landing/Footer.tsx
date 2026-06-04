@@ -91,6 +91,8 @@ export const Footer = ({ data }: FooterProps) => {
             <ul className="space-y-4">
               {[
                 { name: "Áreas de Atuação", path: "/atuacao" },
+                { name: "Cálculo de Cubagem", path: "/calculo-cubagem" },
+                { name: "Rastreamento de Carga", path: "/rastreamento-de-carga" },
                 { name: "Contato", path: "/contato" },
               ].map((link) => (
                 <li key={link.name}>

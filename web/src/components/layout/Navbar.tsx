@@ -151,6 +151,20 @@ export const Navbar = ({ footerData }: { footerData?: any }) => {
           </div>
 
           <Link
+            href="/calculo-cubagem"
+            className={`text-sm font-bold tracking-tight transition-all duration-300 relative group flex items-center px-4 py-2 rounded-full ${pathname === "/calculo-cubagem" ? "text-primary bg-primary/10" : "text-slate-600 hover:text-primary hover:bg-slate-50"}`}
+          >
+            Cálculo de Cubagem
+          </Link>
+
+          <Link
+            href="/rastreamento-de-carga"
+            className={`text-sm font-bold tracking-tight transition-all duration-300 relative group flex items-center px-4 py-2 rounded-full ${pathname === "/rastreamento-de-carga" ? "text-primary bg-primary/10" : "text-slate-600 hover:text-primary hover:bg-slate-50"}`}
+          >
+            Rastreamento de Carga
+          </Link>
+
+          <Link
             href="/contato"
             className={`text-sm font-bold tracking-tight transition-all duration-300 relative group flex items-center px-4 py-2 rounded-full ${pathname === "/contato" ? "text-primary bg-primary/10" : "text-slate-600 hover:text-primary hover:bg-slate-50"}`}
           >
@@ -249,6 +263,22 @@ export const Navbar = ({ footerData }: { footerData?: any }) => {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
+
+            <Link
+              href="/calculo-cubagem"
+              className={`text-lg font-bold p-4 rounded-2xl transition-all ${pathname === "/calculo-cubagem" ? "bg-primary/5 text-primary" : "text-slate-600 hover:bg-slate-50"}`}
+              onClick={() => setIsOpen(false)}
+            >
+              Cálculo de Cubagem
+            </Link>
+
+            <Link
+              href="/rastreamento-de-carga"
+              className={`text-lg font-bold p-4 rounded-2xl transition-all ${pathname === "/rastreamento-de-carga" ? "bg-primary/5 text-primary" : "text-slate-600 hover:bg-slate-50"}`}
+              onClick={() => setIsOpen(false)}
+            >
+              Rastreamento de Carga
+            </Link>
 
             <Link
               href="/contato"

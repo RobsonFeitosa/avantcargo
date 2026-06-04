@@ -13,7 +13,8 @@ import {
   ChevronDown,
   PanelBottom,
   Briefcase,
-  Phone
+  Phone,
+  MapPin
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -79,6 +80,16 @@ const adminNavItems = [
       { title: "Sistemas Comex", url: "/admin/areas/comex-systems" },
       { title: "Transportes", url: "/admin/areas/transport" },
     ],
+  },
+  {
+    title: "Cálculo de Cubagem",
+    url: "/admin/cubage-calculation",
+    icon: ClipboardList,
+  },
+  {
+    title: "Rastreamento de Carga",
+    url: "/admin/cargo-tracking",
+    icon: MapPin,
   },
   {
     title: "Contato",

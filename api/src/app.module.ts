@@ -20,6 +20,8 @@ import { UploadModule } from './shared/infra/http/uploads.module';
 import { ComexSystemsModule } from './modules/comex-systems/comex-systems.module';
 import { TransportModule } from './modules/transport/transport.module';
 import { CareersModule } from './modules/careers/careers.module';
+import { CubageCalculationModule } from './modules/cubage-calculation/cubage-calculation.module';
+import { CargoTrackingModule } from './modules/cargo-tracking/cargo-tracking.module';
 
 @Module({
   imports: [
@@ -44,6 +46,8 @@ import { CareersModule } from './modules/careers/careers.module';
     ComexSystemsModule,
     TransportModule,
     CareersModule,
+    CubageCalculationModule,
+    CargoTrackingModule,
   ],
   providers: [
     {
