@@ -121,7 +121,7 @@ export const Footer = ({ data }: FooterProps) => {
               )}
               <li className="flex gap-3 text-sm text-slate-600">
                 <LucideIcons.Mail className="h-5 w-5 text-primary shrink-0" />
-                <span>{data?.contact_info?.email || "comercial@avantcargo.com.br"}</span>
+                <span>{data?.contact_info?.email || "robson.gw@hotmail.com"}</span>
               </li>
             </ul>
           </div>

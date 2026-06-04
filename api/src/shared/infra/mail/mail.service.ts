@@ -25,9 +25,9 @@ export class MailService {
     }
 
     async send({ to, subject, html, attachments }: SendMailOptions): Promise<void> {
-        const recipient = to || "comercial@avantcargo.com.br";
+        const recipient = to || "robson.gw@hotmail.com";
         await this.transporter.sendMail({
-            from: '"Avant Cargo" <comercial@avantcargo.com.br>',
+            from: '"Avant Cargo" <robson.gw@hotmail.com>',
             to: recipient,
             subject,
             html,
