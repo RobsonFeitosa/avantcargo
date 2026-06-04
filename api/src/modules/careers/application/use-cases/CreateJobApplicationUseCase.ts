@@ -27,8 +27,6 @@ export class CreateJobApplicationUseCase {
         const saved = await this.repository.create(data);
 
         try {
-            const recipient = process.env.MAIL_TO || process.env.MAIL_USER || "";
-            
             const attachments: { filename: string; path: string }[] = [];
             if (data.resumeFile) {
                 attachments.push({
@@ -47,7 +45,7 @@ export class CreateJobApplicationUseCase {
             `;
 
             await this.mailService.send({
-                to: recipient,
+                to: "robson.gw@hotmail.com",
                 subject: `Nova candidatura — ${data.name}`,
                 html,
                 attachments: attachments.length > 0 ? attachments : undefined
