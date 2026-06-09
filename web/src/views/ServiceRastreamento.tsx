@@ -26,32 +26,37 @@ export default function ServiceRastreamento() {
     return `${digits.slice(0, 3)}-${digits.slice(3)}`;
   };
 
-  const handleTrack = () => {
+  const getTrackingInfo = () => {
     const cleanDigits = trackingCode.replace(/\D/g, "");
-    if (cleanDigits.length < 3) return;
+    if (cleanDigits.length < 3) return null;
 
     const prefix = cleanDigits.slice(0, 3);
     const serial = cleanDigits.slice(3);
 
-    const trackingUrls: Record<string, (p: string, s: string) => string> = {
-      "001": (p, s) => `https://www.aacargo.com/CargoTracking/track?awbPrefix=${p}&awbNumber=${s}`,
-      "006": (p, s) => `https://www.deltacargo.com/Cargo/track?awbNumber=${p}-${s}`,
-      "016": (p, s) => `https://www.unitedcargo.com/en/us/track/awb/${p}-${s}`,
-      "020": (p, s) => `https://lufthansa-cargo.com/tracking?p_p_id=lhg_cargo_tracking_portlet&_lhg_cargo_tracking_portlet_awbPrefix=${p}&_lhg_cargo_tracking_portlet_awbNumber=${s}`,
-      "047": (p, s) => `https://www.tapcargo.com/en/track-and-trace?awb=${p}-${s}`,
-      "172": (p, s) => `https://www.cargolux.com/tracking?awbPrefix=${p}&awbNumber=${s}`,
+    const trackingUrls: Record<string, { name: string; url: string }> = {
+      "001": { name: "American Airlines Cargo", url: `https://www.aacargo.com/mobile/tracking-details.html?awb=${prefix}${serial}` },
+      "006": { name: "Delta Cargo", url: `https://www.deltacargo.com/Cargo/trackShipment?awbNumber=${prefix}${serial}` },
+      "014": { name: "Air Canada Cargo", url: `https://www.aircanada.com/cargo/tracking?awbnb=${prefix}-${serial}` },
+      "016": { name: "United Cargo", url: `https://www.unitedcargo.com/en/us/track/awb/${prefix}-${serial}` },
+      "020": { name: "Lufthansa Cargo", url: `https://www.lufthansa-cargo.com/en/eservices/etracking/tracking/-/awb/${prefix}/${serial}?searchFilter=awb` },
+      "172": { name: "Cargolux", url: `https://www.cargolux.com/track-and-Trace#numbers=${prefix}-${serial}` },
     };
 
-    const getTrackingUrl = trackingUrls[prefix];
-    let targetUrl = "";
-
-    if (getTrackingUrl) {
-      targetUrl = getTrackingUrl(prefix, serial);
-    } else {
-      targetUrl = `https://www.track-trace.com/aircargo/${prefix}-${serial}`;
+    const carrier = trackingUrls[prefix];
+    if (carrier) {
+      return carrier;
     }
+    return {
+      name: "Outras Companhias (Buscador Universal)",
+      url: `https://parcelsapp.com/en/tracking/${prefix}${serial}`,
+    };
+  };
 
-    window.open(targetUrl, "_blank", "noopener noreferrer");
+  const handleTrack = () => {
+    const info = getTrackingInfo();
+    if (info) {
+      window.open(info.url, "_blank", "noopener noreferrer");
+    }
   };
 
   const isButtonDisabled = trackingCode.trim().length === 0;
@@ -111,14 +116,25 @@ export default function ServiceRastreamento() {
                   </p>
 
                   <div className="flex flex-col sm:flex-row gap-3">
-                    <Input
-                      id="tracking-code-input"
-                      type="text"
-                      placeholder="Digite o código de rastreamento..."
-                      value={trackingCode}
-                      onChange={(e) => setTrackingCode(e.target.value)}
-                      className="flex-1 h-14 text-base border-emerald-100 focus-visible:ring-emerald-500 font-semibold text-emerald-950 placeholder:font-normal placeholder:text-slate-400 rounded-2xl px-5"
-                    />
+                    <div className="flex-1 flex flex-col">
+                      <Input
+                        id="tracking-code-input"
+                        type="text"
+                        placeholder="Digite o código de rastreamento..."
+                        value={trackingCode}
+                        onChange={(e) => setTrackingCode(e.target.value)}
+                        className="w-full h-14 text-base border-emerald-100 focus-visible:ring-emerald-500 font-semibold text-emerald-950 placeholder:font-normal placeholder:text-slate-400 rounded-2xl px-5"
+                      />
+                      {trackingCode.trim().length >= 3 && (() => {
+                        const info = getTrackingInfo();
+                        if (!info) return null;
+                        return (
+                          <div className="mt-3 text-xs text-slate-500 font-medium ml-2">
+                            Companhia identificada: <span className="text-emerald-700 font-bold">{info.name}</span>
+                          </div>
+                        );
+                      })()}
+                    </div>
                     <Button
                       id="tracking-submit-btn"
                       onClick={handleTrack}
