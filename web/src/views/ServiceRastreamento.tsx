@@ -27,8 +27,31 @@ export default function ServiceRastreamento() {
   };
 
   const handleTrack = () => {
-    const formatted = formatTrackingCode(trackingCode);
-    window.open(`https://www.unitedcargo.com/en/us/track/awb/${formatted}`, "_blank", "noopener noreferrer");
+    const cleanDigits = trackingCode.replace(/\D/g, "");
+    if (cleanDigits.length < 3) return;
+
+    const prefix = cleanDigits.slice(0, 3);
+    const serial = cleanDigits.slice(3);
+
+    const trackingUrls: Record<string, (p: string, s: string) => string> = {
+      "001": (p, s) => `https://www.aacargo.com/CargoTracking/track?awbPrefix=${p}&awbNumber=${s}`,
+      "006": (p, s) => `https://www.deltacargo.com/Cargo/track?awbNumber=${p}-${s}`,
+      "016": (p, s) => `https://www.unitedcargo.com/en/us/track/awb/${p}-${s}`,
+      "020": (p, s) => `https://lufthansa-cargo.com/tracking?p_p_id=lhg_cargo_tracking_portlet&_lhg_cargo_tracking_portlet_awbPrefix=${p}&_lhg_cargo_tracking_portlet_awbNumber=${s}`,
+      "047": (p, s) => `https://www.tapcargo.com/en/track-and-trace?awb=${p}-${s}`,
+      "172": (p, s) => `https://www.cargolux.com/tracking?awbPrefix=${p}&awbNumber=${s}`,
+    };
+
+    const getTrackingUrl = trackingUrls[prefix];
+    let targetUrl = "";
+
+    if (getTrackingUrl) {
+      targetUrl = getTrackingUrl(prefix, serial);
+    } else {
+      targetUrl = `https://www.track-trace.com/aircargo/${prefix}-${serial}`;
+    }
+
+    window.open(targetUrl, "_blank", "noopener noreferrer");
   };
 
   const isButtonDisabled = trackingCode.trim().length === 0;
